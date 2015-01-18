@@ -584,7 +584,7 @@ class MySQLAccountDB(AccountDB):
             self.cnx.commit()
             callback(True)
         else:
-            print (self.update_avid, (accountId, userId))
+            print ("storeAccountId", self.update_avid, (aceountId, userId))
             self.notify.warning('Unable to associate user %s with account %d!' % (userId, accountId))
             callback(False)
 
