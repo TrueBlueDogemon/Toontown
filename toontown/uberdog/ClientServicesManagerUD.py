@@ -356,16 +356,6 @@ class MySQLAccountDB(AccountDB):
           print("Failed creating database: {}".format(err))
           exit(1)
 
-    def create_tables(self, cursor):
-        for name, ddl in self.TABLES.iteritems():
-            try:
-                cursor.execute(ddl)
-            except mysql.connector.Error as err:
-                if err.errno != mysql.connector.errorcode.ER_TABLE_EXISTS_ERROR:
-                    print(ddl)
-                    print(err.msg)
-                    exit(1)
-
     def auto_migrate_semidbm(self):
         self.cur.execute(self.count_account)
         row = self.cur.fetchone()
@@ -439,22 +429,6 @@ class MySQLAccountDB(AccountDB):
                 print(err)
                 exit(1)
 
-        # Now lets try to make the required tables
-        self.TABLES = {}
-        self.TABLES['Accounts'] = {
-            "CREATE TABLE `Accounts` ("
-            "  `id` int(10) NOT NULL AUTO_INCREMENT,"
-            "  `username` varchar(20) NOT NULL,"
-            "  `password` varchar(32) NOT NULL,"
-            "  `rawPassword` tinyint(4) NOT NULL,"
-            "  `accountId` int(20) NOT NULL,"
-            "  `accessLevel` int(20) NOT NULL,"
-            "  `status` varchar(20) NOT NULL,"
-            "  `date` varchar(20) NOT NULL,"
-            "  `email` varchar(20) NOT NULL,"
-            "  PRIMARY KEY (`id`)"
-            ") ENGINE=InnoDB;"}
-
         self.count_account = ("SELECT COUNT(*) from Accounts")
         self.select_account = ("SELECT password,accountId,accessLevel,status,date,rawPassword FROM Accounts where username = %s")
         self.add_account = ("REPLACE INTO Accounts (username, password, accountId, accessLevel, rawPassword) VALUES (%s, %s, %s, %s, %s)")
@@ -462,18 +436,9 @@ class MySQLAccountDB(AccountDB):
         self.update_password = ("UPDATE Accounts SET password = %s, rawPassword = '1' where username = %s")
         self.count_avid = ("SELECT COUNT(*) from Accounts WHERE username = %s")
 
-        self.TABLES['NameApprovals'] = {
-            "CREATE TABLE `NameApprovals` ("
-            "  `avId` int(20) not NULL,"
-            "  `name` varchar(32) not NULL,"
-            "  `status` varchar(20) not NULL"
-            ") ENGINE=InnoDB;"}
-
         self.select_name = ("SELECT status FROM NameApprovals where avId = %s")
         self.add_name_request = ("REPLACE INTO NameApprovals (avId, name, status) VALUES (%s, %s, %s)")
         self.delete_name_query = ("DELETE FROM NameApprovals where avId = %s")
-
-#        self.create_tables(self.cur)
 
         if self.auto_migrate:
             self.auto_migrate_semidbm()
