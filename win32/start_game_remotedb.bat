@@ -9,8 +9,8 @@ set /P ttiUsername="Username: "
 set /P ttiPassword="Password: "
 
 rem Export the environment variables:
-set TTI_PLAYCOOKIE=%ttiUsername%
-set TTI_GAMESERVER=toontownfellowship.com
+set TTI_PLAYCOOKIE=%ttiUsername%:%ttiPassword%
+set TTI_GAMESERVER=test3.toontownfellowship.com
 
 echo ===============================
 echo Starting Toontown Infinite...
