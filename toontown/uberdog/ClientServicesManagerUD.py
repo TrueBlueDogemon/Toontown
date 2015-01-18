@@ -326,12 +326,8 @@ class MongoAccountDB(AccountDB):
 #        'mysql-ssl-key' =>  ''
 #        'mysql-ssl-verify-cert' =>  False
 #        'mysql-auto-new-account' =>  True
-#        'mysql-migrate' =>  True
 #
-# if mysql-migrate is on, it allows for blank passwords until you try
-# to use one for the first time.  At that point, it sets the password
-# to the first non-blank password the player uses.
-#
+
 # dependencies:
 #    apt-get install python-mysqldb
 #    pip install passlib
@@ -345,15 +341,12 @@ class MySQLAccountDB(AccountDB):
         return newpass
 
     def check_password(self, plain_text_password, hashed_password, passType):
-        if self.auto_migrate and plain_text_password == "" and hashed_password == "":
-            return true
+        print ("check_password: ", (plain_text_password, hashed_password))
         try:
-            print ("verify: ", (plain_text_password, hashed_password))
             return bcrypt.verify(plain_text_password, hashed_password)
         except:
             print "bad hash?" 
-            print (plain_text_password, hashed_password)
-            return True
+            return False
 
     def create_database(self, cursor):
       try:
@@ -404,8 +397,7 @@ class MySQLAccountDB(AccountDB):
         self.ssl_cert = simbase.config.GetString('mysql-ssl-cert', '')
         self.ssl_key = simbase.config.GetString('mysql-ssl-key', '')
         self.ssl_verify_cert = simbase.config.GetBool('mysql-ssl-verify-cert', False)
-        self.auto_new_account = simbase.config.GetBool('mysql-auto-new-account', False)
-        self.auto_migrate = simbase.config.GetBool('mysql-auto-migrate', False)
+        self.auto_migrate = True
 
         # Lets try connection to the db
         if self.ssl:
@@ -515,6 +507,7 @@ class MySQLAccountDB(AccountDB):
         return 'Success'
 
     def lookup(self, token, callback):
+        print ("lookup ", token)
         try:
             tokenList = token.split(':')
 
@@ -523,83 +516,48 @@ class MySQLAccountDB(AccountDB):
                   'success': False,
                   'reason': "invalid password format"
                 }
+                print response
                 callback(response)
                 return response
 
             username = tokenList[0]
             password = tokenList[1]
 
-            self.cur.execute(self.count_account)
-            row = self.cur.fetchone()
-            self.cnx.commit()
-            if row[0] == 0:
-                self.cur.execute(self.add_account, ( username, self.get_hashed_password(password), 0, 700, 2))
-                response = {
-                  'success': True,
-                  'userId': username,
-                  'accountId': 0,
-                  'accessLevel': 700
-                }
-                callback(response)
-                return response
-
             self.cur.execute(self.select_account, (username,))
             row = self.cur.fetchone()
             self.cnx.commit()
 
             if row:
-                if False:
-#                if (self.auto_migrate and (row[0] == "" and password != "")) or row[5] == 0:
-                    if row[5] == 0:
-                        newpass = self.get_hashed_password(row[0])
-                    else:
-                        newpass = self.get_hashed_password(password)
-                    print (self.update_password, (newpass, username))
-                    self.cur.execute(self.update_password, (newpass, username))
-                    self.cnx.commit()
-                else:
-                    if not self.check_password(password, row[0], row[5]):
-                        response = {
-                          'success': False,
-                          'reason': "invalid password"
-                        }
-                        callback(response)
-                        return response
+                if not self.check_password(password, row[0], row[5]):
+                    response = {
+                      'success': False,
+                      'reason': "invalid password"
+                    }
+                    callback(response)
+                    return response
 
                 response = {
                     'success': True,
                     'userId': username,
+                    'accessLevel' = int(row[2])
                     'accountId': row[1]
                 }
-                if int(row[2]) != 0:
-                    response['accessLevel'] = int(row[2])
 
+                print response
                 callback(response)
                 return response
 
-            if self.auto_new_account:
-                self.cur.execute(self.add_account, (username, self.get_hashed_password(password), 0, max(100, minAccessLevel), 2))
-                self.cnx.commit()
-
-                response = {
-                  'success': True,
-                  'userId': username,
-                  'accountId': 0,
-                  'accessLevel': max(100, minAccessLevel)
-                }
-
-                callback(response)
-                return response
-            else:
-                response = {
-                  'success': False,
-                  'reason': "unknown user"
-                }
-                callback(response)
-                return response
+            response = {
+              'success': False,
+              'reason': "unknown user"
+            }
+            print response
+            callback(response)
+            return response
 
         except mysql.connector.Error as err:
             print("mysql exception {}".format(err))
+            print response
             response = {
                 'success': False,
                 'reason': "Can't decode this token."
@@ -607,14 +565,15 @@ class MySQLAccountDB(AccountDB):
             callback(response)
             return response
         except:
-             print "exception..."
-             self.notify.warning('Could not decode the provided token!')
-             response = {
-                 'success': False,
-                 'reason': "Can't decode this token."
-             }
-             callback(response)
-             return response
+            print "exception..."
+            self.notify.warning('Could not decode the provided token!')
+            response = {
+                'success': False,
+                'reason': "Can't decode this token."
+            }
+            print response
+            callback(response)
+            return response
 
     def storeAccountID(self, userId, accountId, callback):
         self.cur.execute(self.count_avid, (userId,))
