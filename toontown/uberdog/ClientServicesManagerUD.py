@@ -539,7 +539,7 @@ class MySQLAccountDB(AccountDB):
                 response = {
                     'success': True,
                     'userId': username,
-                    'accessLevel' = int(row[2])
+                    'accessLevel': int(row[2]),
                     'accountId': row[1]
                 }
 
