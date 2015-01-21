@@ -1,9 +1,9 @@
 #!/usr/bin/env python2
 # This is the "main" module that will start a production copy of
-# Toontown Infinite.
+# Toontown fellowship.
 
 # This is a temp patch.
-# It should really be done by the runtime (e.g. infinite.exe):
+# It should really be done by the runtime (e.g. fellowship.exe):
 import sys
 sys.path = ['.']
 

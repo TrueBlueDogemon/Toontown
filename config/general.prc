@@ -1,5 +1,5 @@
 # Window settings:
-window-title Toontown Infinite
+window-title Toontown fellowship
 win-origin -1 -1
 icon-filename phase_3/etc/icon.ico
 cursor-filename phase_3/etc/toonmono.cur
@@ -34,7 +34,7 @@ backups-extension .json
 # Server:
 server-timezone EST/EDT/-5
 server-port 7199
-account-server-endpoint https://toontowninfinite.com/api/
+account-server-endpoint https://toontownfellowship.com/api/
 account-bridge-filename astron/databases/account-bridge.db
 
 # Performance:
