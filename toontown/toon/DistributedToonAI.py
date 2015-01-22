@@ -4988,17 +4988,13 @@ def dna(part, value):
 
     return 'Invalid part: ' + part
 
-"""@magicWord(category=CATEGORY_CREATIVE, types=[int])
+
+@magicWord(category=CATEGORY_CREATIVE, types=[int])
 def bringTheMadness(clothes):
-     """
-    #Applies the Pegboard Nerds Clothes
     """
-    invoker = spellbook.getInvoker()
-
-    dna = ToonDNA.ToonDNA()
-    dna.makeFromNetString(invoker.getDNAString())
-
-    if"""
+    Applies the Pegboard Nerds Clothes
+    """
+    pass # TODO
         
         
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
