@@ -19,9 +19,6 @@ boarding-group-merges #t
 disable-sos-card 91917
 disable-sos-card 91918
 
-# Optional:
-want-chestnut-park-construction #t
-
 # Temporary:
 want-phone-quest #f
 
