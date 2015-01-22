@@ -5488,7 +5488,7 @@ NumToColor = ['White',
  'Purple',
  'Lavender',
  'Pink',
- 'Plum',
+ 'Gray',
  'Black']
 AnimalToSpecies = {'dog': 'Dog',
  'cat': 'Cat',
@@ -8810,7 +8810,7 @@ KartDNA_AccNames = {1000: 'Air Cleaner',
  7022: 'Purple',
  7023: 'Lavender',
  7024: 'Pink',
- 7025: 'Plum',
+ 7025: 'Gray',
  7026: 'Black'}
 RaceHoodSpeedway = 'Speedway'
 RaceHoodRural = 'Rural'
