@@ -303,6 +303,10 @@ class OZSafeZoneLoader(SafeZoneLoader):
         self.geyserSoundNoToonInterval = None
         self.geyserSoundNoToon = None
 
+        if self.constructionSign is not None:
+            self.constructionSign.removeNode()
+            self.constructionSign = None
+
     def enterPlayground(self, requestStatus):
         self.playgroundClass = OZPlayground
         SafeZoneLoader.enterPlayground(self, requestStatus)
