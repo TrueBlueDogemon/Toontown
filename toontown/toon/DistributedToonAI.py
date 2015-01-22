@@ -4991,7 +4991,7 @@ def dna(part, value):
 """@magicWord(category=CATEGORY_CREATIVE, types=[int])
 def bringTheMadness(clothes):
      """
-    '''Applies the Pegboard Nerds Clothes'''
+    #Applies the Pegboard Nerds Clothes
     """
     invoker = spellbook.getInvoker()
 
