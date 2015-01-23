@@ -6,8 +6,8 @@ export DYLD_FRAMEWORK_PATH="Frameworks"
 
 # Get the user input:
 read -p "Username: " ttiUsername
-read -p "Gameserver (DEFAULT:  167.114.28.238): " TTI_GAMESERVER
-TTI_GAMESERVER=${TTI_GAMESERVER:-"167.114.28.238"}
+read -p "Gameserver (DEFAULT:  www.ToontownFellowship.com): " TTI_GAMESERVER
+TTI_GAMESERVER=${TTI_GAMESERVER:-"www.ToontownFellowship.com"}
 
 # Export the environment variables:
 export ttiUsername=$ttiUsername
