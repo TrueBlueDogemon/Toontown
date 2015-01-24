@@ -26,12 +26,11 @@ want-cogdominiums #f
 want-achievements #f
 
 # Chat:
-want-whitelist #f
+want-whitelist #t
 
 # Cashbot boss:
 want-resistance-toonup #t
 want-resistance-restock #t
-want-resistance-dance #t
 
 # Optional:
 want-yin-yang #t
