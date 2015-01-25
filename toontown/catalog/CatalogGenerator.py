@@ -16,11 +16,13 @@ from CatalogGardenItem import CatalogGardenItem
 from CatalogToonStatueItem import CatalogToonStatueItem
 from CatalogRentalItem import CatalogRentalItem
 from CatalogGardenStarterItem import CatalogGardenStarterItem
+from CatalogHouseItem import CatalogHouseItem
 from CatalogNametagItem import CatalogNametagItem
 from CatalogAccessoryItem import CatalogAccessoryItem
 from direct.actor import Actor
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from toontown.estate import HouseGlobals
 import types
 import random
 import time
@@ -513,6 +515,8 @@ MonthlySchedule = ((7,
    CatalogToonStatueItem(105, endPoseIndex=108),
    #CatalogRentalItem(1, 2880, 1000), # TODO
    #CatalogGardenStarterItem(), # TODO
+   CatalogHouseItem(HouseGlobals.HOUSE_DEFAULT),
+   CatalogHouseItem(HouseGlobals.HOUSE_CABIN),
    CatalogNametagItem(100),
    CatalogNametagItem(0),
    CatalogClothingItem(1608, 0, 0),

@@ -1,3 +1,8 @@
+# Different house types:
+
+HOUSE_DEFAULT = 0
+HOUSE_CABIN = 5
+
 NUM_HOUSE_TYPES = 6
 HOUSE_DEFAULT = 0
 HOUSE_CRAFTSMAN = 1
