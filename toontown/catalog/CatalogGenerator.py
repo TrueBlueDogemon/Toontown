@@ -82,6 +82,12 @@ class Sale:
         self.args = args
 
 
+CatalogHouseItems = [
+  CatalogHouseItem(HouseGlobals.HOUSE_DEFAULT),
+  CatalogHouseItem(HouseGlobals.HOUSE_CABIN)
+]
+
+
 MonthlySchedule = ((7,
   1,
   8,
@@ -515,8 +521,6 @@ MonthlySchedule = ((7,
    CatalogToonStatueItem(105, endPoseIndex=108),
    #CatalogRentalItem(1, 2880, 1000), # TODO
    #CatalogGardenStarterItem(), # TODO
-   CatalogHouseItem(HouseGlobals.HOUSE_DEFAULT),
-   CatalogHouseItem(HouseGlobals.HOUSE_CABIN),
    CatalogNametagItem(100),
    CatalogNametagItem(0),
    CatalogClothingItem(1608, 0, 0),
@@ -1512,6 +1516,10 @@ class CatalogGenerator:
 
     def generateWeeklyCatalog(self, avatar, week, monthlyCatalog):
         weeklyCatalog = CatalogItemList.CatalogItemList()
+
+        # Add the different house types:
+        weeklyCatalog += CatalogHouseItems
+
         self.notify.debug('Generating catalog for %s for week %s.' % (avatar.doId, week))
         if week >= 1 and week <= len(WeeklySchedule):
             saleItem = 0

@@ -20,6 +20,12 @@ class CatalogHouseItem(CatalogItem):
 
         dg.addUint8(self.houseType)
 
+    def compareTo(self, other):
+        return self.houseType - other.houseType
+
+    def getHashContents(self):
+        return (self.houseType,)
+
     def output(self, store = -1):
         return 'CatalogHouseItem(%s%s)' % (self.houseType, self.formatOptionalData(store))
 
@@ -56,5 +62,7 @@ class CatalogHouseItem(CatalogItem):
 
     def recordPurchase(self, avatar, optional):
         if avatar:
-            print 'Buying a house'
+            house = simbase.air.doId2do.get(avatar.getHouseId())
+            if house:
+                house.b_setHouseType(self.houseType)
         return ToontownGlobals.P_ItemAvailable
