@@ -19,6 +19,7 @@ from CatalogNametagItem import CatalogNametagItem
 from CatalogToonStatueItem import CatalogToonStatueItem
 from CatalogAnimatedFurnitureItem import CatalogAnimatedFurnitureItem
 from CatalogAccessoryItem import CatalogAccessoryItem
+from CatalogHouseItem import CatalogHouseItem
 
 
 class PopularItemManagerAI:
