@@ -32,8 +32,8 @@ class CatalogHouseItem(CatalogItem):
     def getName(self):
         return TTLocalizer.getHouseNameById(self.houseType)
 
-    def saveHistory(self):
-        return 1
+    def reachedPurchaseLimit(self, avatar):
+        return avatar.getHouseType() == self.houseType or self in avatar.onOrder or self in avatar.mailboxContents
 
     def isGift(self):
         return False
@@ -42,6 +42,9 @@ class CatalogHouseItem(CatalogItem):
         self.model = loader.loadModel(HouseGlobals.houseModels[self.houseType])
         frame = self.makeFrame()
         self.model.reparentTo(frame)
+        self.model.setScale(0.1)
+        self.model.setH(90)
+        self.model.setZ(-1)
         self.hasPicture = True
         return (frame, None)
 

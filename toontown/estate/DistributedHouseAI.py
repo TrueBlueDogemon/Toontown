@@ -56,6 +56,10 @@ class DistributedHouseAI(DistributedObjectAI):
             self.mailbox = DistributedMailboxAI(self.air, self)
             self.mailbox.generateWithRequired(self.zoneId)
 
+            owner = self.air.doId2do.get(self.avatarId)
+            if owner:
+                owner.b_setHouseType(self.houseType)
+
         if not self.isInteriorInitialized:
             self.notify.info('Initializing interior...')
             self.interior.initialize()
