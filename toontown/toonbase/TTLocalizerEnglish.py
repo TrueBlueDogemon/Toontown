@@ -1,6 +1,7 @@
 from toontown.toonbase.TTLocalizerEnglishProperty import *
 from toontown.catalog import CatalogAccessoryItemGlobals
 from otp.otpbase import OTPLocalizer as OL
+from toontown.estate import HouseGlobals
 OL.SpeedChatStaticText = OL.SpeedChatStaticTextToontown.copy()
 for key in OL.SpeedChatStaticTextCommon.iterkeys():
     OL.SpeedChatStaticText[key] = OL.SpeedChatStaticTextCommon[key]
@@ -9830,3 +9831,18 @@ def getBuffString(buffId, buffTime):
 
 def getBuffPosterString(buffId):
     return buffIdStrings[buffId][1]
+
+# Different house types
+
+
+HouseTypeName = 'House'
+
+
+houseNames = {
+  HouseGlobals.HOUSE_DEFAULT: 'Classic House',
+  HouseGlobals.HOUSE_CABIN: 'Cabin House'
+}
+
+
+def getHouseNameById(houseId):
+    return houseNames[houseId]

@@ -17,18 +17,18 @@ from CatalogNametagItem import CatalogNametagItem # Nametag
 from CatalogToonStatueItem import CatalogToonStatueItem # Special
 from CatalogAnimatedFurnitureItem import CatalogAnimatedFurnitureItem # Furniture
 from CatalogAccessoryItem import CatalogAccessoryItem # Clothing
+from CatalogHouseItem import CatalogHouseItem # Special
 
 
 class CatalogItemSorter:
-    SPECIAL_ITEMS = (CatalogToonStatueItem, CatalogPoleItem, CatalogGardenStarterItem,
-                     CatalogGardenItem, CatalogRentalItem, CatalogPetTrickItem)
+    SPECIAL_ITEMS = (CatalogToonStatueItem, CatalogPoleItem, CatalogGardenStarterItem, CatalogGardenItem,
+                     CatalogRentalItem, CatalogPetTrickItem, CatalogHouseItem)
     NAMETAG_ITEMS = (CatalogNametagItem,)
     PHRASE_ITEMS = (CatalogChatItem,)
     CLOTHING_ITEMS = (CatalogAccessoryItem, CatalogClothingItem)
     EMOTION_ITEMS = (CatalogEmoteItem,)
-    FURNITURE_ITEMS = (CatalogFurnitureItem, CatalogWallpaperItem, CatalogWindowItem,
-                       CatalogFlooringItem, CatalogMouldingItem, CatalogWainscotingItem,
-                       CatalogBeanItem, CatalogAnimatedFurnitureItem)
+    FURNITURE_ITEMS = (CatalogFurnitureItem, CatalogWallpaperItem, CatalogWindowItem, CatalogFlooringItem,
+                       CatalogMouldingItem, CatalogWainscotingItem, CatalogBeanItem, CatalogAnimatedFurnitureItem)
 
     def __init__(self, itemList):
         self.itemList = itemList

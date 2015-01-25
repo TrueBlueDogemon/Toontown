@@ -16,11 +16,13 @@ from CatalogGardenItem import CatalogGardenItem
 from CatalogToonStatueItem import CatalogToonStatueItem
 from CatalogRentalItem import CatalogRentalItem
 from CatalogGardenStarterItem import CatalogGardenStarterItem
+from CatalogHouseItem import CatalogHouseItem
 from CatalogNametagItem import CatalogNametagItem
 from CatalogAccessoryItem import CatalogAccessoryItem
 from direct.actor import Actor
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
+from toontown.estate import HouseGlobals
 import types
 import random
 import time
@@ -78,6 +80,12 @@ class Sale:
 
     def __init__(self, *args):
         self.args = args
+
+
+CatalogHouseItems = [
+  CatalogHouseItem(HouseGlobals.HOUSE_DEFAULT),
+  CatalogHouseItem(HouseGlobals.HOUSE_CABIN)
+]
 
 
 MonthlySchedule = ((7,
@@ -1508,6 +1516,10 @@ class CatalogGenerator:
 
     def generateWeeklyCatalog(self, avatar, week, monthlyCatalog):
         weeklyCatalog = CatalogItemList.CatalogItemList()
+
+        # Add the different house types:
+        weeklyCatalog += CatalogHouseItems
+
         self.notify.debug('Generating catalog for %s for week %s.' % (avatar.doId, week))
         if week >= 1 and week <= len(WeeklySchedule):
             saleItem = 0

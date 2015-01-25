@@ -132,6 +132,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.maxMoney = 10000
         self.maxBankMoney = ToontownGlobals.MaxBankMoney
         self.gardenSpecials = []
+        self.houseType = 0
         self.houseId = 0
         self.posIndex = 0
         self.savedCheesyEffect = ToontownGlobals.CENormal
@@ -4284,6 +4285,19 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def b_setBuffs(self, buffs):
         self.setBuffs(buffs)
         self.d_setBuffs(buffs)
+
+    def getHouseType(self):
+        return self.houseType
+
+    def setHouseType(self, houseType):
+        self.houseType = houseType
+
+    def d_setHouseType(self, houseType):
+        self.sendUpdate('setHouseType', [houseType])
+
+    def b_setHouseType(self, houseType):
+        self.setHouseType(houseType)
+        self.d_setHouseType(houseType)
 
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int])
