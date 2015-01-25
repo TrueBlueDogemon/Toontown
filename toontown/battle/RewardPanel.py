@@ -444,6 +444,12 @@ class RewardPanel(DirectFrame):
     def getTrackIntervalList(self, toon, track, origSkill, earnedSkill, hasUber, guestWaste = 0):
         if hasUber < 0:
             print (toon.doId, 'Reward Panel received an invalid hasUber from an uberList')
+
+        # Check if they have the buff...
+        if toon.hasBuff(ToontownGlobals.BGagExperience):
+            earnedSkill *= ToontownGlobals.BGagExperienceMultiplier
+            earnedSkill = int(math.ceil(earnedSkill))
+
         tickDelay = 1.0 / 60
         intervalList = []
         if origSkill + earnedSkill >= ToontownBattleGlobals.UnpaidMaxSkills[track] and toon.getGameAccess() != OTPGlobals.AccessFull:
