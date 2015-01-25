@@ -134,7 +134,7 @@ OTPGlobals.setDefaultProductPrefix(TTLocalizer.ProductPrefix)
 if base.musicManagerIsValid:
     music = base.loadMusic('phase_3/audio/bgm/ttf_theme.ogg')
     if music:
-        #music.setLoop(1)
+        music.setLoop(1)
         music.setVolume(0.9)
         music.play()
     notify.info('Loading the default GUI sounds...')
