@@ -9815,9 +9815,12 @@ YangGoodbye = 'Okay, then. See you later!'
 buffIdStrings = {
   0: ('Your movement speed will be slightly increased for the next %d %s.',
       'Reward: Increased movement speed'),
-  1: ('Your gag accuracy will be slight increased for the next %d %s.',
-      'Reward: Increased gag accuracy')
+  1: ('Your gag accuracy will be slightly increased for the next %d %s.',
+      'Reward: Increased gag accuracy'),
+  2: ('Your gag experience will be slightly increased for the next %d %s.',
+      'Reward: Increased gag experience')
 }
+
 
 def getBuffString(buffId, buffTime):
     if buffTime < 60:

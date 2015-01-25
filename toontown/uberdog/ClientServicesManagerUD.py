@@ -337,15 +337,13 @@ class MySQLAccountDB(AccountDB):
 
     def get_hashed_password(self, plain_text_password):
         newpass = bcrypt.encrypt(plain_text_password)
-        print ("newpass: ", newpass)
         return newpass
 
-    def check_password(self, plain_text_password, hashed_password, passType):
-        print ("check_password: ", (plain_text_password, hashed_password))
+    def check_password(self, plain_text_password, hashed_password):
         try:
             return bcrypt.verify(plain_text_password, hashed_password)
         except:
-            print "bad hash?" 
+            print ("bad hash: ", (plain_text_password, hashed_password))
             return False
 
     def create_database(self, cursor):
@@ -430,7 +428,7 @@ class MySQLAccountDB(AccountDB):
                 exit(1)
 
         self.count_account = ("SELECT COUNT(*) from Accounts")
-        self.select_account = ("SELECT password,accountId,accessLevel,status,date,rawPassword FROM Accounts where username = %s")
+        self.select_account = ("SELECT password,accountId,accessLevel,status,rawPassword FROM Accounts where username = %s")
         self.add_account = ("REPLACE INTO Accounts (username, password, accountId, accessLevel, rawPassword) VALUES (%s, %s, %s, %s, %s)")
         self.update_avid = ("UPDATE Accounts SET accountId = %s where username = %s")
         self.update_password = ("UPDATE Accounts SET password = %s, rawPassword = '1' where username = %s")
@@ -472,7 +470,6 @@ class MySQLAccountDB(AccountDB):
         return 'Success'
 
     def lookup(self, token, callback):
-        print ("lookup ", token)
         try:
             tokenList = token.split(':')
 
@@ -493,7 +490,7 @@ class MySQLAccountDB(AccountDB):
             self.cnx.commit()
 
             if row:
-                if not self.check_password(password, row[0], row[5]):
+                if not self.check_password(password, row[0]):
                     response = {
                       'success': False,
                       'reason': "invalid password"
@@ -522,16 +519,6 @@ class MySQLAccountDB(AccountDB):
 
         except mysql.connector.Error as err:
             print("mysql exception {}".format(err))
-            print response
-            response = {
-                'success': False,
-                'reason': "Can't decode this token."
-            }
-            callback(response)
-            return response
-        except:
-            print "exception..."
-            self.notify.warning('Could not decode the provided token!')
             response = {
                 'success': False,
                 'reason': "Can't decode this token."
@@ -539,6 +526,16 @@ class MySQLAccountDB(AccountDB):
             print response
             callback(response)
             return response
+#        except:
+#            print "exception..."
+#            self.notify.warning('Could not decode the provided token!')
+#            response = {
+#                'success': False,
+#                'reason': "Can't decode this token."
+#            }
+#            print response
+#            callback(response)
+#            return response
 
     def storeAccountID(self, userId, accountId, callback):
         self.cur.execute(self.count_avid, (userId,))
