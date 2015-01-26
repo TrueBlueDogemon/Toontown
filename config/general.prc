@@ -89,6 +89,7 @@ want-goofy #f
 want-minigames #t
 want-photo-game #f
 want-travel-game #f
+want-pairing-game #f
 
 # Picnic table board games:
 want-game-tables #f

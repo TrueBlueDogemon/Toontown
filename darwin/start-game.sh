@@ -22,3 +22,4 @@ echo "Gameserver: $TTI_GAMESERVER"
 echo "==============================="
 
 ppython -m toontown.toonbase.ClientStart
+
