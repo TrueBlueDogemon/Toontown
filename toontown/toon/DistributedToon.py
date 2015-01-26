@@ -185,6 +185,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.canEarnAchievements = False
         self.promotionStatus = [0, 0, 0, 0]
         self.buffs = []
+        self.houseType = 0
 
     def disable(self):
         for soundSequence in self.soundSequenceList:
@@ -2640,6 +2641,11 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.achievements = achievements
         messenger.send(localAvatar.uniqueName('achievementsChange'))
 
+    def hasBuff(self, id):
+        if len(self.buffs) <= id:
+            return False
+        return self.buffs[id] != 0
+
     def setBuffs(self, buffs):
         self.buffs = buffs
         self.applyBuffs()
@@ -2660,6 +2666,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
                     ToontownGlobals.ToonJumpForce,
                     ToontownGlobals.ToonReverseSpeed * ToontownGlobals.BMovementSpeedMultiplier,
                     ToontownGlobals.ToonRotateSpeed * ToontownGlobals.BMovementSpeedMultiplier)
+
+    def getHouseType(self):
+        return self.houseType
+
+    def setHouseType(self, houseType):
+        self.houseType = houseType
 
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER)
 def globalTeleport():

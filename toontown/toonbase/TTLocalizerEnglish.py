@@ -1,6 +1,7 @@
 from toontown.toonbase.TTLocalizerEnglishProperty import *
 from toontown.catalog import CatalogAccessoryItemGlobals
 from otp.otpbase import OTPLocalizer as OL
+from toontown.estate import HouseGlobals
 OL.SpeedChatStaticText = OL.SpeedChatStaticTextToontown.copy()
 for key in OL.SpeedChatStaticTextCommon.iterkeys():
     OL.SpeedChatStaticText[key] = OL.SpeedChatStaticTextCommon[key]
@@ -9814,9 +9815,12 @@ YangGoodbye = 'Okay, then. See you later!'
 buffIdStrings = {
   0: ('Your movement speed will be slightly increased for the next %d %s.',
       'Reward: Increased movement speed'),
-  1: ('Your gag accuracy will be slight increased for the next %d %s.',
-      'Reward: Increased gag accuracy')
+  1: ('Your gag accuracy will be slightly increased for the next %d %s.',
+      'Reward: Increased gag accuracy'),
+  2: ('Your gag experience will be slightly increased for the next %d %s.',
+      'Reward: Increased gag experience')
 }
+
 
 def getBuffString(buffId, buffTime):
     if buffTime < 60:
@@ -9827,3 +9831,18 @@ def getBuffString(buffId, buffTime):
 
 def getBuffPosterString(buffId):
     return buffIdStrings[buffId][1]
+
+# Different house types
+
+
+HouseTypeName = 'House'
+
+
+houseNames = {
+  HouseGlobals.HOUSE_DEFAULT: 'Classic House',
+  HouseGlobals.HOUSE_CABIN: 'Cabin House'
+}
+
+
+def getHouseNameById(houseId):
+    return houseNames[houseId]
