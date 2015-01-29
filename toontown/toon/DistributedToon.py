@@ -2683,7 +2683,7 @@ def globalTeleport():
     invoker.setTeleportAccess(list(ToontownGlobals.HoodsForTeleportAll))
     return 'Global teleport has been activated.'
 
-@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
 def zone(zoneId):
     """
     Changes the invoker's zone ID.
@@ -2691,7 +2691,7 @@ def zone(zoneId):
     base.cr.sendSetZoneMsg(zoneId, [zoneId])
     return 'You have been moved to zone %d.' % zoneId
 
-@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
 def promote(deptIndex):
     """
     sends a request to promote the invoker's [deptIndex] Cog disguise.

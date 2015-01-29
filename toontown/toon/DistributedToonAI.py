@@ -4317,7 +4317,7 @@ def cheesyEffect(value, hood=0, expire=0):
         return 'Invalid cheesy effect value: %d' % value
     if (hood != 0) and (not 1000 <= hood < ToontownGlobals.DynamicZonesBegin):
         return 'Invalid hood ID: %d' % hood
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
     invoker.b_setCheesyEffect(value, hood, expire)
     return 'Set your cheesy effect to: %d' % value
 
@@ -4805,7 +4805,7 @@ def inventory(a, b=None, c=None):
 @magicWord(category=CATEGORY_CREATIVE, types=[str, str])
 def dna(part, value):
     """Modify a DNA part on the invoker."""
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
 
     dna = ToonDNA.ToonDNA()
     dna.makeFromNetString(invoker.getDNAString())
