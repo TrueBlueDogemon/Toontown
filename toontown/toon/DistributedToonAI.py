@@ -5063,7 +5063,7 @@ def track(command, track, value=None):
                  'squirt', 'drop').index(track.lower())
     except:
         return 'Invalid Gag track!'
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
     trackAccess = invoker.getTrackAccess()
     if (command.lower() not in ('add',)) and (not trackAccess[index]):
         return "You don't have that track!"
