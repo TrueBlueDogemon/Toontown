@@ -661,4 +661,4 @@ def target():
     Returns the current Spellbook target.
     """
     target = spellbook.getTarget()
-    return 'Target: %s-%d [%d]' % (target.getName(), target.doId, target.getAdminAccess())
+    return '%s ac:%d toon:%d [%d]' % (target.getName(), target.DISLid, target.doId, target.getAdminAccess())
