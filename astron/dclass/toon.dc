@@ -31,6 +31,7 @@ from toontown.suit import DistributedFactorySuit/AI
 from toontown.suit import DistributedMintSuit/AI
 from toontown.suit import DistributedStageSuit/AI
 from toontown.suit import DistributedSellbotBoss/AI
+from toontown.suit import DistributedBrutalSellbotBoss/AI
 from toontown.suit import DistributedCashbotBoss/AI
 from toontown.coghq import DistributedCashbotBossSafe/AI
 from toontown.coghq import DistributedCashbotBossCrane/AI
@@ -800,6 +801,9 @@ dclass DistributedSellbotBoss : DistributedBossCog {
   doStrafe(uint8, uint8) broadcast;
   cagedToonBattleThree(uint16, uint32) broadcast;
   toonPromoted(uint8(0-1));
+};
+
+dclass DistributedBrutalSellbotBoss : DistributedSellbotBoss {
 };
 
 dclass DistributedCashbotBoss : DistributedBossCog {
