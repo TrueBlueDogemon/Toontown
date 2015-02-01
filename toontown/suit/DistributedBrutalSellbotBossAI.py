@@ -24,6 +24,12 @@ class DistributedBrutalSellbotBossAI(DistributedSellbotBossAI):
     def hitToon(self, toonId):
         pass
 
+    def generateSuits(self, battleNumber):
+        if battleNumber == 1:
+            return self.invokeSuitPlanner(18, 0, randomRevives=True)
+        else:
+            return self.invokeSuitPlanner(19, 0)
+
     def touchCage(self):
         avId = self.air.getAvatarIdFromSender()
         currState = self.getCurrentOrNextState()
