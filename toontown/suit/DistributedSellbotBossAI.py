@@ -20,6 +20,8 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     hitCountDamage = 35
     numPies = ToontownGlobals.FullPies
 
+    SOS_AMOUNT = 1
+
     def __init__(self, air):
         DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, 's')
         FSM.FSM.__init__(self, 'DistributedSellbotBossAI')
@@ -349,7 +351,7 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         for toonId in self.involvedToons:
             toon = self.air.doId2do.get(toonId)
             if toon:
-                if not toon.attemptAddNPCFriend(self.cagedToonNpcId, numCalls=1):
+                if not toon.attemptAddNPCFriend(self.cagedToonNpcId, numCalls=self.SOS_AMOUNT):
                     self.notify.info('%s.unable to add NPCFriend %s to %s.' % (self.doId, self.cagedToonNpcId, toonId))
                 toon.b_promote(self.deptIndex)
 
