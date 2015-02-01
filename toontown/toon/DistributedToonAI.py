@@ -4612,7 +4612,7 @@ def name(name=''):
     else:
         return "%s's name is now empty!" % _name
 
-@magicWord(category=CATEGORY_CREATIVE, types=[int, int])
+@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int, int])
 def hat(hatIndex, hatTex=0):
     """
     Modify the invoker's hat.
@@ -4625,7 +4625,7 @@ def hat(hatIndex, hatTex=0):
     invoker.b_setHat(hatIndex, hatTex, 0)
     return "Set %s's hat to %d, %d!" % (invoker.getName(), hatIndex, hatTex)
 
-@magicWord(category=CATEGORY_CREATIVE, types=[int, int])
+@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int, int])
 def glasses(glassesIndex, glassesTex=0):
     """
     Modify the invoker's glasses.
