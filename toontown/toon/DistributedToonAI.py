@@ -4621,7 +4621,7 @@ def hat(hatIndex, hatTex=0):
         return 'Invalid hat index.'
     if not 0 <= hatTex < len(ToonDNA.HatTextures):
         return 'Invalid hat texture.'
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
     invoker.b_setHat(hatIndex, hatTex, 0)
     return "Set %s's hat to %d, %d!" % (invoker.getName(), hatIndex, hatTex)
 
@@ -4634,7 +4634,7 @@ def glasses(glassesIndex, glassesTex=0):
         return 'Invalid glasses index.'
     if not 0 <= glassesTex < len(ToonDNA.GlassesTextures):
         return 'Invalid glasses texture.'
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
     invoker.b_setGlasses(glassesIndex, glassesTex, 0)
     return "Set %s's glasses to %d, %d!" % (invoker.getName(), glassesIndex, glassesTex)
 
