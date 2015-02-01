@@ -517,19 +517,6 @@ class DistributedLawbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FSM
         self.notify.debug('battleDifficulty = %d' % self.battleDifficulty)
         self.numToonsAtStart = len(self.involvedToons)
 
-    def getToonDifficulty(self):
-        totalCogSuitTier = 0
-        totalToons = 0
-
-        for toonId in self.involvedToons:
-            toon = simbase.air.doId2do.get(toonId)
-            if toon:
-                totalToons += 1
-                totalCogSuitTier += toon.cogTypes[1]
-
-        averageTier = math.floor(totalCogSuitTier / totalToons) + 1
-        return int(averageTier)
-
     def __saySomething(self, task = None):
         index = None
         avId = 0
