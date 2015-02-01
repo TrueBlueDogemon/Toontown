@@ -12,13 +12,14 @@ class CogHQAI:
 
     def __init__(
             self, air, zoneId, lobbyZoneId, lobbyFADoorCode,
-            lobbyElevatorCtor, bossCtor):
+            lobbyElevatorCtor, bossCtor, brutalBossCtor=None):
         self.air = air
         self.zoneId = zoneId
         self.lobbyZoneId = lobbyZoneId
         self.lobbyFADoorCode = lobbyFADoorCode
         self.lobbyElevatorCtor = lobbyElevatorCtor
         self.bossCtor = bossCtor
+        self.brutalBossCtor = brutalBossCtor
 
         self.lobbyMgr = None
         self.lobbyElevator = None
@@ -43,7 +44,7 @@ class CogHQAI:
             self.createBoardingParty()
 
     def createLobbyManager(self):
-        self.lobbyMgr = LobbyManagerAI.LobbyManagerAI(self.air, self.bossCtor)
+        self.lobbyMgr = LobbyManagerAI.LobbyManagerAI(self.air, self.bossCtor, self.brutalBossCtor)
         self.lobbyMgr.generateWithRequired(self.lobbyZoneId)
 
     def createLobbyElevator(self):
