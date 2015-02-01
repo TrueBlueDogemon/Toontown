@@ -1,6 +1,9 @@
-from direct.distributed.DistributedObject import DistributedObject
+from toontown.building.DistributedVPElevator import DistributedVPElevator
 
 
-class DistributedBrutalVPElevator(DistributedObject):
+class DistributedBrutalVPElevator(DistributedVPElevator):
+    def setupElevator(self):
+        return
+
     def getDestName(self):
         return 'Test'

@@ -1,5 +1,5 @@
-from direct.distributed.DistributedObjectAI import DistributedObjectAI
+from toontown.building.DistributedVPElevatorAI import DistributedVPElevatorAI
 
 
-class DistributedBrutalVPElevatorAI(DistributedObjectAI):
+class DistributedBrutalVPElevatorAI(DistributedVPElevatorAI):
     pass

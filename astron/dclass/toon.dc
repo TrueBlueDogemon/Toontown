@@ -2024,7 +2024,7 @@ dclass DistributedBossElevator : DistributedElevatorExt {
 dclass DistributedVPElevator : DistributedBossElevator {
 };
 
-dclass DistributedBrutalVPElevator : DistributedObject {
+dclass DistributedBrutalVPElevator : DistributedVPElevator {
 };
 
 dclass DistributedCFOElevator : DistributedBossElevator {
