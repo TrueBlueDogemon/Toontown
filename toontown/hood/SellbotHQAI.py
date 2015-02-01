@@ -1,4 +1,5 @@
 from toontown.building import DistributedVPElevatorAI
+from toontown.building import DistributedBrutalVPElevatorAI
 from toontown.building import FADoorCodes
 from toontown.building.DistributedBoardingPartyAI import DistributedBoardingPartyAI
 from toontown.coghq.DistributedFactoryElevatorExtAI import DistributedFactoryElevatorExtAI
@@ -16,6 +17,7 @@ class SellbotHQAI(CogHQAI.CogHQAI):
             FADoorCodes.SB_DISGUISE_INCOMPLETE,
             DistributedVPElevatorAI.DistributedVPElevatorAI,
             DistributedSellbotBossAI.DistributedSellbotBossAI,
+            DistributedBrutalVPElevatorAI.DistributedBrutalVPElevatorAI,
             DistributedBrutalSellbotBossAI.DistributedBrutalSellbotBossAI)
 
         self.factoryElevators = []
