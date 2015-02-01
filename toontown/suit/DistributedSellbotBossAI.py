@@ -20,6 +20,8 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     hitCountDamage = 35
     numPies = ToontownGlobals.FullPies
 
+    SOS_AMOUNT = 1
+
     def __init__(self, air):
         DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, 's')
         FSM.FSM.__init__(self, 'DistributedSellbotBossAI')
@@ -272,6 +274,7 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.setPieType()
         self.b_setBossDamage(0, 0, 0)
         self.battleThreeStart = globalClock.getFrameTime()
+
         for toonId in self.involvedToons:
             toon = simbase.air.doId2do.get(toonId)
             if toon:
@@ -349,7 +352,7 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         for toonId in self.involvedToons:
             toon = self.air.doId2do.get(toonId)
             if toon:
-                if not toon.attemptAddNPCFriend(self.cagedToonNpcId, numCalls=1):
+                if not toon.attemptAddNPCFriend(self.cagedToonNpcId, numCalls=self.SOS_AMOUNT):
                     self.notify.info('%s.unable to add NPCFriend %s to %s.' % (self.doId, self.cagedToonNpcId, toonId))
                 toon.b_promote(self.deptIndex)
 
@@ -402,6 +405,16 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def enterReward(self):
         self.air.achievementsManager.toonsFinishedVP(self.involvedToons)
         DistributedBossCogAI.DistributedBossCogAI.enterReward(self)
+
+    def hasToonTouchedCage(self, toon):
+        return toon.__touchedCage
+
+    def setToonTouchedCage(self, toon):
+        toon.__touchedCage = 1
+
+    def toonDidGoodJump(self, avId):
+        self.__goodJump(avId)
+
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
 def skipVP():

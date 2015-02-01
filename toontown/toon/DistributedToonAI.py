@@ -2446,6 +2446,9 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
     def setNumPies(self, numPies):
         self.numPies = numPies
 
+    def getNumPies(self):
+        return self.numPies
+
     def b_setPieType(self, pieType):
         self.setPieType(pieType)
         self.d_setPieType(pieType)

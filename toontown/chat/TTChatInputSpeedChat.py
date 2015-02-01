@@ -534,7 +534,8 @@ class TTChatInputSpeedChat(DirectObject.DirectObject):
         return
 
     def handleResistanceMsg(self, textId):
-        self.chatMgr.sendSCResistanceChatMessage(textId)
+        if base.localAvatar.getCanUseUnites():
+            self.chatMgr.sendSCResistanceChatMessage(textId)
 
     def handleSpeedChatStyleChange(self):
         nameKey, arrowColor, rolloverColor, frameColor = speedChatStyles[base.localAvatar.getSpeedChatStyleIndex()]

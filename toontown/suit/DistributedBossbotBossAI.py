@@ -746,19 +746,6 @@ class DistributedBossbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
             returnedToonId = random.choice(maxToons)
         return returnedToonId
 
-    def getToonDifficulty(self):
-        totalCogSuitTier = 0
-        totalToons = 0
-
-        for toonId in self.involvedToons:
-            toon = simbase.air.doId2do.get(toonId)
-            if toon:
-                totalToons += 1
-                totalCogSuitTier += toon.cogTypes[1]
-
-        averageTier = math.floor(totalCogSuitTier / totalToons) + 1
-        return int(averageTier)
-
     def calcAndSetBattleDifficulty(self):
         self.toonLevels = self.getToonDifficulty()
         battleDifficulty = int(math.floor(self.toonLevels / 2))
