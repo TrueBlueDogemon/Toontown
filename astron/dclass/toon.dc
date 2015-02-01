@@ -125,6 +125,7 @@ from toontown.coghq import DistributedLawOfficeElevatorInt/AI
 from toontown.building import DistributedElevatorFloor/AI
 from toontown.building import DistributedBossElevator/AI
 from toontown.building import DistributedVPElevator/AI
+from toontown.building import DistributedBrutalVPElevator/AI
 from toontown.building import DistributedCFOElevator/AI
 from toontown.building import DistributedCJElevator/AI
 from toontown.building import DistributedBBElevator/AI
@@ -2021,6 +2022,9 @@ dclass DistributedBossElevator : DistributedElevatorExt {
 };
 
 dclass DistributedVPElevator : DistributedBossElevator {
+};
+
+dclass DistributedBrutalVPElevator : DistributedObject {
 };
 
 dclass DistributedCFOElevator : DistributedBossElevator {
