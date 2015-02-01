@@ -21,6 +21,9 @@ class DistributedBrutalSellbotBossAI(DistributedSellbotBossAI):
 
         self.numPies = BrutalSellbotBossGlobals.PieCount[self.getToonDifficulty()-1]
 
+    def hitToon(self, toonId):
+        pass
+
     def touchCage(self):
         avId = self.air.getAvatarIdFromSender()
         currState = self.getCurrentOrNextState()
