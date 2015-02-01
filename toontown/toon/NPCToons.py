@@ -11856,6 +11856,16 @@ for npcId in disabledSosCards:
 npcFriends = dict(HQnpcFriends)
 npcFriends.update(FOnpcFriends)
 
+
+BrutalSellbotNPCS = {}
+
+
+for npcId in HQnpcFriends:
+    npcInfo = HQnpcFriends[npcId]
+    if npcInfo[3] == 5:
+        BrutalSellbotNPCS[npcId] = npcInfo
+
+
 def getNPCName(npcId):
     if npcId in NPCToonDict:
         return NPCToonDict[npcId][1]
