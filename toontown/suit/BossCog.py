@@ -31,6 +31,8 @@ class BossCog(Avatar.Avatar):
     healthColors = Suit.Suit.healthColors
     healthGlowColors = Suit.Suit.healthGlowColors
 
+    ANIM_PLAYRATE = 1
+
     def __init__(self):
         Avatar.Avatar.__init__(self)
         self.setFont(ToontownGlobals.getSuitFont())
@@ -405,7 +407,7 @@ class BossCog(Avatar.Avatar):
             self.currentAnimIval.setDoneEvent('')
             self.currentAnimIval.finish()
         self.currentAnimIval = ival
-        self.currentAnimIval.start()
+        self.currentAnimIval.start(playRate=self.ANIM_PLAYRATE)
         self.nowRaised = raised
         self.nowForward = forward
         self.nowHappy = happy
