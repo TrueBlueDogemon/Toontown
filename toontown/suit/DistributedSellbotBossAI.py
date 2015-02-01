@@ -274,6 +274,7 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.setPieType()
         self.b_setBossDamage(0, 0, 0)
         self.battleThreeStart = globalClock.getFrameTime()
+
         for toonId in self.involvedToons:
             toon = simbase.air.doId2do.get(toonId)
             if toon:
@@ -404,6 +405,16 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     def enterReward(self):
         self.air.achievementsManager.toonsFinishedVP(self.involvedToons)
         DistributedBossCogAI.DistributedBossCogAI.enterReward(self)
+
+    def hasToonTouchedCage(self, toon):
+        return toon.__touchedCage
+
+    def setToonTouchedCage(self, toon):
+        toon.__touchedCage = 1
+
+    def toonDidGoodJump(self, avId):
+        self.__goodJump(avId)
+
 
 @magicWord(category=CATEGORY_ADMINISTRATOR)
 def skipVP():
