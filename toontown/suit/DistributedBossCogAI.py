@@ -116,6 +116,9 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
         if not self.hasToons():
             taskMgr.doMethodLater(10, self.__bossDone, self.uniqueName('BossDone'))
 
+    def getBossDoneFunc(self):
+        return self.__bossDone
+
     def __bossDone(self, task):
         self.b_setState('Off')
         messenger.send(self.uniqueName('BossDone'))
