@@ -10,6 +10,7 @@ import re
 import sys
 import token
 import tokenize
+import QuestScripts
 
 import BlinkingArrows
 from otp.speedchat import SpeedChatGlobals
@@ -51,12 +52,13 @@ def init():
 def clear():
     globalVarDict.clear()
 
-def readFile(filename):
+def readFile():
     global curId
-    with open(filename, 'r') as scriptFile:
+    contents = QuestScripts.script
+    lines = contents.split('\n')
+    for line in lines:
         def readline():
-            return scriptFile.readline().replace('\r', '')
-
+            return line
         gen = tokenize.generate_tokens(readline)
         line = getLineOfTokens(gen)
         while line is not None:
@@ -1083,4 +1085,4 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         else:
             return Wait(0.0)
 
-readFile('toontown/quest/QuestScripts.py')
+readFile()
