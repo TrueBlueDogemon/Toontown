@@ -1,5 +1,6 @@
 from toontown.suit.DistributedSellbotBossAI import DistributedSellbotBossAI
 from toontown.suit import BrutalSellbotBossGlobals
+from toontown.toonbase import ToontownGlobals
 from toontown.toon import NPCToons
 
 import random
@@ -23,6 +24,32 @@ class DistributedBrutalSellbotBossAI(DistributedSellbotBossAI):
 
     def hitToon(self, toonId):
         pass
+
+    def zapToon(self, x, y, z, h, p, r, bpx, bpy, attackCode, timestamp):
+        avId = self.air.getAvatarIdFromSender()
+
+        if not self.validate(avId, avId in self.involvedToons, 'zapToon from unknown avatar'):
+            return
+
+        if attackCode == ToontownGlobals.BossCogLawyerAttack and self.dna.dept != 'l':
+            self.notify.warning('got lawyer attack but not in CJ boss battle')
+            return
+
+        toon = simbase.air.doId2do.get(avId)
+        if toon:
+            self.d_showZapToon(avId, x, y, z, h, p, r, attackCode, timestamp)
+
+            damage = BrutalSellbotBossGlobals.getDamageFromAttackCode(attackCode)
+            self.damageToon(toon, damage)
+
+            currState = self.getCurrentOrNextState()
+
+            if attackCode == ToontownGlobals.BossCogElectricFence and (currState == 'RollToBattleTwo' or currState == 'BattleThree'):
+                if bpy < 0 and abs(bpx / bpy) > 0.5:
+                    if bpx < 0:
+                        self.b_setAttackCode(ToontownGlobals.BossCogSwatRight)
+                    else:
+                        self.b_setAttackCode(ToontownGlobals.BossCogSwatLeft)
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
