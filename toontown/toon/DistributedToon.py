@@ -186,6 +186,7 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.promotionStatus = [0, 0, 0, 0]
         self.buffs = []
         self.houseType = 0
+        self.canUseUnites = True
 
     def disable(self):
         for soundSequence in self.soundSequenceList:
@@ -2672,6 +2673,12 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
 
     def setHouseType(self, houseType):
         self.houseType = houseType
+
+    def getCanUseUnites(self):
+        return self.canUseUnites
+
+    def setCanUseUnites(self, canUseUnites):
+        self.canUseUnites = canUseUnites
 
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER)
 def globalTeleport():
