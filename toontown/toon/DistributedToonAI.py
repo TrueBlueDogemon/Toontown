@@ -4320,7 +4320,7 @@ def cheesyEffect(value, hood=0, expire=0):
         return 'Invalid cheesy effect value: %d' % value
     if (hood != 0) and (not 1000 <= hood < ToontownGlobals.DynamicZonesBegin):
         return 'Invalid hood ID: %d' % hood
-    invoker = spellbook.getTarget()
+    invoker = spellbook.getInvoker()
     invoker.b_setCheesyEffect(value, hood, expire)
     return 'Set your cheesy effect to: %d' % value
 
@@ -4599,7 +4599,7 @@ def maxFishTank(maxFishTank):
     target.b_setMaxFishTank(maxFishTank)
     return "Set %s's max fish tank value to %d!" % (target.getName(), maxFishTank)
 
-@magicWord(category=CATEGORY_MODERATOR, types=[str])
+@magicWord(category=CATEGORY_ADMINISTRATOR, types=[str])
 def name(name=''):
     """
     Modify the target's name.
@@ -4808,7 +4808,7 @@ def inventory(a, b=None, c=None):
 @magicWord(category=CATEGORY_CREATIVE, types=[str, str])
 def dna(part, value):
     """Modify a DNA part on the invoker."""
-    invoker = spellbook.getTarget()
+    invoker = spellbook.getInvoker()
 
     dna = ToonDNA.ToonDNA()
     dna.makeFromNetString(invoker.getDNAString())
@@ -5012,8 +5012,8 @@ def bringTheMadness(clothes):
     Applies the Pegboard Nerds Clothes
     """
     pass # TODO
-        
-        
+
+
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
 def trophyScore(value):
     """
@@ -5066,7 +5066,7 @@ def track(command, track, value=None):
                  'squirt', 'drop').index(track.lower())
     except:
         return 'Invalid Gag track!'
-    invoker = spellbook.getTarget()
+    invoker = spellbook.getInvoker()
     trackAccess = invoker.getTrackAccess()
     if (command.lower() not in ('add',)) and (not trackAccess[index]):
         return "You don't have that track!"
