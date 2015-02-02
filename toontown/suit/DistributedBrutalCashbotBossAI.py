@@ -7,6 +7,18 @@ class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
     def removeToon(self, avId):
         av = self.air.doId2do.get(avId)
 
+        if self.cranes is not None:
+            for crane in self.cranes:
+                crane.removeToon(avId)
+
+        if self.safes is not None:
+            for safe in self.safes:
+                safe.removeToon(avId)
+
+        if self.goons is not None:
+            for goon in self.goons:
+                goon.removeToon(avId)
+
         if avId in self.looseToons:
             self.looseToons.remove(avId)
 
