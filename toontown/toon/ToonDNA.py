@@ -1947,7 +1947,9 @@ allColorsList = [VBase4(1.0, 1.0, 1.0, 1.0),
  # Mountain Green - 27
  VBase4(0.0, 0.635294, 0.258823, 1.0),
  # Icy Blue - 28
- VBase4(0.674509, 0.925490, 1.0, 1.0)
+ VBase4(0.674509, 0.925490, 1.0, 1.0),
+ # Desert Sand - 29
+ VBase4(0.988235, 0.894117, 0.745098, 1.0)
  ]
 defaultBoyColorList = [0,
  1,
@@ -1957,6 +1959,7 @@ defaultBoyColorList = [0,
  5,
  6,
  7,
+ 29,
  8,
  9,
  10,
@@ -1986,6 +1989,7 @@ defaultGirlColorList = [0,
  5,
  6,
  7,
+ 29,
  8,
  9,
  10,
