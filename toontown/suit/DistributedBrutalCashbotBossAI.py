@@ -45,6 +45,31 @@ class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
     def waitForNextHelmet(self):
         pass
 
+    def applyReward(self):
+        avId = self.air.getAvatarIdFromSender()
+        if avId in self.involvedToons and avId not in self.rewardedToons:
+            self.rewardedToons.append(avId)
+
+            toon = self.air.doId2do.get(avId)
+            if toon:
+                for _ in xrange(4):
+                    toon.doResistanceEffect(self.rewardId)
+
+            if simbase.config.GetBool('cfo-staff-event', False):
+
+                withStaff = False
+                for avId in self.involvedToons:
+                    av = self.air.doId2do.get(avId)
+                    if av:
+                        if av.adminAccess > 100:
+                            withStaff = True
+
+                if withStaff:
+                    participants = simbase.backups.load('cfo-staff-event', ('participants',), default={'doIds': []})
+                    if avId not in participants['doIds']:
+                        participants['doIds'].append(toon.doId)
+                    simbase.backups.save('cfo-staff-event', ('participants',), participants)
+
     def removeToon(self, avId):
         av = self.air.doId2do.get(avId)
 
