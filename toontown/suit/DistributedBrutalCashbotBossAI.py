@@ -1,6 +1,7 @@
 from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
 from toontown.coghq.DistributedCashbotBossCraneAI import DistributedCashbotBossCraneAI
 from toontown.toonbase import ToontownGlobals
+from toontown.chat import ResistanceChat
 
 
 class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
@@ -9,6 +10,7 @@ class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
     def __init__(self, air):
         DistributedCashbotBossAI.__init__(self, air)
 
+        self.rewardId = ResistanceChat.getRandomBrutalId()
         self.bossMaxDamage = ToontownGlobals.BrutalCashbotBossMaxDamage
         self.setMakeBattleFreeObjects(self.newMakeBattleThreeObjects)
 
