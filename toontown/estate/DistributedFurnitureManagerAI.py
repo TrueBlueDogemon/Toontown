@@ -1,7 +1,7 @@
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.catalog.CatalogItemList import CatalogItemList
 from toontown.catalog import CatalogItem
-from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem, FLTrunk, FLCloset, FLBank, FLPhone
+from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem, FLTrunk, FLCloset, FLBank, FLPhone, FLIsTable
 from toontown.catalog.CatalogWallpaperItem import CatalogWallpaperItem
 from toontown.catalog.CatalogMouldingItem import CatalogMouldingItem
 from toontown.catalog.CatalogFlooringItem import CatalogFlooringItem
@@ -538,9 +538,9 @@ def recoverCloset():
             for item in reversed(fm.items):
                 if item.catalogItem.getFlags() & FLCloset:
                     fm.moveItemToAttic(item.doId);
-                    return "Moved the closet"
+                    return "Moved the Closet"
             fm.saveToHouse()
-    return "I cannot find your closet"
+    return "I cannot find your Closet"
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[])
 def fillAttic():
@@ -587,3 +587,26 @@ def emptyHouse():
                 fm.items.remove(item)
             fm.saveToHouse()
     return "The house is empty"
+
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[])
+def furniture():
+    """
+    get any furniture item from your catalog
+    """
+    target = spellbook.getTarget()
+    if not target:
+        target = spellbook.getInvoker()
+    if not target:
+        return "Strange.. who are we talking about?"
+
+    if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
+        return "no houses in the state"
+
+    for house in target.estate.houses:
+        if house.doId == target.houseId:
+            item = CatalogFurnitureItem(1240)  # the Item...
+            item.posHpr = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+            items.append(item)
+            fm.saveToHouse()
+    return "Furniture delivery!"
