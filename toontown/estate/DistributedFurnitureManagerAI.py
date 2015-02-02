@@ -589,11 +589,17 @@ def emptyHouse():
     return "The house is empty"
 
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[])
-def furniture():
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def furniture(value):
     """
     get any furniture item from your catalog
     """
+
+    try:
+        value = int(value)
+    except:
+        value = 1240
+
     target = spellbook.getTarget()
     if not target:
         target = spellbook.getInvoker()
@@ -603,10 +609,11 @@ def furniture():
     if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
         return "no houses in the state"
 
+    fm = house.interior.furnitureManager
     for house in target.estate.houses:
         if house.doId == target.houseId:
-            item = CatalogFurnitureItem(1240)  # the Item...
+            item = CatalogFurnitureItem(value)  # the Item...
             item.posHpr = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-            items.append(item)
+            fm.items.append(item)
             fm.saveToHouse()
     return "Furniture delivery!"
