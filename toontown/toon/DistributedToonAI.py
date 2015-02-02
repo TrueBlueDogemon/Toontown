@@ -1342,7 +1342,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def d_setCogMerits(self, merits):
         self.sendUpdate('setCogMerits', [merits])
-
+d
     def getCogMerits(self):
         return self.cogMerits
 
@@ -5146,7 +5146,7 @@ def nametagStyle(nametagStyle):
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int])
 def disguise(command, suitIndex, value):
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
 
     if suitIndex > 3:
         return 'Invalid suit index: %s' % suitIndex
