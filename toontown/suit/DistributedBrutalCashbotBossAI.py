@@ -4,6 +4,9 @@ from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
 class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
     notify = directNotify.newCategory('DistributedBrutalCashbotBoss')
 
+    def waitForNextHelmet(self):
+        pass
+
     def removeToon(self, avId):
         av = self.air.doId2do.get(avId)
 
