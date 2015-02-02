@@ -1,8 +1,25 @@
 from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
+from toontown.toonbase import ToontownGlobals
 
 
 class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
     notify = directNotify.newCategory('DistributedBrutalCashbotBoss')
+
+    def recordHit(self, damage):
+        avId = self.air.getAvatarIdFromSender()
+
+        if not self.validate(avId, avId in self.involvedToons, 'recordHit from unknown avatar'):
+            return
+
+        if self.state != 'BattleThree':
+            return
+
+        self.b_setBossDamage(self.bossDamage + damage)
+
+        if self.bossDamage >= self.bossMaxDamage:
+            self.b_setState('Victory')
+
+        self.b_setAttackCode(ToontownGlobals.BossCogNoAttack)
 
     def waitForNextHelmet(self):
         pass
