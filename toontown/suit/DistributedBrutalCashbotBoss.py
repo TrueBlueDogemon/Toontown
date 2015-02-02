@@ -5,6 +5,8 @@ from toontown.toonbase import ToontownGlobals
 class DistributedBrutalCashbotBoss(DistributedCashbotBoss):
     notify = directNotify.newCategory('DistributedBrutalCashbotBoss')
 
+    ANIM_PLAYRATE = 1.5
+
     def __init__(self, cr):
         DistributedCashbotBoss.__init__(self, cr)
 
