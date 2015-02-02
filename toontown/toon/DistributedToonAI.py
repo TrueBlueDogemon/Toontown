@@ -1342,7 +1342,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def d_setCogMerits(self, merits):
         self.sendUpdate('setCogMerits', [merits])
-d
+
     def getCogMerits(self):
         return self.cogMerits
 
