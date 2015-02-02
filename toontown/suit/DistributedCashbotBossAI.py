@@ -18,6 +18,8 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBossAI')
     maxGoons = 8
 
+    WANT_SAFES = True
+
     def __init__(self, air):
         DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, 'm')
         FSM.FSM.__init__(self, 'DistributedCashbotBossAI')
@@ -100,12 +102,13 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
                 crane.generateWithRequired(self.zoneId)
                 self.cranes.append(crane)
 
-        if self.safes == None:
-            self.safes = []
-            for index in xrange(len(ToontownGlobals.CashbotBossSafePosHprs)):
-                safe = DistributedCashbotBossSafeAI.DistributedCashbotBossSafeAI(self.air, self, index)
-                safe.generateWithRequired(self.zoneId)
-                self.safes.append(safe)
+        if self.WANT_SAFES:
+            if self.safes == None:
+                self.safes = []
+                for index in xrange(len(ToontownGlobals.CashbotBossSafePosHprs)):
+                    safe = DistributedCashbotBossSafeAI.DistributedCashbotBossSafeAI(self.air, self, index)
+                    safe.generateWithRequired(self.zoneId)
+                    self.safes.append(safe)
 
         if self.goons == None:
             self.goons = []
@@ -121,8 +124,6 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         if self.safes != None:
             for safe in self.safes:
                 safe.request('Initial')
-
-        return
 
     def __deleteBattleThreeObjects(self):
         if self.cranes != None:
