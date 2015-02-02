@@ -609,8 +609,9 @@ def furniture(value):
     if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
         return "no houses in the state"
 
-    fm = house.interior.furnitureManager
+ 
     for house in target.estate.houses:
+        fm = house.interior.furnitureManager
         if house.doId == target.houseId:
             item = CatalogFurnitureItem(value)  # the Item...
             item.posHpr = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
