@@ -2,11 +2,15 @@ from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
 from toontown.toonbase import ToontownGlobals
 from toontown.chat import ResistanceChat
 
+import random
+
 
 class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
     notify = directNotify.newCategory('DistributedBrutalCashbotBoss')
 
     WANT_SAFES = False
+    STUNNABLE_GOONS = False
+    WANT_HARD_GOONS = True
 
     def __init__(self, air):
         DistributedCashbotBossAI.__init__(self, air)
@@ -95,3 +99,17 @@ class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
         self.ignore(event)
         if not self.hasToons():
             taskMgr.doMethodLater(10, self.getBossDoneFunc(), self.uniqueName('BossDone'))
+
+    def progressValue(self, fromValue, toValue):
+        t0 = float(self.bossDamage) / float(self.bossMaxDamage)
+        elapsed = globalClock.getFrameTime() - self.battleThreeStart
+        t1 = elapsed / float(self.battleThreeDuration)
+        t = max(t0, t1)
+        return fromValue + (toValue - fromValue) * min(t, 1) * 3
+
+    def progressRandomValue(self, fromValue, toValue, radius = 0.2):
+        t = self.progressValue(0, 1)
+        radius = radius * (1.0 - abs(t - 0.5) * 2.0)
+        t += radius * random.uniform(-1, 1)
+        t = max(min(t, 1.0), 0.0)
+        return fromValue + (toValue - fromValue) * t * 3

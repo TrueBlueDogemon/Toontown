@@ -19,6 +19,8 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     maxGoons = 8
 
     WANT_SAFES = True
+    STUNNABLE_GOONS = True
+    WANT_HARD_GOONS = False
 
     def __init__(self, air):
         DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, 'm')
@@ -263,17 +265,16 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         if goon == None:
             if len(self.goons) >= self.getMaxGoons():
                 return
-            goon = DistributedCashbotBossGoonAI.DistributedCashbotBossGoonAI(self.air, self)
+            goon = DistributedCashbotBossGoonAI.DistributedCashbotBossGoonAI(self.air, self, isStunnable=self.STUNNABLE_GOONS)
             goon.generateWithRequired(self.zoneId)
             self.goons.append(goon)
-        if self.getBattleThreeTime() > 1.0:
+        if self.getBattleThreeTime() > 1.0 and not self.WANT_HARD_GOONS:
             goon.STUN_TIME = 4
             goon.b_setupGoon(velocity=8, hFov=90, attackRadius=20, strength=30, scale=1.8)
         else:
             goon.STUN_TIME = self.progressValue(30, 8)
             goon.b_setupGoon(velocity=self.progressRandomValue(3, 7), hFov=self.progressRandomValue(70, 80), attackRadius=self.progressRandomValue(6, 15), strength=int(self.progressRandomValue(5, 25)), scale=self.progressRandomValue(0.5, 1.5))
         goon.request(side)
-        return
 
     def __chooseOldGoon(self):
         for goon in self.goons:
