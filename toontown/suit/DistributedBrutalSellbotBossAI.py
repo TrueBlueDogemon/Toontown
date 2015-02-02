@@ -75,6 +75,9 @@ class DistributedBrutalSellbotBossAI(DistributedSellbotBossAI):
     def removeToon(self, avId):
         av = self.air.doId2do.get(avId)
 
+        if av:
+            av.b_setNumPies(0)
+
         if avId in self.looseToons:
             self.looseToons.remove(avId)
 
