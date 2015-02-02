@@ -3,6 +3,8 @@ from toontown.toonbase import TTLocalizer
 
 
 class DistributedBrutalVPElevator(DistributedVPElevator):
+    notify = directNotify.newCategory('DistributedBrutalVPElevator')
+
     def setupElevator(self):
         pass
 

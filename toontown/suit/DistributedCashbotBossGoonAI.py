@@ -34,6 +34,7 @@ class DistributedCashbotBossGoonAI(DistributedGoonAI.DistributedGoonAI, Distribu
     def __init__(self, air, boss):
         DistributedGoonAI.DistributedGoonAI.__init__(self, air, 0)
         DistributedCashbotBossObjectAI.DistributedCashbotBossObjectAI.__init__(self, air, boss)
+
         cn = CollisionNode('tubeNode')
         self.tube = CollisionTube(0, 0, 0, 0, 0, 0, 2)
         cn.addSolid(self.tube)

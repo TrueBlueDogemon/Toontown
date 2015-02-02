@@ -1,9 +1,11 @@
 from toontown.building import DistributedCFOElevatorAI
+from toontown.building import DistributedBrutalCFOElevatorAI
 from toontown.building import FADoorCodes
 from toontown.building.DistributedBoardingPartyAI import DistributedBoardingPartyAI
 from toontown.coghq.DistributedMintElevatorExtAI import DistributedMintElevatorExtAI
 from toontown.hood import CogHQAI
 from toontown.suit import DistributedCashbotBossAI
+from toontown.suit import DistributedBrutalCashbotBossAI
 from toontown.suit import DistributedSuitPlannerAI
 from toontown.toonbase import ToontownGlobals
 
@@ -14,7 +16,9 @@ class CashbotHQAI(CogHQAI.CogHQAI):
             self, air, ToontownGlobals.CashbotHQ, ToontownGlobals.CashbotLobby,
             FADoorCodes.CB_DISGUISE_INCOMPLETE,
             DistributedCFOElevatorAI.DistributedCFOElevatorAI,
-            DistributedCashbotBossAI.DistributedCashbotBossAI)
+            DistributedCashbotBossAI.DistributedCashbotBossAI,
+            DistributedBrutalCFOElevatorAI.DistributedBrutalCFOElevatorAI,
+            DistributedBrutalCashbotBossAI.DistributedBrutalCashbotBossAI)
 
         self.mintElevators = []
         self.mintBoardingParty = None
