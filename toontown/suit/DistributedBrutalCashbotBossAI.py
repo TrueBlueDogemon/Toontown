@@ -1,4 +1,5 @@
 from toontown.suit.DistributedCashbotBossAI import DistributedCashbotBossAI
+from toontown.coghq.DistributedCashbotBossCraneAI import DistributedCashbotBossCraneAI
 from toontown.toonbase import ToontownGlobals
 
 
@@ -9,6 +10,21 @@ class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
         DistributedCashbotBossAI.__init__(self, air)
 
         self.bossMaxDamage = ToontownGlobals.BrutalCashbotBossMaxDamage
+        self.setMakeBattleFreeObjects(self.newMakeBattleThreeObjects)
+
+    def generateSuits(self, battleNumber):
+        return self.invokeSuitPlanner(20, 0)
+
+    def newMakeBattleThreeObjects(self):
+        if self.cranes is None:
+            self.cranes = []
+            for index in xrange(len(ToontownGlobals.CashbotBossCranePosHprs)):
+                crane = DistributedCashbotBossCraneAI(self.air, self, index)
+                crane.generateWithRequired(self.zoneId)
+                self.cranes.append(crane)
+
+        if self.goons is None:
+            self.goons = []
 
     def recordHit(self, damage):
         avId = self.air.getAvatarIdFromSender()

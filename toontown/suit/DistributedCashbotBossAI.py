@@ -109,7 +109,9 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
 
         if self.goons == None:
             self.goons = []
-        return
+
+    def setMakeBattleFreeObjects(self, newFunc):
+        self.__makeBattleThreeObjects = newFunc
 
     def __resetBattleThreeObjects(self):
         if self.cranes != None:
