@@ -31,7 +31,7 @@ class DistributedCashbotBossGoonAI(DistributedGoonAI.DistributedGoonAI, Distribu
     offMask = BitMask32(0)
     onMask = CollisionNode.getDefaultCollideMask()
 
-    def __init__(self, air, boss, isStunnable=True):
+    def __init__(self, air, boss):
         DistributedGoonAI.DistributedGoonAI.__init__(self, air, 0)
         DistributedCashbotBossObjectAI.DistributedCashbotBossObjectAI.__init__(self, air, boss)
 
@@ -58,7 +58,6 @@ class DistributedCashbotBossGoonAI(DistributedGoonAI.DistributedGoonAI, Distribu
         self.cTrav = CollisionTraverser('goon')
         self.cQueue = CollisionHandlerQueue()
         self.cTrav.addCollider(self.feelerNodePath, self.cQueue)
-        self.isStunnable = isStunnable
 
     def requestBattle(self, pauseTime):
         avId = self.air.getAvatarIdFromSender()
@@ -184,9 +183,6 @@ class DistributedCashbotBossGoonAI(DistributedGoonAI.DistributedGoonAI, Distribu
         return Task.done
 
     def requestStunned(self, pauseTime):
-        if not self.isStunnable:
-            return
-
         avId = self.air.getAvatarIdFromSender()
         if avId not in self.boss.involvedToons:
             return
