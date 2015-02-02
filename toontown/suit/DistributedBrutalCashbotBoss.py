@@ -1,8 +1,14 @@
 from toontown.suit.DistributedCashbotBoss import DistributedCashbotBoss
+from toontown.toonbase import ToontownGlobals
 
 
 class DistributedBrutalCashbotBoss(DistributedCashbotBoss):
     notify = directNotify.newCategory('DistributedBrutalCashbotBoss')
+
+    def __init__(self, cr):
+        DistributedCashbotBoss.__init__(self, cr)
+
+        self.bossMaxDamage = ToontownGlobals.BrutalCashbotBossMaxDamage
 
     def announceGenerate(self):
         DistributedCashbotBoss.announceGenerate(self)

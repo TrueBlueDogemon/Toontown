@@ -5,6 +5,11 @@ from toontown.toonbase import ToontownGlobals
 class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
     notify = directNotify.newCategory('DistributedBrutalCashbotBoss')
 
+    def __init__(self, air):
+        DistributedCashbotBossAI.__init__(self, air)
+
+        self.bossMaxDamage = ToontownGlobals.BrutalCashbotBossMaxDamage
+
     def recordHit(self, damage):
         avId = self.air.getAvatarIdFromSender()
 
