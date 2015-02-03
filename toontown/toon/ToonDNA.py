@@ -1953,10 +1953,13 @@ allColorsList = [VBase4(1.0, 1.0, 1.0, 1.0),
  # Mint - 30
  VBase4(0.749019, 1.0, 0.847058, 1.0),
  # Charcoal - 31
- VBase4(0.470588, 0.443137, 0.447058, 1.0)
+ VBase4(0.470588, 0.443137, 0.447058, 1.0),
+ # Hot Pink - 32
+ VBase4(0.996078, 0.254901, 0.392156, 1.0)
  ]
 defaultBoyColorList = [0,
  1,
+ 32,
  2,
  3,
  4,
@@ -1989,6 +1992,7 @@ defaultBoyColorList = [0,
  26]
 defaultGirlColorList = [0,
  1,
+ 32,
  2,
  3,
  4,
