@@ -4778,6 +4778,18 @@ OptionalRewardTrackDict = {
     ELDER_TIER: (1000, 1000, 610, 611, 612, 613, 614, 615, 616, 617, 618, 2961, 2962, 2963, 2964, 2965, 2966, 2967, 2968, 2969, 2970, 2971, 3004, 3004, 3004, 3008, 3008, 3008, 3012, 3012, 3012)
 }
 
+
+# Add the ToonColorRewards
+for tier in OptionalRewardTrackDict:
+    tierRewards = OptionalRewardTrackDict[tier]
+
+    if not tierRewards:
+        continue
+
+    for i, _ in enumerate(ToonDNA.allColorsList):
+        tierRewards.append(4000+i)
+
+
 def isRewardOptional(tier, rewardId):
     return tier in OptionalRewardTrackDict and rewardId in OptionalRewardTrackDict[tier]
 
