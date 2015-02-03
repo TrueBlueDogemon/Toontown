@@ -4704,7 +4704,7 @@ RewardDict = {
 
 # Add the color rewards...
 for i, _ in enumerate(ToonDNA.allColorsList):
-    RewardDict[i] = (ToonColorReward, i)
+    RewardDict[4000+i] = (ToonColorReward, i)
 
 
 def getNumTiers():
