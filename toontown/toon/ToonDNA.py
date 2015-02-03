@@ -1951,7 +1951,9 @@ allColorsList = [VBase4(1.0, 1.0, 1.0, 1.0),
  # Desert Sand - 29
  VBase4(0.988235, 0.894117, 0.745098, 1.0),
  # Mint - 30
- VBase4(0.749019, 1.0, 0.847058, 1.0)
+ VBase4(0.749019, 1.0, 0.847058, 1.0),
+ # Charcoal - 31
+ VBase4(0.470588, 0.443137, 0.447058, 1.0)
  ]
 defaultBoyColorList = [0,
  1,
@@ -1983,6 +1985,7 @@ defaultBoyColorList = [0,
  23,
  24,
  25,
+ 31,
  26]
 defaultGirlColorList = [0,
  1,
@@ -2014,6 +2017,7 @@ defaultGirlColorList = [0,
  23,
  24,
  25,
+ 31,
  26]
 allColorsListApproximations = map(lambda x: VBase4(round(x[0], 3), round(x[1], 3), round(x[2], 3), round(x[3], 3)), allColorsList)
 allowedColors = set(map(lambda x: allColorsListApproximations[x], set([0] + defaultBoyColorList + defaultGirlColorList + [26])))
