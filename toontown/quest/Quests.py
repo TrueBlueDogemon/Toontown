@@ -4340,6 +4340,22 @@ class ToonColorReward(Reward):
         return TTLocalizer.getColorPosterString(self.getColorId())
 
 
+class GloveColorReward(Reward):
+    def sendRewardAI(self, av):
+        dna = ToonDNA.ToonDNA(av.getDNAString())
+        dna.gloveColor = self.getColorId()
+        av.b_setDNAString(dna.makeNetString())
+
+    def getColorId(self):
+        return self.reward[0]
+
+    def getString(self):
+        return TTLocalizer.getGloveColorRewardString(self.getColorId())
+
+    def getPosterString(self):
+        return TTLocalizer.getGloveColorPosterString(self.getColorId())
+
+
 def getRewardClass(id):
     reward = RewardDict.get(id)
     if reward:
@@ -4705,6 +4721,7 @@ RewardDict = {
 # Add the color rewards...
 for i, _ in enumerate(ToonDNA.allColorsList):
     RewardDict[4000+i] = (ToonColorReward, i)
+    RewardDict[4100+i] = (GloveColorReward, i)
 
 
 def getNumTiers():
@@ -4779,7 +4796,7 @@ OptionalRewardTrackDict = {
 }
 
 
-# Add the ToonColorRewards
+# Add the ToonColorRewards and the GloveColorRewards
 for tier in OptionalRewardTrackDict:
     tierRewards = OptionalRewardTrackDict[tier]
 
@@ -4789,6 +4806,7 @@ for tier in OptionalRewardTrackDict:
     tierRewards = list(tierRewards)
     for i, _ in enumerate(ToonDNA.allColorsList):
         tierRewards.append(4000+i)
+        tierRewards.append(4100+i)
     OptionalRewardTrackDict[tier] = tuple(tierRewards)
 
 
