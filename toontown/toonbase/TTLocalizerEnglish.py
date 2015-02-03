@@ -5645,17 +5645,26 @@ QuestScript150_3 = 'Once you have made a friend, come back here.'
 QuestScript150_4 = 'Some tasks are too difficult to do alone!'
 MissingKeySanityCheck = 'Ignore me'
 SellbotBossName = 'Senior V. P.'
+SellbotBrutalBossName = 'C. E. O'
 CashbotBossName = 'C. F. O.'
 LawbotBossName = 'Chief Justice'
 BossCogNameWithDept = '%(name)s\n%(dept)s'
 BossCogPromoteDoobers = 'You are hereby promoted to full-fledged %s.  Congratulations!'
+BrutalBossCogPromoteDoobers = 'Welcome back. It seems the V.P. made a wise decision promoting you.'
 BossCogDoobersAway = {'s': 'Go!  And make that sale!'}
+BrutalBossCogDoobersAway = {'s': 'Great job on those sales, Sellbots! I have a little meeting to attend, so please continue to work on your assignments.'}
 BossCogWelcomeToons = 'Welcome, new Cogs!'
+BrutalBossCogWelcomeToons = 'Oh, look what we have here... Toons'
 BossCogPromoteToons = 'You are hereby promoted to full-fledged %s.  Congratu--'
+BrutalBossCogPromoteToons = "You aren't fooling me with those Cog suits..."
 CagedToonInterruptBoss = 'Hey! Hiya! Hey over there!'
+BrutalCagedToonInterruptBoss = 'Toons?! What are you doing here?'
 CagedToonRescueQuery = 'So, did you Toons come to rescue me?'
+BrutalCagedToonRescueQuery = "I'm up here! Leave now! This place is dangerous. There is a new Vice President in place now. Get out of here befor---"
 BossCogDiscoverToons = 'Huh?  Toons!  In disguise!'
+BrutalBossCogDiscoverToons = 'SILENCE!! There will be zero tolerance of silliness here!'
 BossCogAttackToons = 'Attack!!'
+BrutalBossCogAttackToons = 'Enough with all the shenanigans! Attack!!'
 CagedToonDrop = ["Great job!  You're wearing him down!",
  "Keep after him!  He's on the run!",
  'You guys are doing great!',
