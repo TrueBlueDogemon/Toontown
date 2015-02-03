@@ -1961,7 +1961,9 @@ allColorsList = [VBase4(1.0, 1.0, 1.0, 1.0),
  # Gray - 34
  VBase4(0.749019, 0.756862, 0.760784, 1.0),
  # Neon Orange - 35
- VBase4(1.0, 0.639215, 0.262745, 1.0)
+ VBase4(1.0, 0.639215, 0.262745, 1.0),
+ # Sapphire - 36
+ VBase4(0.0, 0.403921, 0.647058, 1.0)
  ]
 defaultBoyColorList = [0,
  1,
@@ -1992,6 +1994,7 @@ defaultBoyColorList = [0,
  19,
  20,
  21,
+ 36,
  22,
  23,
  24,
@@ -2028,6 +2031,7 @@ defaultGirlColorList = [0,
  19,
  20,
  21,
+ 36,
  22,
  23,
  24,
