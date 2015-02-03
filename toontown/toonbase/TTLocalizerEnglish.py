@@ -9844,6 +9844,7 @@ def getBuffString(buffId, buffTime):
 def getBuffPosterString(buffId):
     return buffIdStrings[buffId][1]
 
+
 # Different house types
 
 
@@ -9858,3 +9859,14 @@ houseNames = {
 
 def getHouseNameById(houseId):
     return houseNames[houseId]
+
+
+# Toon Color ToonTask Rewards
+
+
+def getColorRewardString(colorId):
+    return 'You are now a %s Toon!' % NumToColor[colorId]
+
+
+def getColorPosterString(colorId):
+    return 'Reward: %s Toon Color' % NumToColor[colorId]
