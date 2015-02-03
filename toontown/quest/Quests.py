@@ -7,7 +7,7 @@ from toontown.battle import SuitBattleGlobals
 from toontown.coghq import CogDisguiseGlobals
 from toontown.toon import NPCToons
 from toontown.hood import ZoneUtil
-from toontown.toon.ToonDNA import ToonDNA
+from toontown.toon import ToonDNA
 from otp.otpbase import OTPGlobals
 import random
 import copy
@@ -4324,7 +4324,7 @@ class BuffReward(Reward):
 
 class ToonColorReward(Reward):
     def sendRewardAI(self, av):
-        dna = ToonDNA(av.getDNAString())
+        dna = ToonDNA.ToonDNA(av.getDNAString())
         dna.headColor = self.getColorId()
         dna.armColor = self.getColorId()
         dna.legColor = self.getColorId()
@@ -4700,6 +4700,11 @@ RewardDict = {
     3010: (BuffReward, ToontownGlobals.BGagExperience, 60),
     3011: (BuffReward, ToontownGlobals.BGagExperience, 180),
     3012: (BuffReward, ToontownGlobals.BGagExperience, 360)}
+
+
+# Add the color rewards...
+for i, _ in enumerate(ToonDNA.allColorsList):
+    RewardDict[i] = (ToonColorReward, i)
 
 
 def getNumTiers():
