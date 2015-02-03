@@ -5496,7 +5496,8 @@ NumToColor = ['White',
  'Desert Sand',
  'Mint',
  'Charcoal',
- 'Hot Pink']
+ 'Hot Pink',
+ 'Honey Mustard']
 AnimalToSpecies = {'dog': 'Dog',
  'cat': 'Cat',
  'mouse': 'Mouse',
