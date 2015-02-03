@@ -4786,8 +4786,10 @@ for tier in OptionalRewardTrackDict:
     if not tierRewards:
         continue
 
+    tierRewards = list(tierRewards)
     for i, _ in enumerate(ToonDNA.allColorsList):
         tierRewards.append(4000+i)
+    OptionalRewardTrackDict[tier] = tuple(tierRewards)
 
 
 def isRewardOptional(tier, rewardId):
