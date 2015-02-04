@@ -23,6 +23,7 @@ from toontown.suit import SuitDNA
 from toontown.toon import ToonHeadFrame
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownBattleGlobals
+from toontown.quest import QuestScripts
 
 
 notify = DirectNotifyGlobal.directNotify.newCategory('QuestParser')
@@ -30,6 +31,7 @@ lineDict = {}
 globalVarDict = {}
 curId = None
 FLOAT = re.compile(r'[+-]?\d+[.]\d*([e][+-]\d+)?')
+
 
 def init():
     globalVarDict.update({'render': render,
@@ -49,12 +51,14 @@ def init():
      'chatScButton': base.localAvatar.chatMgr.scButton,
      'arrows': BlinkingArrows.BlinkingArrows()})
 
+
 def clear():
     globalVarDict.clear()
 
+
 def readFile():
     global curId
-    contents = QuestScripts.script
+    contents = QuestScripts.SCRIPT
     lines = contents.split('\n')
     for line in lines:
         def readline():
@@ -72,8 +76,6 @@ def readFile():
             else:
                 lineDict[curId].append(line)
             line = getLineOfTokens(gen)
-
-        return
 
 
 def getLineOfTokens(gen):
