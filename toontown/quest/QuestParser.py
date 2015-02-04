@@ -10,7 +10,6 @@ import re
 import sys
 import token
 import tokenize
-import QuestScripts
 
 import BlinkingArrows
 from otp.speedchat import SpeedChatGlobals
