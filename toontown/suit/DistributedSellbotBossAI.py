@@ -20,10 +20,11 @@ class DistributedSellbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     hitCountDamage = 35
     numPies = ToontownGlobals.FullPies
 
+    DEPT = 's'
     SOS_AMOUNT = 1
 
     def __init__(self, air):
-        DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, 's')
+        DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, self.DEPT)
         FSM.FSM.__init__(self, 'DistributedSellbotBossAI')
         self.doobers = []
         self.cagedToonNpcId = random.choice(NPCToons.HQnpcFriends.keys())

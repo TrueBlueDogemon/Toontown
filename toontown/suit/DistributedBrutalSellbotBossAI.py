@@ -9,6 +9,7 @@ import random
 class DistributedBrutalSellbotBossAI(DistributedSellbotBossAI):
     notify = directNotify.newCategory('DistributedBrutalSellbotBossAI')
 
+    DEPT = 'c'
     SOS_AMOUNT = 2
 
     def __init__(self, air):
