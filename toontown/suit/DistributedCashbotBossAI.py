@@ -18,10 +18,11 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedCashbotBossAI')
     maxGoons = 8
 
+    DEPT = 'm'
     WANT_SAFES = True
 
     def __init__(self, air):
-        DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, 'm')
+        DistributedBossCogAI.DistributedBossCogAI.__init__(self, air, self.DEPT)
         FSM.FSM.__init__(self, 'DistributedCashbotBossAI')
         self.cranes = None
         self.safes = None
