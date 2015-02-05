@@ -425,14 +425,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
                 'suspicious', self.doId, 'Invalid DNA string.')
 
     def verifyDNA(self):
-        valid = True
-        if self.isPlayerControlled():
-            if self.dna.gloveColor != 0:
-                self.dna.gloveColor = 0
-                valid = False
-            if not valid:
-                self.b_setDNAString(self.dna.makeNetString())
-        return valid
+        return True
 
     def getDNAString(self):
         return self.dna.makeNetString()

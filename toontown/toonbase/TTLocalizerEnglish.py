@@ -5490,7 +5490,17 @@ NumToColor = ['White',
  'Lavender',
  'Pink',
  'Gray',
- 'Black']
+ 'Black',
+ 'Mountain Green',
+ 'Icy Blue',
+ 'Desert Sand',
+ 'Mint',
+ 'Charcoal',
+ 'Hot Pink',
+ 'Honey Mustard',
+ 'Gray',
+ 'Neon Orange',
+ 'Sapphire']
 AnimalToSpecies = {'dog': 'Dog',
  'cat': 'Cat',
  'mouse': 'Mouse',
@@ -9834,6 +9844,7 @@ def getBuffString(buffId, buffTime):
 def getBuffPosterString(buffId):
     return buffIdStrings[buffId][1]
 
+
 # Different house types
 
 
@@ -9848,3 +9859,23 @@ houseNames = {
 
 def getHouseNameById(houseId):
     return houseNames[houseId]
+
+
+# Toon/Glove Color ToonTask Rewards
+
+
+def getColorRewardString(colorId):
+    return 'You are now a %s Toon!' % NumToColor[colorId]
+
+
+def getColorPosterString(colorId):
+    return 'Reward: %s Toon Color' % NumToColor[colorId]
+
+
+
+def getGloveColorRewardString(colorId):
+    return 'You now have %s gloves!' % NumToColor[colorId]
+
+
+def getGloveColorPosterString(colorId):
+    return 'Reward: %s Gloves' % NumToColor[colorId]
