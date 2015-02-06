@@ -4784,6 +4784,7 @@ WHITELIST = [
     'brushing',
     'brushoff',
     'brussels',
+    'brutal',
     'brute',
     'brutish',
     'bryan',
