@@ -2707,8 +2707,8 @@ def promote(deptIndex):
     invoker.sendUpdate('requestPromotion', [deptIndex])
     return 'Your promotion request has been sent.'
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[])
-def mute():
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def mute(minutes):
     """
     Mute the target
     """
@@ -2717,8 +2717,7 @@ def mute():
     target = MagicWordManager.lastClickedNametag
     if spellbook.getInvokerAccess() <= target.getAdminAccess():
         return "Must be of a higher access level then target"
-    print ['mute', target.doId, 0]
-    base.cr.chatAgent.sendMuteAccount(target.doId, 0)
+    base.cr.chatAgent.sendMuteAccount(target.doId, minutes)
     return 'Mute request sent'
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[])

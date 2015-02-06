@@ -2,6 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 # TODO: OTP should not depend on Toontown... Hrrm.
 from toontown.chat.TTWhiteList import TTWhiteList
+import time
 
 class ChatAgentUD(DistributedObjectGlobalUD):
     notify = DirectNotifyGlobal.directNotify.newCategory("ChatAgentUD")
@@ -14,11 +15,12 @@ class ChatAgentUD(DistributedObjectGlobalUD):
 
     def muteAccount(self, account, howLong):
         print ['muteAccount', account, howLong]
-        self.muted[account] = True
+        self.muted[account] = int(time.time()/60) + howLong
 
     def unmuteAccount(self, account):
         print ['unuteAccount', account]
-        self.muted[account] = False
+        if account in self.muted:
+            del self.muted[account]
 
     def chatMessage(self, message):
         sender = self.air.getAvatarIdFromSender()
@@ -27,11 +29,7 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                                          'Account sent chat without an avatar', message)
             return
 
-        print ['chatMessage', sender, message]
-        print self.muted
-
-        if sender in self.muted and self.muted[sender]:
-            print ['Muted', sender, message]
+        if sender in self.muted and int(time.time()/60) < self.muted[sender]:
             return
 
         modifications = []
