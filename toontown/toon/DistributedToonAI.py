@@ -5165,27 +5165,3 @@ def disguise(command, suitIndex, value):
         return 'Merits set.'
     else:
         return 'Unknow command: %s' % command
-
-@magicWord(category=CATEGORY_PROGRAMMER, types=[])
-def mute():
-    """
-    Mute the target
-    """
-    target = spellbook.getTarget()
-    if spellbook.getInvokerAccess() <= target.getAdminAccess():
-        return "Must be of a higher access level then target"
-    print ['mute', target.DISLid, 0]
-    simbase.air.chatAgent.sendUpdate('muteAccount', [target.DISLid, 0])
-    return 'Mute request sent'
-
-@magicWord(category=CATEGORY_PROGRAMMER, types=[])
-def unmute():
-    """
-    Unmute the target
-    """
-    target = spellbook.getTarget()
-    if spellbook.getInvokerAccess() <= target.getAdminAccess():
-        return "Must be of a higher access level then target"
-    print ['unmute', target.DISLid]
-    simbase.air.chatAgent.sendUpdate('unmuteAccount', [target.DISLid])
-    return 'Unmute request sent'

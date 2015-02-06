@@ -27,11 +27,11 @@ class ChatAgentUD(DistributedObjectGlobalUD):
                                          'Account sent chat without an avatar', message)
             return
 
-        print ['chatMessage', self.air.getAccountIdFromSender(), message]
+        print ['chatMessage', sender, message]
         print self.muted
 
-        if self.muted.has_key(self.air.getAccountIdFromSender()) and self.muted[self.air.getAccountIdFromSender()]:
-            print ['Muted', self.air.getAccountIdFromSender(), message]
+        if sender in self.muted and self.muted[sender]:
+            print ['Muted', sender, message]
             return
 
         modifications = []

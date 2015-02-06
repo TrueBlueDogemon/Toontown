@@ -20,8 +20,7 @@ class ChatAgent(DistributedObjectGlobal):
         self.sendUpdate('chatMessage', [message])
 
     def sendMuteAccount(self, account, howLong):
-        messenger.send('muteAccount', [account, howLong])
-#        self.sendUpdate('muteAccount', [account, howLong])
+        self.sendUpdate('muteAccount', [account, howLong])
 
     def sendUnmuteAccount(self, account):
         self.sendUpdate('unmuteAccount', [account])
