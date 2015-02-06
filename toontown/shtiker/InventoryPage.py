@@ -4,6 +4,8 @@ from direct.gui.DirectGui import *
 from pandac.PandaModules import *
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
+from toontown.shtiker.CogMenu import CogMenu
+
 
 class InventoryPage(ShtikerPage.ShtikerPage):
 
@@ -27,10 +29,16 @@ class InventoryPage(ShtikerPage.ShtikerPage):
         jarGui = loader.loadModel('phase_3.5/models/gui/jar_gui')
         self.moneyDisplay = DirectLabel(parent=self, relief=None, pos=(0.55, 0, -0.5), scale=0.8, text=str(base.localAvatar.getMoney()), text_scale=0.18, text_fg=(0.95, 0.95, 0, 1), text_shadow=(0, 0, 0, 1), text_pos=(0, -0.1, 0), image=jarGui.find('**/Jar'), text_font=ToontownGlobals.getSignFont())
         jarGui.removeNode()
-        return
+        self.cogMenu = CogMenu()
+        self.cogMenu.reparentTo(self)
+        self.cogMenu.setX(-0.165)
+        self.cogMenu.setZ(0.63)
+        self.cogMenu.setScale(0.82)
 
     def unload(self):
         del self.title
+        self.cogMenu.cleanup()
+        del self.cogMenu
         ShtikerPage.ShtikerPage.unload(self)
 
     def __moneyChange(self, money):
@@ -141,9 +149,11 @@ class InventoryPage(ShtikerPage.ShtikerPage):
         self.accept('enterTrackFrame', self.updateTrackInfo)
         self.accept('exitTrackFrame', self.clearTrackInfo)
         self.accept(localAvatar.uniqueName('moneyChange'), self.__moneyChange)
+        self.cogMenu.update()
         self.reparentTo(aspect2d)
         self.title.hide()
         self.show()
+        self.cogMenu.show()
 
     def hideInventoryOnscreen(self):
         if not self.onscreen:
@@ -157,3 +167,4 @@ class InventoryPage(ShtikerPage.ShtikerPage):
         self.reparentTo(self.book)
         self.title.show()
         self.hide()
+        self.cogMenu.hide()
