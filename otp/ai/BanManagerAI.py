@@ -23,8 +23,13 @@ class BanFSM(FSM):
         self.avName = None
 
     def performBan(self, bannedUntil):
-        executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
+        accountDBType = simbase.config.GetString('accountdb-type', 'developer')
+        if accountDBType == 'remote':
+            executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
                            Reason=self.comment)
+        else:
+            print ['banAvatar', [self.avId, self.accountId, bannedUntil, self.comment]]
+            simbase.air.csm.sendUpdate('banAvatar', [self.avId, self.accountId, str(bannedUntil), self.comment]);
 
     def ejectPlayer(self):
         av = self.air.doId2do.get(self.avId)

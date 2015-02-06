@@ -1432,6 +1432,12 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
         else:
             self.notify.error('Invalid accountdb-type: ' + accountDBType)
 
+    def banAvatar(self, avid, who, why, release):
+        print ['ban', avid, who, why, release]
+
+    def reportAvatar(self, who, why):
+        print ['report', who, why]
+
     def killConnection(self, connId, reason):
         datagram = PyDatagram()
         datagram.addServerHeader(
