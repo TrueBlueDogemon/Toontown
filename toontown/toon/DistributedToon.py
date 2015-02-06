@@ -2706,3 +2706,27 @@ def promote(deptIndex):
     invoker = spellbook.getInvoker()
     invoker.sendUpdate('requestPromotion', [deptIndex])
     return 'Your promotion request has been sent.'
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[])
+def cmute():
+    """
+    Mute the target
+    """
+    target = spellbook.getTarget()
+    if spellbook.getInvokerAccess() <= target.getAdminAccess():
+        return "Must be of a higher access level then target"
+    print ['mute', target.DISLid, 0]
+    base.cr.chatAgent.sendMuteAccount(target.DISLid, 0)
+    return 'Mute request sent'
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[])
+def cunmute():
+    """
+    Unmute the target
+    """
+    target = spellbook.getTarget()
+    if spellbook.getInvokerAccess() <= target.getAdminAccess():
+        return "Must be of a higher access level then target"
+    print ['unmute', target.DISLid]
+    base.cr.chatAgent.sendUnmuteAccount(target.DISLid)
+    return 'Unmute request sent'

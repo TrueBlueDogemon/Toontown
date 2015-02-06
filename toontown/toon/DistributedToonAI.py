@@ -4666,7 +4666,7 @@ def gmIcon(accessLevel=None):
     invoker = spellbook.getInvoker()
     target = spellbook.getTarget()
     invokerAccess = spellbook.getInvokerAccess()
-    if invokerAccess != CATEGORY_PROGRAMMER.defaultAccess:
+    if invokerAccess < CATEGORY_PROGRAMMER.defaultAccess:
         if accessLevel is not None:
             return "You must be of a higher access level to override your GM icon."
         target = spellbook.getInvoker()
@@ -5165,3 +5165,27 @@ def disguise(command, suitIndex, value):
         return 'Merits set.'
     else:
         return 'Unknow command: %s' % command
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[])
+def mute():
+    """
+    Mute the target
+    """
+    target = spellbook.getTarget()
+    if spellbook.getInvokerAccess() <= target.getAdminAccess():
+        return "Must be of a higher access level then target"
+    print ['mute', target.DISLid, 0]
+    simbase.air.chatAgent.sendUpdate('muteAccount', [target.DISLid, 0])
+    return 'Mute request sent'
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[])
+def unmute():
+    """
+    Unmute the target
+    """
+    target = spellbook.getTarget()
+    if spellbook.getInvokerAccess() <= target.getAdminAccess():
+        return "Must be of a higher access level then target"
+    print ['unmute', target.DISLid]
+    simbase.air.chatAgent.sendUpdate('unmuteAccount', [target.DISLid])
+    return 'Unmute request sent'

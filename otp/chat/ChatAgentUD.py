@@ -10,12 +10,28 @@ class ChatAgentUD(DistributedObjectGlobalUD):
         DistributedObjectGlobalUD.announceGenerate(self)
 
         self.whiteList = TTWhiteList()
+        self.muted = {}
+
+    def muteAccount(self, account, howLong):
+        print ['muteAccount', account, howLong]
+        self.muted[account] = True
+
+    def unmuteAccount(self, account):
+        print ['unuteAccount', account]
+        self.muted[account] = False
 
     def chatMessage(self, message):
         sender = self.air.getAvatarIdFromSender()
         if sender == 0:
             self.air.writeServerEvent('suspicious', self.air.getAccountIdFromSender(),
                                          'Account sent chat without an avatar', message)
+            return
+
+        print ['chatMessage', self.air.getAccountIdFromSender(), message]
+        print self.muted
+
+        if self.muted.has_key(self.air.getAccountIdFromSender()) and self.muted[self.air.getAccountIdFromSender()]:
+            print ['Muted', self.air.getAccountIdFromSender(), message]
             return
 
         modifications = []
