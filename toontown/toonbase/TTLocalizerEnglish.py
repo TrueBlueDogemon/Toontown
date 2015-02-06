@@ -5645,7 +5645,7 @@ QuestScript150_3 = 'Once you have made a friend, come back here.'
 QuestScript150_4 = 'Some tasks are too difficult to do alone!'
 MissingKeySanityCheck = 'Ignore me'
 SellbotBossName = 'Senior V. P.'
-SellbotBrutalBossName = 'C. E. O'
+BrutalSellbotBossName = 'C. E. O.\nBossbot'
 CashbotBossName = 'C. F. O.'
 BrutalCashbotBossName = 'C. E. O.\nBossbot'
 LawbotBossName = 'Chief Justice'
@@ -5672,7 +5672,7 @@ CagedToonDrop = ["Great job!  You're wearing him down!",
  "Fantastic!  You've almost got him now!"]
 CagedToonPrepareBattleTwo = "Look out, he's trying to get away!\x07Help me, everyone--get up here and stop him!"
 CagedToonPrepareBattleThree = "Hooray, I'm almost free!\x07Now you need to attack the V.P. Cog directly.\x07I've got a whole bunch of pies you can use!\x07Jump up and touch the bottom of my cage and I'll give you some pies.\x07Press the Delete key to throw pies once you've got them!"
-BrutalCagedToonPrepareBattleThree = "Hooray, I'm almost free!\x07Now you need to attack the C.E.O. Cog directly.\x07I've got a whole bunch of pies you can use!\x07Jump up and touch the bottom of my cage and I'll give you some pies.\x07Press the Delete key to throw pies once you've got them!"
+BrutalCagedToonPrepareBattleThree = "Hooray, I'm almost free!\x07Now you need to attack the C.E.O. Cog directly.\x07Sadly, I only have a limited number of pies left.\x07Jump up and touch the bottom of my cage and I'll give you some of the pies.\x07Press the Delete key to throw pies once you've got them!"
 BossBattleNeedMorePies = 'You need to get more pies!'
 BossBattleHowToGetPies = 'Jump up to touch the cage to get pies.'
 BossBattleHowToThrowPies = 'Press the Delete key to throw pies!'

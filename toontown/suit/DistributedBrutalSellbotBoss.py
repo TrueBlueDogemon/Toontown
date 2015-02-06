@@ -1,9 +1,12 @@
-from pandac.PandaModules import Point3
+from pandac.PandaModules import Point3, VBase3
 
 from toontown.suit.DistributedSellbotBoss import DistributedSellbotBoss
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
 from toontown.chat import ChatGlobals
+from toontown.coghq import CogDisguiseGlobals
+from toontown.suit import SuitDNA
+from toontown.battle import SuitBattleGlobals
 
 from direct.interval.IntervalGlobal import *
 
@@ -16,6 +19,7 @@ class DistributedBrutalSellbotBoss(DistributedSellbotBoss):
     def announceGenerate(self):
         DistributedSellbotBoss.announceGenerate(self)
 
+        self.setName(TTLocalizer.BrutalSellbotBossName)
         base.localAvatar.setCanUseUnites(False)
 
     def disable(self):
@@ -137,3 +141,67 @@ class DistributedBrutalSellbotBoss(DistributedSellbotBoss):
         track.append(dialogTrack)
 
         return Sequence(Func(self.stickToonsToFloor), track, Func(self.unstickToons), name=self.uniqueName('Introduction'))
+
+    def enterPrepareBattleThree(self):
+        self.cleanupIntervals()
+        self.controlToons()
+        self.clearChat()
+        self.cagedToon.clearChat()
+        self.reparentTo(render)
+        self.rampA.request('retract')
+        self.rampB.request('retract')
+        self.rampC.request('extend')
+        self.setCageIndex(4)
+        camera.reparentTo(render)
+        camera.setPosHpr(self.cage, 0, -17, 3.3, 0, 0, 0)
+        localAvatar.setCameraFov(ToontownGlobals.CogHQCameraFov)
+        self.hide()
+        self.acceptOnce('doneChatPage', self._DistributedSellbotBoss__onToBattleThree)
+        self.cagedToon.setLocalPageChat(TTLocalizer.BrutalCagedToonPrepareBattleThree, 1)
+        base.playMusic(self.betweenBattleMusic, looping=1, volume=0.9)
+
+    def _DistributedSellbotBoss__talkAboutPromotion(self, speech):
+        if self.prevCogSuitLevel < ToontownGlobals.MaxCogSuitLevel:
+            deptIndex = CogDisguiseGlobals.dept2deptIndex(self.style.dept)
+            cogLevels = base.localAvatar.getCogLevels()
+            newCogSuitLevel = cogLevels[deptIndex]
+            cogTypes = base.localAvatar.getCogTypes()
+            maxCogSuitLevel = (SuitDNA.levelsPerSuit-1) + cogTypes[deptIndex]
+            if self.prevCogSuitLevel != maxCogSuitLevel:
+                speech += TTLocalizer.BrutalCagedToonLevelPromotion
+            if newCogSuitLevel == maxCogSuitLevel:
+                if newCogSuitLevel != ToontownGlobals.MaxCogSuitLevel:
+                    suitIndex = (SuitDNA.suitsPerDept*deptIndex) + cogTypes[deptIndex]
+                    cogTypeStr = SuitDNA.suitHeadTypes[suitIndex]
+                    cogName = SuitBattleGlobals.SuitAttributes[cogTypeStr]['name']
+                    speech += TTLocalizer.CagedToonSuitPromotion % cogName
+        else:
+            speech += TTLocalizer.CagedToonMaxed % (ToontownGlobals.MaxCogSuitLevel + 1)
+        return speech
+
+    def _DistributedSellbotBoss__makeCageOpenMovie(self):
+        speech = TTLocalizer.BrutalCagedToonThankYou
+        speech = self._DistributedSellbotBoss__talkAboutPromotion(speech)
+        name = self.uniqueName('CageOpen')
+        seq = Sequence(
+            Func(self.cage.setPos, self.cagePos[4]),
+            Func(self.cageDoor.setHpr, VBase3(0, 0, 0)),
+            Func(self.cagedToon.setPos, Point3(0, -2, 0)),
+            Parallel(
+                self.cage.posInterval(0.5, self.cagePos[5], blendType='easeOut'),
+                SoundInterval(self.cageLowerSfx, duration=0.5)),
+            Parallel(
+                self.cageDoor.hprInterval(0.5, VBase3(0, 90, 0), blendType='easeOut'),
+                Sequence(SoundInterval(self.cageDoorSfx), duration=0)),
+            Wait(0.2),
+            Func(self.cagedToon.loop, 'walk'),
+            self.cagedToon.posInterval(0.8, Point3(0, -6, 0)),
+            Func(self.cagedToon.setChatAbsolute, TTLocalizer.CagedToonYippee, ChatGlobals.CFSpeech),
+            ActorInterval(self.cagedToon, 'jump'),
+            Func(self.cagedToon.loop, 'neutral'),
+            Func(self.cagedToon.headsUp, localAvatar),
+            Func(self.cagedToon.setLocalPageChat, speech, 0),
+            Func(camera.reparentTo, localAvatar),
+            Func(camera.setPos, 0, -9, 9),
+            Func(camera.lookAt, self.cagedToon, Point3(0, 0, 2)), name=name)
+        return seq
