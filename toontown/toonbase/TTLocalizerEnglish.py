@@ -5651,21 +5651,21 @@ BrutalCashbotBossName = 'C. E. O.\nBossbot'
 LawbotBossName = 'Chief Justice'
 BossCogNameWithDept = '%(name)s\n%(dept)s'
 BossCogPromoteDoobers = 'You are hereby promoted to full-fledged %s.  Congratulations!'
-BrutalBossCogPromoteDoobers = 'Welcome back. It seems the V.P. made a wise decision promoting you.'
+BrutalBossCogPromoteDoobers = 'Welcome back.  It seems the V.P. made a wise decision promoting you.'
 BossCogDoobersAway = {'s': 'Go!  And make that sale!'}
-BrutalBossCogDoobersAway = {'s': 'Great job on those sales, Sellbots! I have a little meeting to attend, so please continue to work on your assignments.'}
+BrutalBossCogDoobersAway = 'Great job on those sales, Sellbots!  I have a little meeting to attend, so please continue to work on your assignments.'
 BossCogWelcomeToons = 'Welcome, new Cogs!'
 BrutalBossCogWelcomeToons = "Oh, look what we have here... I've been expecting you, Toons"
 BossCogPromoteToons = 'You are hereby promoted to full-fledged %s.  Congratu--'
 BrutalBossCogPromoteToons = "By the way, you aren't fooling me with those disguises..."
 CagedToonInterruptBoss = 'Hey! Hiya! Hey over there!'
-BrutalCagedToonInterruptBoss = 'Toons?! What are you doing here?'
+BrutalCagedToonInterruptBoss = 'Toons?!  What are you doing here?'
 CagedToonRescueQuery = 'So, did you Toons come to rescue me?'
-BrutalCagedToonRescueQuery = "I'm up here! Leave now! This place is dangerous. There is a new Vice President in place, and he is tough! Get out of here befor---"
+BrutalCagedToonRescueQuery = "I'm up here!  Leave now!  This place is dangerous. There is a new Vice President in place, and he is tough! Get out of here befor---"
 BossCogDiscoverToons = 'Huh?  Toons!  In disguise!'
-BrutalBossCogDiscoverToons = 'SILENCE PRISONER!! There will be zero tolerance of silliness here!'
+BrutalBossCogDiscoverToons = 'SILENCE PRISONER!!  There will be zero tolerance of silliness here!'
 BossCogAttackToons = 'Attack!!'
-BrutalBossCogAttackToons = 'Enough with all the shenanigans! Attack!!'
+BrutalBossCogAttackToons = 'Enough with all the shenanigans!  Attack!!'
 CagedToonDrop = ["Great job!  You're wearing him down!",
  "Keep after him!  He's on the run!",
  'You guys are doing great!',
