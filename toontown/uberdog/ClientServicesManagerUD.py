@@ -48,24 +48,32 @@ http.setVerifySsl(0)
 
 
 def executeHttpRequest(url, **extras):
-    timestamp = str(int(time.time()))
-    signature = hmac.new(accountServerSecret, timestamp, hashlib.sha256)
-    request = urllib2.Request(accountServerEndpoint + url)
-    request.add_header('User-Agent', 'TTI-CSM')
-    request.add_header('X-CSM-Timestamp', timestamp)
-    request.add_header('X-CSM-Signature', signature.hexdigest())
-    for k, v in extras.items():
-        request.add_header('X-CSM-' + k, v)
-    try:
-        return urllib2.urlopen(request).read()
-    except:
-        return None
+    print "executeHttpRequest: ", accountDBType, url, extras
 
+    if accountDBType == 'remote':
+        timestamp = str(int(time.time()))
+        signature = hmac.new(accountServerSecret, timestamp, hashlib.sha256)
+        request = urllib2.Request(accountServerEndpoint + url)
+        request.add_header('User-Agent', 'TTI-CSM')
+        request.add_header('X-CSM-Timestamp', timestamp)
+        request.add_header('X-CSM-Signature', signature.hexdigest())
+        for k, v in extras.items():
+            request.add_header('X-CSM-' + k, v)
+        try:
+            return urllib2.urlopen(request).read()
+        except:
+            return None
+
+    if accountDBType == 'mysqldb':
+        if url == 'accounts/ban/':
+            print [extras['Id'], extras['Release'], extras['Reason']]
+        return None;
+
+    return None;
 
 blacklist = executeHttpRequest('names/blacklist.json')
 if blacklist:
     blacklist = json.loads(blacklist)
-
 
 def judgeName(name):
     if not name:
