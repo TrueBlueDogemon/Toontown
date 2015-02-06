@@ -1,5 +1,7 @@
 from toontown.suit.DistributedSellbotBossAI import DistributedSellbotBossAI
 from toontown.suit import BrutalSellbotBossGlobals
+from toontown.suit.DistributedSuitAI import DistributedSuitAI
+from toontown.suit import SuitDNA
 from toontown.toonbase import ToontownGlobals
 from toontown.toon import NPCToons
 
@@ -9,6 +11,7 @@ import random
 class DistributedBrutalSellbotBossAI(DistributedSellbotBossAI):
     notify = directNotify.newCategory('DistributedBrutalSellbotBossAI')
 
+    DEPT = 'c'
     SOS_AMOUNT = 2
 
     def __init__(self, air):
@@ -97,3 +100,16 @@ class DistributedBrutalSellbotBossAI(DistributedSellbotBossAI):
         self.ignore(event)
         if not self.hasToons():
             taskMgr.doMethodLater(10, self.getBossDoneFunc(), self.uniqueName('BossDone'))
+
+    def _DistributedSellbotBossAI__makeDoobers(self):
+        self._DistributedSellbotBossAI__resetDoobers()
+        for i in xrange(8):
+            suit = DistributedSuitAI(self.air, None)
+            level = random.randrange(len(SuitDNA.suitsPerLevel))
+            suit.dna = SuitDNA.SuitDNA()
+            suit.dna.newSuitRandom(level=level, dept='s')
+            suit.setLevel(level)
+            suit.generateWithRequired(self.zoneId)
+            self.doobers.append(suit)
+
+        self._DistributedSellbotBossAI__sendDooberIds()

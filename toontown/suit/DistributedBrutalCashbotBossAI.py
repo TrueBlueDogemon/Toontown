@@ -8,6 +8,7 @@ import random
 class DistributedBrutalCashbotBossAI(DistributedCashbotBossAI):
     notify = directNotify.newCategory('DistributedBrutalCashbotBoss')
 
+    DEPT = 'c'
     WANT_SAFES = False
 
     def __init__(self, air):
