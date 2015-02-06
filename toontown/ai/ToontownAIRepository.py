@@ -114,7 +114,6 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.cogPageManager = CogPageManagerAI.CogPageManagerAI()
         self.bankManager = BankManagerAI.BankManagerAI(self)
         self.holidayManager = HolidayManagerAI(self)
-#        self.chatAgent = self.generateGlobalObject(OTP_DO_ID_CHAT_MANAGER, 'ChatAgent')
         if self.wantFishing:
             self.fishManager = FishManagerAI(self)
         if self.wantHousing:
