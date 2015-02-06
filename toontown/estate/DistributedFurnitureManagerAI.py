@@ -3,6 +3,8 @@ from toontown.catalog.CatalogItemList import CatalogItemList
 from toontown.catalog import CatalogItem
 from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem, FLTrunk, FLCloset, FLBank, FLPhone, FLIsTable
 from toontown.catalog.CatalogWallpaperItem import CatalogWallpaperItem
+from toontown.catalog.CatalogAccessoryItem import CatalogAccessoryItem
+from toontown.catalog.CatalogClothingItem import CatalogClothingItem
 from toontown.catalog.CatalogMouldingItem import CatalogMouldingItem
 from toontown.catalog.CatalogFlooringItem import CatalogFlooringItem
 from toontown.catalog.CatalogWainscotingItem import CatalogWainscotingItem
@@ -12,6 +14,7 @@ from DistributedPhoneAI import DistributedPhoneAI
 from DistributedClosetAI import DistributedClosetAI
 from DistributedTrunkAI import DistributedTrunkAI
 from otp.ai.MagicWordGlobal import *
+import time
 
 class FurnitureError(Exception):
     def __init__(self, code):
@@ -592,13 +595,10 @@ def emptyHouse():
 @magicWord(category=CATEGORY_PROGRAMMER, types=[int])
 def furniture(value):
     """
-    get any furniture item from your catalog
+    ship any furniture item from your catalog
     """
 
-    try:
-        value = int(value)
-    except:
-        value = 1240
+    value = int(value)
 
     target = spellbook.getTarget()
     if not target:
@@ -606,15 +606,51 @@ def furniture(value):
     if not target:
         return "Strange.. who are we talking about?"
 
-    if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
-        return "no houses in the state"
+    item = CatalogFurnitureItem(value)  # the Item...
+    item.deliveryDate = int(time.time()/60) + item.getDeliveryTime()
+    target.onOrder.append(item)
+    target.b_setDeliverySchedule(target.onOrder)
 
- 
-    for house in target.estate.houses:
-        fm = house.interior.furnitureManager
-        if house.doId == target.houseId:
-            item = CatalogFurnitureItem(value)  # the Item...
-            item.posHpr = (0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
-            fm.items.append(item)
-            fm.saveToHouse()
-    return "Furniture delivery!"
+    return "Its on its way..."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def accessory(value):
+    """
+    ship any accessory item from your catalog
+    """
+
+    value = int(value)
+
+    target = spellbook.getTarget()
+    if not target:
+        target = spellbook.getInvoker()
+    if not target:
+        return "Strange.. who are we talking about?"
+
+    item = CatalogAccessoryItem(value)  # the Item...
+    item.deliveryDate = int(time.time()/60) + item.getDeliveryTime()
+    target.onOrder.append(item)
+    target.b_setDeliverySchedule(target.onOrder)
+
+    return "Its on its way..."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def clothing(value):
+    """
+    ship any clothing item from your catalog
+    """
+
+    value = int(value)
+
+    target = spellbook.getTarget()
+    if not target:
+        target = spellbook.getInvoker()
+    if not target:
+        return "Strange.. who are we talking about?"
+
+    item = CatalogClothingItem(value, 0)  # the Item...
+    item.deliveryDate = int(time.time()/60) + item.getDeliveryTime()
+    target.onOrder.append(item)
+    target.b_setDeliverySchedule(target.onOrder)
+
+    return "Its on its way..."
