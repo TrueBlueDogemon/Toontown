@@ -1,8 +1,8 @@
-All of these instructions are for ubuntu...
+All of these instructions are for ubuntu (14.10).  I use the oracle virtual box stuff and run a virtual linux box at home for testing/development.  This allows me to match production.
 
 here is my standard set of packages
 
-sudo apt-get install python-dev libpng-dev zlib1g-dev libssl-dev libx11-dev libgl1-mesa-dev libxrandr-dev libxxf86dga-dev libxcursor-dev bison flex libfreetype6-dev libvorbis-dev libjpeg-dev libeigen3-dev libopenal-dev libode-dev libbullet-dev nvidia-cg-toolkit libboost1.55-all-dev python-pip   python-pmw  libyaml-cpp-dev cmake python-mysqldb
+sudo apt-get install python-dev libpng-dev zlib1g-dev libssl-dev libx11-dev libgl1-mesa-dev libxrandr-dev libxxf86dga-dev libxcursor-dev bison flex libfreetype6-dev libvorbis-dev libjpeg-dev libeigen3-dev libopenal-dev libode-dev libbullet-dev nvidia-cg-toolkit libboost1.55-all-dev python-pip   python-pmw  libyaml-cpp-dev cmake python-mysqldb python-mysql.connector
 
 then,
 
@@ -52,8 +52,24 @@ Now, we can go into mysql
 
 now we need to make ourselves our first account.. I created a cmd.php to help.  You MUST supply all the arguments.  If somebody wants to improve this.. PLEASE DO!
 
-  %  php cmd.php u=toontown p=some_pass db=toontown username=blorp password=bahh email=bahh@gmail.com level=700
+  %  php cmd.php u=toontown p=some_pass db=toontown username=test1 password=test email=bahh@gmail.com level=700
+  %  php cmd.php u=toontown p=some_pass db=toontown username=test2 password=test email=bahh@gmail.com level=100
   % mysql -u toontown -p toontown
   Enter password:
   mysql> select * from Accounts;
 
+edit   ../config/release/dev.prc
+
+  @@ -7,10 +7,13 @@ model-path ../resources
+   # Server:
+   server-version fellowship-dev
+   min-access-level 600
+  -accountdb-type developer
+   shard-low-pop 50
+   shard-mid-pop 100
+  
+  +accountdb-type mysqldb
+  +mysql-login toontown
+  +mysql-password some_pass
+
+and bring up toontown!

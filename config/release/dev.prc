@@ -11,6 +11,10 @@ accountdb-type developer
 shard-low-pop 50
 shard-mid-pop 100
 
+#accountdb-type mysqldb
+#mysql-login toontown
+#mysql-password some_pass
+
 # RPC:
 want-rpc-server #f
 rpc-server-endpoint http://localhost:8080/
