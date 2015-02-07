@@ -3308,9 +3308,6 @@ dclass ClientServicesManager : DistributedObjectGlobal {
   chooseAvatar(uint32 avId) clsend;
 
   systemMessage(string message);
-
-  banAvatar(uint32 avId, string, string, string) clsend;
-  reportAvatar(string, string) clsend;
 };
 
 dclass AwardManager : DistributedObjectGlobal {

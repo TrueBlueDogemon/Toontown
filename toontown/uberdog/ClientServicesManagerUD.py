@@ -64,11 +64,6 @@ def executeHttpRequest(url, **extras):
         except:
             return None
 
-    if accountDBType == 'mysqldb':
-        if url == 'accounts/ban/':
-            print [extras['Id'], extras['Release'], extras['Reason']]
-        return None;
-
     return None;
 
 blacklist = executeHttpRequest('names/blacklist.json')
@@ -1431,12 +1426,6 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             self.accountDB = RemoteAccountDB(self)
         else:
             self.notify.error('Invalid accountdb-type: ' + accountDBType)
-
-    def banAvatar(self, avid, who, why, release):
-        print ['ban', avid, who, why, release]
-
-    def reportAvatar(self, who, why):
-        print ['report', who, why]
 
     def killConnection(self, connId, reason):
         datagram = PyDatagram()
