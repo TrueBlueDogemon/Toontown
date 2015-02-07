@@ -601,10 +601,6 @@ def furniture(value):
     value = int(value)
 
     target = spellbook.getTarget()
-    if not target:
-        target = spellbook.getInvoker()
-    if not target:
-        return "Strange.. who are we talking about?"
 
     item = CatalogFurnitureItem(value)  # the Item...
     item.deliveryDate = int(time.time()/60) + item.getDeliveryTime()
@@ -622,10 +618,6 @@ def accessory(value):
     value = int(value)
 
     target = spellbook.getTarget()
-    if not target:
-        target = spellbook.getInvoker()
-    if not target:
-        return "Strange.. who are we talking about?"
 
     item = CatalogAccessoryItem(value)  # the Item...
     item.deliveryDate = int(time.time()/60) + item.getDeliveryTime()
@@ -643,10 +635,6 @@ def clothing(value):
     value = int(value)
 
     target = spellbook.getTarget()
-    if not target:
-        target = spellbook.getInvoker()
-    if not target:
-        return "Strange.. who are we talking about?"
 
     item = CatalogClothingItem(value, 0)  # the Item...
     item.deliveryDate = int(time.time()/60) + item.getDeliveryTime()
