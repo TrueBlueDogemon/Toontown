@@ -19,7 +19,7 @@ CREATE TABLE `Accounts` (
   `lastloggedinip` varchar(50) NOT NULL,
   `rpwkey` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3708 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;
 
 CREATE TABLE `NameApprovals` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -28,4 +28,4 @@ CREATE TABLE `NameApprovals` (
   `status` varchar(10) NOT NULL,
   `reviewedby` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4652 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB;

@@ -1,0 +1,55 @@
+All of these instructions are for ubuntu...
+
+here is my standard set of packages
+
+sudo apt-get install python-dev libpng-dev zlib1g-dev libssl-dev libx11-dev libgl1-mesa-dev libxrandr-dev libxxf86dga-dev libxcursor-dev bison flex libfreetype6-dev libvorbis-dev libjpeg-dev libeigen3-dev libopenal-dev libode-dev libbullet-dev nvidia-cg-toolkit libboost1.55-all-dev python-pip   python-pmw  libyaml-cpp-dev cmake python-mysqldb
+
+then,
+
+  sudo pip install semidbm
+  sudo pip install passlib
+  sudo pip install PyMongo     <= only needed once we have mongo info in this README
+
+next panda:
+
+  cd repos     (wherever your stuff lives)
+  git clone https://github.com/astron/panda3d
+  cd panda3d
+  python2.7 makepanda/makepanda.py --everything --installer --no-egl --no-gles --no-gles2
+  sudo dpkg  -i  panda3d1.9_1.9.0_amd64.deb
+
+next astron:
+
+  cd ..
+  git clone https://github.com/astron/astron
+  cd astron
+  cmake -DCMAKE_BUILD_TYPE=Release . && make
+  cp astrond ../src/astron
+
+TODO: update this for the mongo database support
+
+next, the database
+
+  apt-get install mysql-server
+
+pick some useful and random password for root
+
+  apt-get install apache2
+
+then install phpmyadmin.. This has the effect of pulling in all the php dependencies required for mysql
+
+  apt-get install phpmyadmin
+
+Make sure to tell this to use apache..
+
+Now, we can go into mysql
+
+ % mysql -u root -p       (enter the root password)
+ mysql> CREATE DATABASE toontown
+ mysql> GRANT ALL PRIVILEGES ON toontown.* TO 'toontown'@'localhost' IDENTIFIED BY 'some_pass' WITH GRANT OPTION;
+ quit
+ % mysql -u toontown -p toontown < schema.sql
+
+now we need to make ourselves our first account
+
+
