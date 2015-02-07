@@ -4929,8 +4929,6 @@ def dna(part, value):
 
     if part == 'gloves':
         value = int(value)
-        if value != 0:
-            return 'Invalid glove color: ' + str(value)
         dna.gloveColor = value
         invoker.b_setDNAString(dna.makeNetString())
         return 'Glove color set to: ' + str(dna.gloveColor)
