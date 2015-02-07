@@ -60,7 +60,7 @@ class BanFSM(FSM):
             self.cnx = mysql.connector.connect(**self.config)
             self.cur = self.cnx.cursor(buffered=True)
             self.cnx.database = mysql_db
-            self.update_ban = ("UPDATE Accounts SET canPlay = %0, banRelease = %s, banReason = %s where accountid = %s")
+            self.update_ban = ("UPDATE Accounts SET canPlay = 0, banRelease = %s, banReason = %s where accountid = %s")
 
     def performBan(self, bannedUntil):
         accountDBType = simbase.config.GetString('accountdb-type', 'developer')
