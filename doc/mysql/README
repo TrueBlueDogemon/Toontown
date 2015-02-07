@@ -50,6 +50,10 @@ Now, we can go into mysql
  quit
  % mysql -u toontown -p toontown < schema.sql
 
-now we need to make ourselves our first account
+now we need to make ourselves our first account.. I created a cmd.php to help.  You MUST supply all the arguments.  If somebody wants to improve this.. PLEASE DO!
 
+  %  php cmd.php u=toontown p=some_pass db=toontown username=blorp password=bahh email=bahh@gmail.com level=700
+  % mysql -u toontown -p toontown
+  Enter password:
+  mysql> select * from Accounts;
 
