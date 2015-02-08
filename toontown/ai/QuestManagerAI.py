@@ -508,14 +508,14 @@ class QuestManagerAI:
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int])
 def quests(command, arg0=0, arg1=0):
-    invoker = spellbook.getInvoker()
-    currQuests = invoker.getQuests()
+    target = spellbook.getTarget()
+    currQuests = target.getQuests()
     currentQuestIds = []
 
     for i in xrange(0, len(currQuests), 5):
         currentQuestIds.append(currQuests[i])
 
-    pocketSize = invoker.getQuestCarryLimit()
+    pocketSize = target.getQuestCarryLimit()
     carrying = len(currQuests) / 5
     canCarry = False
 
@@ -523,10 +523,10 @@ def quests(command, arg0=0, arg1=0):
         canCarry = True
 
     if command == 'clear':
-        invoker.b_setQuests([])
+        target.b_setQuests([])
         return 'Cleared quests'
     elif command == 'clearHistory':
-        invoker.d_setQuestHistory([])
+        target.d_setQuestHistory([])
         return 'Cleared quests history'
     elif command == 'add':
         if arg0:
@@ -542,12 +542,12 @@ def quests(command, arg0=0, arg1=0):
     elif command == 'remove':
         if arg0:
             if arg0 in currentQuestIds:
-                invoker.removeQuest(arg0)
+                target.removeQuest(arg0)
                 return 'Removed QuestID %s'%(arg0)
             elif arg0 < pocketSize and arg0 > 0:
                 if len(currentQuestIds) <= arg0:
                     questIdToRemove = currentQuestIds[arg0 - 1]
-                    invoker.removeQuest(questIdToRemove)
+                    target.removeQuest(questIdToRemove)
                     return 'Removed quest from slot %s'%(arg0)
                 else:
                     return 'Invalid quest slot'
@@ -567,7 +567,7 @@ def quests(command, arg0=0, arg1=0):
             return 'CurrentQuests: %s'%(currentQuestIds)
     elif command == 'bagSize':
         if arg0 > 0 and arg0 < 5:
-            invoker.b_setQuestCarryLimit(arg0)
+            target.b_setQuestCarryLimit(arg0)
             return 'Set carry limit to %s'%(arg0)
         else:
             return 'Argument 0 must be between 1 and 4.'
@@ -585,7 +585,7 @@ def quests(command, arg0=0, arg1=0):
 
                     questList.append(questDesc)
 
-                invoker.b_setQuests(questList)
+                target.b_setQuests(questList)
                 return 'Set quest slot %s progress to %s'%(arg0, arg1)
             elif arg0 in Quests.QuestDict.keys():
                 if arg0 in currentQuestIds:
@@ -599,7 +599,7 @@ def quests(command, arg0=0, arg1=0):
 
                         questList.append(questDesc)
 
-                    invoker.b_setQuests(questList)
+                    target.b_setQuests(questList)
                     return 'Set QuestID %s progress to %s'%(arg0, arg1)
                 else:
                     return 'Cannot progress QuestID: %s.'%(arg0)
@@ -609,7 +609,7 @@ def quests(command, arg0=0, arg1=0):
             return 'progress needs 2 arguments.'
     elif command == 'tier':
         if arg0:
-            invoker.b_setRewardHistory(arg0, invoker.getRewardHistory()[1])
+            target.b_setRewardHistory(arg0, target.getRewardHistory()[1])
             return 'Set tier to %s'%(arg0)
         else:
             return 'tier needs 1 argument.'

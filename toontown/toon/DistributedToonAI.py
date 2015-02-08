@@ -5163,3 +5163,10 @@ def disguise(command, suitIndex, value):
         return 'Merits set.'
     else:
         return 'Unknown command: %s' % command
+
+@magicWord(category=CATEGORY_PROGRAMMER)
+def immortal():
+    """ Makes invoker immune to attacks. """
+    invoker = spellbook.getInvoker()
+    invoker.setImmortalMode(not invoker.immortalMode)
+    return 'Immortal Mode: %s' % ('ON' if invoker.immortalMode else 'OFF')
