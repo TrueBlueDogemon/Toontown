@@ -137,7 +137,6 @@ from toontown.estate import DistributedBankMgr/AI
 from toontown.estate import DistributedMailbox/AI
 from toontown.estate import DistributedFurnitureManager/AI
 from toontown.estate import DistributedFurnitureItem/AI
-from toontown.estate import DistributedBank/AI
 from toontown.toon import DistributedNPCBanker/AI
 from toontown.estate import DistributedCloset/AI
 from toontown.estate import DistributedTrunk/AI
@@ -2148,13 +2147,6 @@ dclass DistributedFurnitureItem : DistributedSmoothNode {
   setItem(uint32 furnitureMgrId, blob item) required broadcast ram;
   requestPosHpr(uint8 final, int16/10 x, int16/10 y, int16/100 z, int16/10 h, int16/10 p, int16/10 r, int16 t) airecv clsend;
   setMode(uint8 mdoe, uint32 avId) required broadcast ram;
-};
-
-dclass DistributedBank : DistributedFurnitureItem {
-  avatarEnter() airecv clsend;
-  freeAvatar();
-  setMovie(uint8, uint32, int16) broadcast ram;
-  transferMoney(int16) airecv clsend;
 };
 
 dclass DistributedBankCollectable : DistributedObject {

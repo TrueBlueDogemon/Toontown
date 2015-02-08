@@ -1,7 +1,8 @@
 from toontown.estate.DistributedClosetAI import DistributedClosetAI
 from toontown.toon.ToonDNA import ToonDNA, HAT, GLASSES, BACKPACK, SHOES
+from toontown.estate import ClosetGlobals
+
 from direct.distributed.ClockDelta import globalClockDelta
-import ClosetGlobals
 
 
 class DistributedTrunkAI(DistributedClosetAI):
@@ -23,6 +24,7 @@ class DistributedTrunkAI(DistributedClosetAI):
     def generate(self):
         if self.furnitureMgr.ownerId:
             owner = self.air.doId2do.get(self.furnitureMgr.ownerId)
+
             if owner:
                 self.hatList = owner.hatList
                 self.glassesList = owner.glassesList
@@ -36,6 +38,7 @@ class DistributedTrunkAI(DistributedClosetAI):
         if dclass != self.air.dclassesByName['DistributedToonAI']:
             self.notify.warning('Got object of wrong type!')
             return
+
         self.hatList = fields['setHatList'][0]
         self.glassesList = fields['setGlassesList'][0]
         self.backpackList = fields['setBackpackList'][0]
@@ -51,15 +54,22 @@ class DistributedTrunkAI(DistributedClosetAI):
 
     def removeItem(self, itemIdx, textureIdx, colorIdx, which):
         avId = self.air.getAvatarIdFromSender()
+
         if avId != self.furnitureMgr.ownerId:
-            self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to remove item from someone else\'s closet!')
+            self.air.writeServerEvent('suspicious', avId=avId,
+                                      issue='Tried to remove item from someone else\'s closet!')
             return
-        if avId != self.avId:
-            self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to remove item while not interacting with closet!')
+
+        if not self.verifyCustomer(avId):
+            self.air.writeServerEvent('suspicious', avId=avId,
+                                      issue='Tried to remove item while not interacting with closet!')
             return
+
         av = self.air.doId2do.get(avId)
+
         if not av:
-            self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to interact with a closet from another shard!')
+            self.air.writeServerEvent('suspicious', avId=avId,
+                                      issue='Tried to interact with a closet from another shard!')
             return
 
         if which == HAT:
@@ -71,18 +81,24 @@ class DistributedTrunkAI(DistributedClosetAI):
         elif which == SHOES:
             self.removedShoes.append((itemIdx, textureIdx, colorIdx))
 
-    def setDNA(self, hatIdx, hatTexture, hatColor, glassesIdx, glassesTexture, glassesColor, backpackIdx, backpackTexture, backpackColor, shoesIdx, shoesTexture, shoesColor, finished, which):
+    def setDNA(self, hatIdx, hatTexture, hatColor, glassesIdx, glassesTexture, glassesColor, backpackIdx,
+               backpackTexture, backpackColor, shoesIdx, shoesTexture, shoesColor, finished, which):
         avId = self.air.getAvatarIdFromSender()
-        if avId != self.avId:
+
+        if not self.verifyCustomer(avId):
             self.air.writeServerEvent('suspicious', avId, 'Tried to set DNA from closet while not using it!')
             return
+
         av = self.air.doId2do.get(avId)
+
         if not av:
             self.air.writeServerEvent('suspicious', avId, 'Interacted with a closet from another shard!')
             return
+
         if not self.__verifyAvatarInMyZone(av):
             self.air.writeServerEvent('suspicious', avId, 'Tried to setDNA while in another zone!')
             return
+
         if not finished:
             # They changed one of their accessories.
             if which == HAT:
@@ -109,12 +125,14 @@ class DistributedTrunkAI(DistributedClosetAI):
             # Free the user.
             self.d_setMovie(ClosetGlobals.CLOSET_MOVIE_COMPLETE, avId, globalClockDelta.getRealNetworkTime())
             self.resetMovie()
-            self.setState(ClosetGlobals.CLOSED, 0, self.furnitureMgr.ownerId, self.gender, self.hatList, self.glassesList, self.backpackList, self.shoesList)
+            self.setState(ClosetGlobals.CLOSED, 0, self.furnitureMgr.ownerId, self.gender, self.hatList,
+                          self.glassesList, self.backpackList, self.shoesList)
         elif finished == 2:
             # They are done using the trunk. Update their removed items.
             # Is the user actually the owner?
             if avId != self.furnitureMgr.ownerId:
-                self.air.writeServerEvent('suspicious', avId, 'Tried to set their clothes from somebody else\'s closet!')
+                self.air.writeServerEvent('suspicious', avId,
+                                          'Tried to set their clothes from somebody else\'s closet!')
                 return
 
             # Put on the accessories they want...
@@ -148,26 +166,30 @@ class DistributedTrunkAI(DistributedClosetAI):
             self.removedShoes = []
             self.generate()
 
-            self.avId = None
+            # Release the customer
+            self.releaseCustomer()
 
             # We are done, free the user!
             self.d_setMovie(ClosetGlobals.CLOSET_MOVIE_COMPLETE, avId, globalClockDelta.getRealNetworkTime())
             self.resetMovie()
-            self.setState(ClosetGlobals.CLOSED, 0, self.furnitureMgr.ownerId, self.gender, self.hatList, self.glassesList, self.backpackList, self.shoesList)
+            self.setState(ClosetGlobals.CLOSED, 0, self.furnitureMgr.ownerId, self.gender, self.hatList,
+                          self.glassesList, self.backpackList, self.shoesList)
 
     def enterAvatar(self):
         avId = self.air.getAvatarIdFromSender()
-        if self.avId:
-            if self.avId == avId:
-                self.air.writeServerEvent('suspicious', avId=avId, issue='Tried to use closet twice!')
-            self.sendUpdateToAvatarId(avId, 'freeAvatar', [])
-            return
         av = self.air.doId2do.get(avId)
+
         if not av:
             self.air.writeServerEvent('suspicious', avId=avId, issue='Not in same shard as closet!')
             return
+
         if not self.__verifyAvatarInMyZone(av):
             self.air.writeServerEvent('suspicious', avId=avId, issue='Not in same zone as closet!')
             return
-        self.avId = avId
-        self.setState(ClosetGlobals.OPEN, avId, self.furnitureMgr.ownerId, self.gender, self.hatList, self.glassesList, self.backpackList, self.shoesList)
+
+        if not self.occupy(avId):
+            self.sendUpdateToAvatarId(avId, 'freeAvatar', [])
+            return
+
+        self.setState(ClosetGlobals.OPEN, avId, self.furnitureMgr.ownerId, self.gender, self.hatList, self.glassesList,
+                      self.backpackList, self.shoesList)
