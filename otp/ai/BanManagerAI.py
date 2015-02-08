@@ -7,6 +7,9 @@ from direct.distributed.MsgTypes import *
 from otp.ai.MagicWordGlobal import *
 from direct.showbase.DirectObject import DirectObject
 
+if accountDBType == 'mysqldb':
+    from passlib.hash import bcrypt
+    import mysql.connector
 
 class BanFSM(FSM):
 
