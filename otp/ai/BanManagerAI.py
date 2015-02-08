@@ -40,7 +40,7 @@ class BanFSM(FSM):
     
             # Lets try connection to the db
             if mysql_ssl:
-                mysql_config = {
+                self.mysql_config = {
                   'user': mysql_username,
                   'password': mysql_password,
                   'db': mysql_db,
@@ -53,7 +53,7 @@ class BanFSM(FSM):
                   'ssl_verify_cert': mysql_ssl_verify_cert
                 }
             else:
-                mysql_config = {
+                self.mysql_config = {
                   'user': mysql_username,
                   'password': mysql_password,
                   'db': mysql_db,
@@ -61,7 +61,7 @@ class BanFSM(FSM):
                   'port': mysql_port,
                 }
     
-            self.cnx = mysql.connector.connect(**self.config)
+            self.cnx = mysql.connector.connect(**self.mysql_config)
             self.cur = self.cnx.cursor(buffered=True)
             self.cnx.database = mysql_db
             self.update_ban = ("UPDATE Accounts SET canPlay = 0, banRelease = %s, banReason = %s where accountid = %s")
@@ -72,7 +72,7 @@ class BanFSM(FSM):
             executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
                            Reason=self.comment)
         if accountDBType == 'mysqldb':
-            self.cur.execute(self.update_ban, (str(bannedUntil), self.comment), self.accountId)
+            self.cur.execute(self.update_ban, (str(bannedUntil), self.comment, self.accountId))
             self.cnx.commit()
 
     def ejectPlayer(self):
