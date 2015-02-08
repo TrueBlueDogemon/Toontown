@@ -7,6 +7,7 @@ from direct.distributed.MsgTypes import *
 from otp.ai.MagicWordGlobal import *
 from direct.showbase.DirectObject import DirectObject
 
+accountDBType = simbase.config.GetString('accountdb-type', 'developer')
 if accountDBType == 'mysqldb':
     from passlib.hash import bcrypt
     import mysql.connector
