@@ -6,8 +6,8 @@ sudo apt-get install python-dev libpng-dev zlib1g-dev libssl-dev libx11-dev libg
 
 then,
 
-  sudo pip install semidbm
-  sudo pip install passlib
+  sudo pip install passlib py-bcrypt semidbm
+
   sudo pip install PyMongo     <= only needed once we have mongo info in this README
 
 next panda:
