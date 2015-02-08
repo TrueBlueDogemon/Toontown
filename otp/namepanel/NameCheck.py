@@ -76,8 +76,7 @@ def checkName(name, otherCheckFuncs = [], font = None):
         for char in name:
             if not _validCharacter(char):
                 if char in string.digits:
-                    notify.info('name contains digits')
-                    return OTPLocalizer.NCNoDigits
+                    return
                 else:
                     notify.info('name contains bad char: %s' % TextEncoder().encodeWtext(char))
                     return OTPLocalizer.NCBadCharacter % TextEncoder().encodeWtext(char)
