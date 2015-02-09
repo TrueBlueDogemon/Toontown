@@ -4265,46 +4265,6 @@ class CheesyEffectReward(Reward):
         return TTLocalizer.QuestsCheesyEffectRewardPoster % desc
 
 
-class CogSuitPartReward(Reward):
-    trackNames = [TTLocalizer.Bossbot,
-     TTLocalizer.Lawbot,
-     TTLocalizer.Cashbot,
-     TTLocalizer.Sellbot]
-
-    def __init__(self, id, reward):
-        Reward.__init__(self, id, reward)
-
-    def getCogTrack(self):
-        return self.reward[0]
-
-    def getCogPart(self):
-        return self.reward[1]
-
-    def sendRewardAI(self, av):
-        dept = self.getCogTrack()
-        part = self.getCogPart()
-        av.giveCogPart(part, dept)
-
-    def countReward(self, qrc):
-        pass
-
-    def getCogTrackName(self):
-        index = ToontownGlobals.cogDept2index[self.getCogTrack()]
-        return CogSuitPartReward.trackNames[index]
-
-    def getCogPartName(self):
-        index = ToontownGlobals.cogDept2index[self.getCogTrack()]
-        return CogDisguiseGlobals.PartsQueryNames[index][self.getCogPart()]
-
-    def getString(self):
-        return TTLocalizer.QuestsCogSuitPartReward % {'cogTrack': self.getCogTrackName(),
-         'part': self.getCogPartName()}
-
-    def getPosterString(self):
-        return TTLocalizer.QuestsCogSuitPartRewardPoster % {'cogTrack': self.getCogTrackName(),
-         'part': self.getCogPartName()}
-
-
 class BuffReward(Reward):
     def sendRewardAI(self, av):
         av.addBuff(self.getBuffId(), self.getBuffTime())
@@ -4379,8 +4339,10 @@ def getReward(id):
 def getNextRewards(numChoices, tier, av):
     rewardTier = list(getRewardsInTier(tier))
     optRewards = list(getOptionalRewardsInTier(tier))
+
     if av.getGameAccess() == OTPGlobals.AccessFull and tier == TT_TIER + 3:
         optRewards = []
+
     if isLoopingFinalTier(tier):
         rewardHistory = map(lambda questDesc: questDesc[3], av.quests)
         if notify.getDebug():
@@ -4389,19 +4351,10 @@ def getNextRewards(numChoices, tier, av):
         rewardHistory = av.getRewardHistory()[1]
         if notify.getDebug():
             notify.debug('getNextRewards: rewardHistory: %s' % rewardHistory)
+
     if notify.getDebug():
         notify.debug('getNextRewards: rewardTier: %s' % rewardTier)
         notify.debug('getNextRewards: numChoices: %s' % numChoices)
-    for rewardId in getRewardsInTier(tier):
-        if getRewardClass(rewardId) == CogSuitPartReward:
-            deptStr = RewardDict.get(rewardId)[1]
-            cogPart = RewardDict.get(rewardId)[2]
-            dept = ToontownGlobals.cogDept2index[deptStr]
-            if av.hasCogPart(cogPart, dept):
-                notify.debug('getNextRewards: already has cog part: %s dept: %s' % (cogPart, dept))
-                rewardTier.remove(rewardId)
-            else:
-                notify.debug('getNextRewards: keeping quest for cog part: %s dept: %s' % (cogPart, dept))
 
     for rewardId in rewardHistory:
         if rewardId in rewardTier:
@@ -4914,17 +4867,6 @@ def avatarHasAllRequiredRewards(av, tier):
             actualRewardId = transformReward(rewardId, av)
             if actualRewardId in rewardHistory:
                 rewardHistory.remove(actualRewardId)
-            elif getRewardClass(rewardId) == CogSuitPartReward:
-                deptStr = RewardDict.get(rewardId)[1]
-                cogPart = RewardDict.get(rewardId)[2]
-                dept = ToontownGlobals.cogDept2index[deptStr]
-                if av.hasCogPart(cogPart, dept):
-                    if notify.getDebug():
-                        notify.debug('avatarHasAllRequiredRewards: rewardId: %s counts, avatar has cog part: %s dept: %s' % (actualRewardId, cogPart, dept))
-                else:
-                    if notify.getDebug():
-                        notify.debug('avatarHasAllRequiredRewards: CogSuitPartReward: %s not found' % actualRewardId)
-                    return 0
             else:
                 if notify.getDebug():
                     notify.debug('avatarHasAllRequiredRewards: rewardId %s not found' % actualRewardId)
