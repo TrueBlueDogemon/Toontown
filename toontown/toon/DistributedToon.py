@@ -2707,7 +2707,7 @@ def promote(deptIndex):
     invoker.sendUpdate('requestPromotion', [deptIndex])
     return 'Your promotion request has been sent.'
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+@magicWord(category=CATEGORY_MODERATOR, types=[int])
 def mute(minutes):
     """
     Mute the target
@@ -2720,7 +2720,7 @@ def mute(minutes):
     base.cr.chatAgent.sendMuteAccount(target.doId, minutes)
     return 'Mute request sent'
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[])
+@magicWord(category=CATEGORY_MODERATOR, types=[])
 def unmute():
     """
     Unmute the target
