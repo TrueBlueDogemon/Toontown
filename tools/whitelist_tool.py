@@ -11,7 +11,14 @@ def acceptWord():
         saveChanges()
         return
 
-    if word in LOCAL_LIST:
+    if word.startswith('r '):
+        word = word.replace('r ', '')
+        if word not in LOCAL_LIST:
+            print 'Could not remove unknown word "%s" from the whitelist.' % word
+        else:
+            LOCAL_LIST.remove(word)
+            print 'Removed "%s" from the whitelist.' % word
+    elif word in LOCAL_LIST:
         print 'The word "%s" is already whitelisted.' % word
     else:
         LOCAL_LIST.append(word)
@@ -49,7 +56,8 @@ LOCAL_LIST = WhiteListData.WHITELIST
 
 print 'Welcome to the Toontown Fellowship Whitelist Tool!'
 print 'Type any word you want to add to the whitelist.'
-print 'When you are done and want to save your changes, type "exit()"'
+print 'If you wish to remove a word, type "r <word>".'
+print 'When you are done and want to save your changes, type "exit()".'
 
 
 acceptWord()
