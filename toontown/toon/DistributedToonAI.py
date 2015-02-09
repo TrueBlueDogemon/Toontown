@@ -4456,15 +4456,15 @@ def unlocks():
     """
     Unlocks the invoker's teleport access, emotions, and pet trick phrases.
     """
-    invoker = spellbook.getInvoker()
+    target = spellbook.getTarget()
 
     # First, unlock their teleport access:
     hoods = list(ToontownGlobals.HoodsForTeleportAll)
-    invoker.b_setHoodsVisited(hoods)
-    invoker.b_setTeleportAccess(hoods)
+    target.b_setHoodsVisited(hoods)
+    target.b_setTeleportAccess(hoods)
 
     # Next, unlock all of their emotions:
-    emotes = list(invoker.getEmoteAccess())
+    emotes = list(target.getEmoteAccess())
     for emoteId in OTPLocalizer.EmoteFuncDict.values():
         if emoteId >= len(emotes):
             continue
@@ -4473,11 +4473,11 @@ def unlocks():
         if emoteId in (17, 18, 19):
             continue
         emotes[emoteId] = 1
-    invoker.b_setEmoteAccess(emotes)
+    target.b_setEmoteAccess(emotes)
 
     # Finally, unlock all of their pet phrases:
     if simbase.wantPets:
-        invoker.b_setPetTrickPhrases(range(7))
+        target.b_setPetTrickPhrases(range(7))
 
     return 'Unlocked teleport access, emotions, and pet trick phrases!'
 
@@ -5057,7 +5057,7 @@ def track(command, track, value=None):
                  'squirt', 'drop').index(track.lower())
     except:
         return 'Invalid Gag track!'
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
     trackAccess = invoker.getTrackAccess()
     if (command.lower() not in ('add',)) and (not trackAccess[index]):
         return "You don't have that track!"
@@ -5162,4 +5162,11 @@ def disguise(command, suitIndex, value):
         invoker.d_setCogMerits(invoker.cogMerits)
         return 'Merits set.'
     else:
-        return 'Unknow command: %s' % command
+        return 'Unknown command: %s' % command
+
+@magicWord(category=CATEGORY_PROGRAMMER)
+def immortal():
+    """ Makes invoker immune to attacks. """
+    invoker = spellbook.getInvoker()
+    invoker.setImmortalMode(not invoker.immortalMode)
+    return 'Immortal Mode: %s' % ('ON' if invoker.immortalMode else 'OFF')
