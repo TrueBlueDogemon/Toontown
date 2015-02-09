@@ -1,8 +1,10 @@
 from direct.distributed.DistributedObjectAI import DistributedObjectAI
 from toontown.catalog.CatalogItemList import CatalogItemList
 from toontown.catalog import CatalogItem
-from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem, FLTrunk, FLCloset, FLBank, FLPhone
+from toontown.catalog.CatalogFurnitureItem import CatalogFurnitureItem, FLTrunk, FLCloset, FLBank, FLPhone, FLIsTable
 from toontown.catalog.CatalogWallpaperItem import CatalogWallpaperItem
+from toontown.catalog.CatalogAccessoryItem import CatalogAccessoryItem
+from toontown.catalog.CatalogClothingItem import CatalogClothingItem
 from toontown.catalog.CatalogMouldingItem import CatalogMouldingItem
 from toontown.catalog.CatalogFlooringItem import CatalogFlooringItem
 from toontown.catalog.CatalogWainscotingItem import CatalogWainscotingItem
@@ -12,6 +14,7 @@ from DistributedPhoneAI import DistributedPhoneAI
 from DistributedClosetAI import DistributedClosetAI
 from DistributedTrunkAI import DistributedTrunkAI
 from otp.ai.MagicWordGlobal import *
+import time
 
 class FurnitureError(Exception):
     def __init__(self, code):
@@ -538,9 +541,9 @@ def recoverCloset():
             for item in reversed(fm.items):
                 if item.catalogItem.getFlags() & FLCloset:
                     fm.moveItemToAttic(item.doId);
-                    return "Moved the closet"
+                    return "Moved the Closet"
             fm.saveToHouse()
-    return "I cannot find your closet"
+    return "I cannot find your Closet"
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[])
 def fillAttic():
@@ -587,3 +590,55 @@ def emptyHouse():
                 fm.items.remove(item)
             fm.saveToHouse()
     return "The house is empty"
+
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def furniture(value):
+    """
+    ship any furniture item from your catalog
+    """
+
+    value = int(value)
+
+    target = spellbook.getTarget()
+
+    item = CatalogFurnitureItem(value)  # the Item...
+    item.deliveryDate = int(time.time()/60) + item.getDeliveryTime()
+    target.onOrder.append(item)
+    target.b_setDeliverySchedule(target.onOrder)
+
+    return "Its on its way..."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def accessory(value):
+    """
+    ship any accessory item from your catalog
+    """
+
+    value = int(value)
+
+    target = spellbook.getTarget()
+
+    item = CatalogAccessoryItem(value)  # the Item...
+    item.deliveryDate = int(time.time()/60) + item.getDeliveryTime()
+    target.onOrder.append(item)
+    target.b_setDeliverySchedule(target.onOrder)
+
+    return "Its on its way..."
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def clothing(value):
+    """
+    ship any clothing item from your catalog
+    """
+
+    value = int(value)
+
+    target = spellbook.getTarget()
+
+    item = CatalogClothingItem(value, 0)  # the Item...
+    item.deliveryDate = int(time.time()/60) + item.getDeliveryTime()
+    target.onOrder.append(item)
+    target.b_setDeliverySchedule(target.onOrder)
+
+    return "Its on its way..."

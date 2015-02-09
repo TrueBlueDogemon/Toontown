@@ -59,7 +59,7 @@ from toontown.speedchat import TTSCDecoders
 from toontown.suit import SuitDNA
 from toontown.toonbase import TTLocalizer
 from toontown.toonbase import ToontownGlobals
-
+from otp.ai import MagicWordManager
 
 if base.wantKarts:
     from toontown.racing.KartDNA import *
@@ -2706,3 +2706,30 @@ def promote(deptIndex):
     invoker = spellbook.getInvoker()
     invoker.sendUpdate('requestPromotion', [deptIndex])
     return 'Your promotion request has been sent.'
+
+@magicWord(category=CATEGORY_MODERATOR, types=[int])
+def mute(minutes):
+    """
+    Mute the target
+    """
+    if not MagicWordManager.lastClickedNametag:
+        return "nobody selected"
+    target = MagicWordManager.lastClickedNametag
+    if spellbook.getInvokerAccess() <= target.getAdminAccess():
+        return "Must be of a higher access level then target"
+    base.cr.chatAgent.sendMuteAccount(target.doId, minutes)
+    return 'Mute request sent'
+
+@magicWord(category=CATEGORY_MODERATOR, types=[])
+def unmute():
+    """
+    Unmute the target
+    """
+    if not MagicWordManager.lastClickedNametag:
+        return "nobody selected"
+    target = MagicWordManager.lastClickedNametag
+    if spellbook.getInvokerAccess() <= target.getAdminAccess():
+        return "Must be of a higher access level then target"
+    print ['unmute', target.doId]
+    base.cr.chatAgent.sendUnmuteAccount(target.doId)
+    return 'Unmute request sent'
