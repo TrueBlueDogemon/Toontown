@@ -285,6 +285,8 @@ dclass OtpAvatarManager : DistributedObject {
 dclass ChatAgent : DistributedObject {
   adminChat(uint32, string);
   chatMessage(string(0-256)) clsend;
+  muteAccount(DoId, int32) clsend;
+  unmuteAccount(DoId) clsend;
 };
 
 dclass FriendManager : DistributedObject {
