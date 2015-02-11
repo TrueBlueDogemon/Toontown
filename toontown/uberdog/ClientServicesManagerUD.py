@@ -10,6 +10,8 @@ import json
 from pandac.PandaModules import *
 import time
 import urllib2
+import datetime
+from datetime import datetime
 
 from otp.ai.MagicWordGlobal import *
 from otp.distributed import OtpDoGlobals
@@ -48,24 +50,27 @@ http.setVerifySsl(0)
 
 
 def executeHttpRequest(url, **extras):
-    timestamp = str(int(time.time()))
-    signature = hmac.new(accountServerSecret, timestamp, hashlib.sha256)
-    request = urllib2.Request(accountServerEndpoint + url)
-    request.add_header('User-Agent', 'TTI-CSM')
-    request.add_header('X-CSM-Timestamp', timestamp)
-    request.add_header('X-CSM-Signature', signature.hexdigest())
-    for k, v in extras.items():
-        request.add_header('X-CSM-' + k, v)
-    try:
-        return urllib2.urlopen(request).read()
-    except:
-        return None
+    print "executeHttpRequest: ", accountDBType, url, extras
 
+    if accountDBType == 'remote':
+        timestamp = str(int(time.time()))
+        signature = hmac.new(accountServerSecret, timestamp, hashlib.sha256)
+        request = urllib2.Request(accountServerEndpoint + url)
+        request.add_header('User-Agent', 'TTI-CSM')
+        request.add_header('X-CSM-Timestamp', timestamp)
+        request.add_header('X-CSM-Signature', signature.hexdigest())
+        for k, v in extras.items():
+            request.add_header('X-CSM-' + k, v)
+        try:
+            return urllib2.urlopen(request).read()
+        except:
+            return None
+
+    return None;
 
 blacklist = executeHttpRequest('names/blacklist.json')
 if blacklist:
     blacklist = json.loads(blacklist)
-
 
 def judgeName(name):
     if not name:
@@ -428,7 +433,7 @@ class MySQLAccountDB(AccountDB):
                 exit(1)
 
         self.count_account = ("SELECT COUNT(*) from Accounts")
-        self.select_account = ("SELECT password,accountId,accessLevel,status,rawPassword FROM Accounts where username = %s")
+        self.select_account = ("SELECT password,accountId,accessLevel,status,rawPassword,canPlay,banRelease FROM Accounts where username = %s")
         self.add_account = ("REPLACE INTO Accounts (username, password, accountId, accessLevel, rawPassword) VALUES (%s, %s, %s, %s, %s)")
         self.update_avid = ("UPDATE Accounts SET accountId = %s where username = %s")
         self.update_password = ("UPDATE Accounts SET password = %s, rawPassword = '1' where username = %s")
@@ -490,6 +495,14 @@ class MySQLAccountDB(AccountDB):
             self.cnx.commit()
 
             if row:
+                print row
+                if row[5] == 0 and datetime.strptime(row[6],"%Y-%m-%d") > datetime.now():
+                    response = {
+                      'success': False,
+                      'reason': "banned"
+                    }
+                    callback(response)
+                    return response
                 if not self.check_password(password, row[0]):
                     response = {
                       'success': False,

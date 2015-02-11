@@ -7,6 +7,10 @@ from direct.distributed.MsgTypes import *
 from otp.ai.MagicWordGlobal import *
 from direct.showbase.DirectObject import DirectObject
 
+accountDBType = simbase.config.GetString('accountdb-type', 'developer')
+if accountDBType == 'mysqldb':
+    from passlib.hash import bcrypt
+    import mysql.connector
 
 class BanFSM(FSM):
 
@@ -21,10 +25,55 @@ class BanFSM(FSM):
         self.DISLid = None
         self.accountId = None
         self.avName = None
+        accountDBType = simbase.config.GetString('accountdb-type', 'developer')
+        if accountDBType == 'mysqldb':
+            mysql_username = simbase.config.GetString('mysql-username', 'toontown')
+            mysql_password = simbase.config.GetString('mysql-password', 'password')
+            mysql_db = simbase.config.GetString('mysql-db', 'toontown')
+            mysql_host = simbase.config.GetString('mysql-host', '127.0.0.1')
+            mysql_port = simbase.config.GetInt('mysql-port', 3306)
+            mysql_ssl = simbase.config.GetBool('mysql-ssl', False)
+            mysql_ssl_ca = simbase.config.GetString('mysql-ssl-ca', '')
+            mysql_ssl_cert = simbase.config.GetString('mysql-ssl-cert', '')
+            mysql_ssl_key = simbase.config.GetString('mysql-ssl-key', '')
+            mysql_ssl_verify_cert = simbase.config.GetBool('mysql-ssl-verify-cert', False)
+    
+            # Lets try connection to the db
+            if mysql_ssl:
+                self.mysql_config = {
+                  'user': mysql_username,
+                  'password': mysql_password,
+                  'db': mysql_db,
+                  'host': mysql_host,
+                  'port': mysql_port,
+                  'client_flags': [ClientFlag.SSL],
+                  'ssl_ca': mysql_ssl_ca,
+                  'ssl_cert': mysql_ssl_cert,
+                  'ssl_key': mysql_ssl_key,
+                  'ssl_verify_cert': mysql_ssl_verify_cert
+                }
+            else:
+                self.mysql_config = {
+                  'user': mysql_username,
+                  'password': mysql_password,
+                  'db': mysql_db,
+                  'host': mysql_host,
+                  'port': mysql_port,
+                }
+    
+            self.cnx = mysql.connector.connect(**self.mysql_config)
+            self.cur = self.cnx.cursor(buffered=True)
+            self.cnx.database = mysql_db
+            self.update_ban = ("UPDATE Accounts SET canPlay = 0, banRelease = %s, banReason = %s where username = %s")
 
     def performBan(self, bannedUntil):
-        executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
+        accountDBType = simbase.config.GetString('accountdb-type', 'developer')
+        if accountDBType == 'remote':
+            executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
                            Reason=self.comment)
+        if accountDBType == 'mysqldb':
+            self.cur.execute(self.update_ban, (str(bannedUntil), self.comment, self.accountId))
+            self.cnx.commit()
 
     def ejectPlayer(self):
         av = self.air.doId2do.get(self.avId)
