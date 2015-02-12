@@ -64,7 +64,7 @@ class BanFSM(FSM):
             self.cnx = mysql.connector.connect(**self.mysql_config)
             self.cur = self.cnx.cursor(buffered=True)
             self.cnx.database = mysql_db
-            self.update_ban = ("UPDATE Accounts SET canPlay = 0, banRelease = %s, banReason = %s where username = %s")
+            self.update_ban = ("UPDATE Accounts SET canPlay = 0, bannedTime = %s, banRelease = %s, banReason = %s where username = %s")
 
     def performBan(self, bannedUntil):
         accountDBType = simbase.config.GetString('accountdb-type', 'developer')
@@ -72,7 +72,7 @@ class BanFSM(FSM):
             executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
                            Reason=self.comment)
         if accountDBType == 'mysqldb':
-            self.cur.execute(self.update_ban, (bannedUntil, self.comment, self.accountId))
+            self.cur.execute(self.update_ban, (int(time.time()), bannedUntil, self.comment, self.accountId))
             self.cnx.commit()
 
     def ejectPlayer(self):
