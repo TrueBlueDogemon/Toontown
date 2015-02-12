@@ -494,7 +494,6 @@ class MySQLAccountDB(AccountDB):
             self.cnx.commit()
 
             if row:
-                print row
                 if row[4] == 0 and int(row[5]) > time.time():
                     response = {
                       'success': False,
