@@ -6,9 +6,7 @@ sudo apt-get install python-dev libpng-dev zlib1g-dev libssl-dev libx11-dev libg
 
 then,
 
-  sudo pip install passlib py-bcrypt semidbm
-
-  sudo pip install PyMongo     <= only needed once we have mongo info in this README
+  sudo pip install passlib py-bcrypt semidbm PyMongo
 
 next panda:
 
@@ -23,10 +21,27 @@ next astron:
   cd ..
   git clone https://github.com/astron/astron
   cd astron
+
+If you want to use the version of mongo we are currently using on TTF, you 
+need to go to a specific git revisiton.  (We have not tested with newer versions
+yet.  If you find a newer configuration that works for you, please update 
+this document.)
+
+  git checkout a8949abe
+
+Then retrieve the mongo-cxx-driver-v2.4 drivers, place them some handy, 
+and put a symbol link to them in the Astron/src directory.  You can find them
+at https://www.mongodb.org/dl/linux/x86_64.   These are all old drivers so 
+please feel free to experiment with newer ones and then update this document.
+
+  cd src
+  ln -s /home/enigmeow/mongo-cxx-driver-v2.4/src/mongo
+  cd ..
+
+next we build it
+
   cmake -DCMAKE_BUILD_TYPE=Release . && make
   cp astrond ../src/astron
-
-TODO: update this for the mongo database support
 
 next, the database
 
