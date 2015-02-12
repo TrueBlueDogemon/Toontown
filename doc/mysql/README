@@ -23,9 +23,9 @@ next astron:
   cd astron
 
 If you want to use the version of mongo we are currently using on TTF, you 
-want to go to a specific git revisiton.  We have not tested with newer versions
+need to go to a specific git revisiton.  (We have not tested with newer versions
 yet.  If you find a newer configuration that works for you, please update 
-this document.
+this document.)
 
   git checkout a8949abe
 
