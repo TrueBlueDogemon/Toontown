@@ -31,6 +31,10 @@ if accountDBType == 'mongodb':
     import bcrypt
     from pymongo import MongoClient
 
+if accountDBType == 'mongodev':
+    import pymongo
+    from pymongo import MongoClient
+
 if accountDBType == 'mysqldb':
     from passlib.hash import bcrypt
     import mysql.connector
@@ -188,6 +192,77 @@ class LocalAccountDB(AccountDB):
             }
             callback(response)
             return response
+            
+class MongoDevAccountDB(AccountDB):
+    #This class is used for development, and NOT production.
+    # params:
+    #    mongodb-url   how to connect to the mongodb
+    #    mongodb-name  What db to use
+    #
+    # dependencies:
+    #    pip install PyMongo    
+
+    notify = directNotify.newCategory('MongoAccountDB')
+
+    def __init__(self, csm):
+        self.csm = csm
+
+        dburltest = simbase.config.GetString('mongodb-url', 'mongodb://localhost:27017')
+        self.client = MongoClient(dburltest)
+
+        dbnametest = simbase.config.GetString('mongodb-name', 'test')
+        self.db = self.client[dbnametest]
+
+        self.accounts = self.db.accountdb
+
+    def lookup(self, username, callback):
+        if accounts.count() == 0:
+            account = { "username": username, "accountId": 0, "accessLevel": 700}
+            accounts.insert(account)
+            response = {
+              'success': True,
+              'userId': username,
+              'accountId': 0,
+              'accessLevel': 700
+            }
+            callback(response)
+            return response
+
+        account = accounts.find_one({"username": username}) 
+
+        if account:
+            response = {
+              'success': True,
+              'userId': username,
+              'accountId': int(account["accountId"]),
+              'accessLevel': int(account["accessLevel"])
+            }
+            callback(response)
+            return response
+            
+
+        account = { "username": username, "accountId": 0, "accessLevel": 600}
+        accounts.insert(account)
+
+        response = {
+          'success': True,
+          'userId': username,
+          'accountId': 0,
+          'accessLevel': int(account["accessLevel"])
+        }
+
+        callback(response)
+        return response
+
+    def storeAccountID(self, userId, accountId, callback):
+        account = accounts.find_one({"username": userId})
+        if account:
+            accounts.update({"username": userId}, {"$set": {"accountId": accountId}})
+            callback(True)
+        else:
+            self.notify.warning('Unable to associate user %s with account %d!' % (userId, accountId))
+            callback(False)
+            
 # Mongo implementation of the AccountDB
 #
 # This was never used in production and might possibly not work.
@@ -1430,6 +1505,8 @@ class ClientServicesManagerUD(DistributedObjectGlobalUD):
             self.accountDB = LocalAccountDB(self)
         elif accountDBType == 'mongodb':
             self.accountDB = MongoAccountDB(self)
+        elif accountDBType == 'mongodev':
+            self.accountDB = MongoDevAccountDB(self)
         elif accountDBType == 'mysqldb':
             self.accountDB = MySQLAccountDB(self)
         elif accountDBType == 'remote':
