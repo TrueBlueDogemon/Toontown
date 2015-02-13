@@ -6,6 +6,7 @@ from direct.distributed.PyDatagram import PyDatagram
 from direct.distributed.MsgTypes import *
 from otp.ai.MagicWordGlobal import *
 from direct.showbase.DirectObject import DirectObject
+import time
 
 accountDBType = simbase.config.GetString('accountdb-type', 'developer')
 if accountDBType == 'mysqldb':
@@ -14,10 +15,11 @@ if accountDBType == 'mysqldb':
 
 class BanFSM(FSM):
 
-    def __init__(self, air, avId, comment, duration):
+    def __init__(self, air, avId, comment, duration, bannerId):
         FSM.__init__(self, 'banFSM-%s' % avId)
         self.air = air
         self.avId = avId
+        self.bannerId = bannerId
 
         # Needed variables for the actual banning.
         self.comment = comment
@@ -64,7 +66,7 @@ class BanFSM(FSM):
             self.cnx = mysql.connector.connect(**self.mysql_config)
             self.cur = self.cnx.cursor(buffered=True)
             self.cnx.database = mysql_db
-            self.update_ban = ("UPDATE Accounts SET canPlay = 0, banRelease = %s, banReason = %s where username = %s")
+            self.update_ban = ("UPDATE Accounts SET canPlay = 0, bannedTime = %s, banRelease = %s, banReason = %s, banBy = %s where username = %s")
 
     def performBan(self, bannedUntil):
         accountDBType = simbase.config.GetString('accountdb-type', 'developer')
@@ -72,7 +74,8 @@ class BanFSM(FSM):
             executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
                            Reason=self.comment)
         if accountDBType == 'mysqldb':
-            self.cur.execute(self.update_ban, (str(bannedUntil), self.comment, self.accountId))
+            print (self.update_ban, (int(time.time()), bannedUntil, self.comment, self.bannerId, self.accountId))
+            self.cur.execute(self.update_ban, (int(time.time()), int(bannedUntil), self.comment, self.bannerId, self.accountId))
             self.cnx.commit()
 
     def ejectPlayer(self):
@@ -90,23 +93,40 @@ class BanFSM(FSM):
         simbase.air.send(datagram)
 
     def dbCallback(self, dclass, fields):
-        if dclass != self.air.dclassesByName['AccountAI']:
-            return
-
-        self.accountId = fields.get('ACCOUNT_ID')
-
-        if not self.accountId:
-            return
-
-        date = datetime.date.today()
-        if simbase.config.GetBool('want-bans', True):
-            if self.duration == 0:
-                bannedUntil = "0000-00-00" # Terminated.
-            else:
-                bannedUntil = date + datetime.timedelta(days=self.duration)
-
-            self.duration = None
-            self.performBan(bannedUntil)
+        try:
+            if dclass != self.air.dclassesByName['AccountAI']:
+                return
+    
+            self.accountId = fields.get('ACCOUNT_ID')
+    
+            if not self.accountId:
+                return
+    
+            date = time.time()
+            if simbase.config.GetBool('want-bans', True):
+                le = len(self.duration)
+                if le < 2:
+                    l = int(self.duration)
+                else:
+                    t = self.duration[le-1]
+                    l = int(self.duration[0:(le-1)])
+                    if t == 'y' or t == 'Y':
+                        l = l * (60 * 60 * 24 * 365);
+                    elif t == 'm' or t == 'M':
+                        l = l * (60 * 60 * 24 * 31);
+                    elif t == 'd' or t == 'D':
+                        l = l * (60 * 60 * 24);
+                    elif t == 'h' or t == 'H':
+                        l = l * (60 * 60);
+                    elif t == 'm' or t == 'm':
+                        l = l * 60;
+    
+                bannedUntil = time.time() + l
+    
+                self.duration = None
+                self.performBan(bannedUntil)
+        except:
+            pass
 
     def getAvatarDetails(self):
         av = self.air.doId2do.get(self.avId)
@@ -154,8 +174,9 @@ class BanManagerAI(DirectObject):
         self.air = air
         self.banFSMs = {}
 
-    def ban(self, avId, duration, comment):
-        self.banFSMs[avId] = BanFSM(self.air, avId, comment, duration)
+    def ban(self, avId, duration, comment, bannerId):
+        print BanManagerAI.ban
+        self.banFSMs[avId] = BanFSM(self.air, avId, comment, duration, bannerId)
         self.banFSMs[avId].request('Start')
 
         self.acceptOnce(self.air.getAvatarExitEvent(avId), self.banDone, [avId])
@@ -183,16 +204,18 @@ def kick(reason='No reason specified'):
     return "Kicked %s from the game server!" % target.getName()
 
 
-@magicWord(category=CATEGORY_MODERATOR, types=[str, int])
+@magicWord(category=CATEGORY_MODERATOR, types=[str, str])
 def ban(reason, duration):
     """
     Ban the target from the game server.
+    arguments:  reason  hacking/language/other
+                time    10m  
     """
     target = spellbook.getTarget()
     if target == spellbook.getInvoker():
         return "You can't ban yourself!"
     if reason not in ('hacking', 'language', 'other'):
         return "'%s' is not a valid reason." % reason
-    simbase.air.banManager.ban(target.doId, duration, reason)
+    simbase.air.banManager.ban(target.doId, duration, reason, spellbook.getInvoker().doId)
     return "Banned %s from the game server!" % target.getName()
 

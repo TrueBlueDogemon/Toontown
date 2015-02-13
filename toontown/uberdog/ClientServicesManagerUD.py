@@ -372,7 +372,7 @@ class MySQLAccountDB(AccountDB):
         for account in dbm.keys():
             accountid = dbm[account]
             print "%s maps to %s"%(account, accountid)
-            self.cur.execute(self.add_account, (account,  "", accountid, 0, 0))
+            self.cur.execute(self.add_account, (account,  "", accountid, 0))
         self.cnx.commit()
         dbm.close()
 
@@ -433,10 +433,9 @@ class MySQLAccountDB(AccountDB):
                 exit(1)
 
         self.count_account = ("SELECT COUNT(*) from Accounts")
-        self.select_account = ("SELECT password,accountId,accessLevel,status,rawPassword,canPlay,banRelease FROM Accounts where username = %s")
-        self.add_account = ("REPLACE INTO Accounts (username, password, accountId, accessLevel, rawPassword) VALUES (%s, %s, %s, %s, %s)")
+        self.select_account = ("SELECT password,accountId,accessLevel,status,canPlay,banRelease FROM Accounts where username = %s")
+        self.add_account = ("REPLACE INTO Accounts (username, password, accountId, accessLevel) VALUES (%s, %s, %s, %s)")
         self.update_avid = ("UPDATE Accounts SET accountId = %s where username = %s")
-        self.update_password = ("UPDATE Accounts SET password = %s, rawPassword = '1' where username = %s")
         self.count_avid = ("SELECT COUNT(*) from Accounts WHERE username = %s")
 
         self.select_name = ("SELECT status FROM NameApprovals where avId = %s")
@@ -495,8 +494,7 @@ class MySQLAccountDB(AccountDB):
             self.cnx.commit()
 
             if row:
-                print row
-                if row[5] == 0 and datetime.strptime(row[6],"%Y-%m-%d") > datetime.now():
+                if row[4] == 0 and int(row[5]) > time.time():
                     response = {
                       'success': False,
                       'reason': "banned"
