@@ -208,6 +208,8 @@ def kick(reason='No reason specified'):
 def ban(reason, duration):
     """
     Ban the target from the game server.
+    arguments:  reason  hacking/language/other
+                time    10m  
     """
     target = spellbook.getTarget()
     if target == spellbook.getInvoker():
