@@ -107,6 +107,8 @@ class BanFSM(FSM):
                 le = len(self.duration)
                 if le < 2:
                     l = int(self.duration)
+                    if l == 0:
+                      l = 10 * (60 * 60 * 24 * 365);
                 else:
                     t = self.duration[le-1]
                     l = int(self.duration[0:(le-1)])
