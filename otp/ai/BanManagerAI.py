@@ -114,13 +114,13 @@ class BanFSM(FSM):
                     l = int(self.duration[0:(le-1)])
                     if t == 'y' or t == 'Y':
                         l = l * (60 * 60 * 24 * 365);
-                    elif t == 'm' or t == 'M':
+                    elif t == 'M':
                         l = l * (60 * 60 * 24 * 31);
                     elif t == 'd' or t == 'D':
                         l = l * (60 * 60 * 24);
                     elif t == 'h' or t == 'H':
                         l = l * (60 * 60);
-                    elif t == 'm' or t == 'm':
+                    elif t == 'm':
                         l = l * 60;
     
                 bannedUntil = time.time() + l
