@@ -36,7 +36,7 @@ class DNADoor(DNAGroup.DNAGroup):
         leftDoor = doorNodePath.find('door_*_left')
         leftDoor.flattenStrong()
         leftDoor.setName('leftDoor')
-        leftDoor.setName('leftDoor')
+        leftDoor.hide()
         rightDoor = doorNodePath.find('door_*_right')
         rightDoor.flattenStrong()
         rightDoor.setName('rightDoor')
