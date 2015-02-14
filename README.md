@@ -19,7 +19,7 @@ Toontown Fellowship wouldn't be here.
 
 Thank you for their courteousy and their incredible pioneering work.
 
-We also would like to thank SweetRatt for allowing us to use his
+We also would like to thank [SweetRatt](http://www.reddit.com/user/SweetRatt) for allowing us to use his
 amazing models.
 
 Why are we here and how would we like to be different
