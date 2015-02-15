@@ -251,13 +251,10 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
             self.air.writeServerEvent('suspicious', avId=directorId, issue='Tried to move furniture without being on the shard!')
             return
 
-        if self.director:
-            self.director.b_setGhostMode(0)
         if director:
             if director.zoneId != self.zoneId:
                 self.air.writeServerEvent('suspicious', avId=directorId, issue='Tried to become director from another zone!')
                 return
-            director.b_setGhostMode(1)
 
         self.director = director
         self.sendUpdate('setDirector', [directorId])
@@ -495,102 +492,6 @@ class DistributedFurnitureManagerAI(DistributedObjectAI):
             if window.placement == slot:
                 return window
         return None
-
-@magicWord(category=CATEGORY_PROGRAMMER, types=[])
-def findCloset():
-    """
-    find the closet
-    """
-    target = spellbook.getTarget()
-    if not target:
-        target = spellbook.getInvoker()
-    if not target:
-        return "Strange.. who are we talking about?"
-
-    if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
-        return "no houses in the state"
-
-    for house in target.estate.houses:
-        if house.doId == target.houseId:
-            fm = house.interior.furnitureManager
-            for item in fm.items:
-                if item.catalogItem.getFlags() & FLCloset:
-                    return 'items: %s'%(str(item.catalogItem))
-            for item in fm.atticItems:
-                if item.getFlags() & FLCloset:
-                    return 'atticItems: %s'%(str(item))
-    return "I cannot find your closet"
-
-@magicWord(category=CATEGORY_PROGRAMMER, types=[])
-def recoverCloset():
-    """
-    recover the closet
-    """
-    target = spellbook.getTarget()
-    if not target:
-        target = spellbook.getInvoker()
-    if not target:
-        return "Strange.. who are we talking about?"
-
-    if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
-        return "no houses in the state"
-
-    for house in target.estate.houses:
-        if house.doId == target.houseId:
-            fm = house.interior.furnitureManager
-            for item in reversed(fm.items):
-                if item.catalogItem.getFlags() & FLCloset:
-                    fm.moveItemToAttic(item.doId);
-                    return "Moved the Closet"
-            fm.saveToHouse()
-    return "I cannot find your Closet"
-
-@magicWord(category=CATEGORY_PROGRAMMER, types=[])
-def fillAttic():
-    """
-    move everything to the attic
-    """
-    target = spellbook.getTarget()
-    if not target:
-        target = spellbook.getInvoker()
-    if not target:
-        return "Strange.. who are we talking about?"
-
-    if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
-        return "no houses in the state"
-
-    for house in target.estate.houses:
-        if house.doId == target.houseId:
-            fm = house.interior.furnitureManager
-            for item in reversed(fm.items):
-                fm.moveItemToAttic(item.doId);
-            fm.saveToHouse()
-    return "everything has been moved to the attic"
-
-
-@magicWord(category=CATEGORY_PROGRAMMER, types=[])
-def emptyHouse():
-    """
-    delete everything in the house
-    """
-    target = spellbook.getTarget()
-    if not target:
-        target = spellbook.getInvoker()
-    if not target:
-        return "Strange.. who are we talking about?"
-
-    if not hasattr(target, "estate") or not hasattr(target.estate, "houses"):
-        return "no houses in the state"
-
-    for house in target.estate.houses:
-        if house.doId == target.houseId:
-            fm = house.interior.furnitureManager
-            for item in reversed(fm.items):
-                item.destroy()
-                fm.items.remove(item)
-            fm.saveToHouse()
-    return "The house is empty"
-
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[int])
 def furniture(value):
