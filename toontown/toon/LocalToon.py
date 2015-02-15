@@ -1092,6 +1092,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         return
 
     def stopMoveFurniture(self):
+        base.localAvatar.controlManager.collisionsOn()
         if self.oldPos:
             self.setPos(self.oldPos)
         if self.furnitureManager != None:
