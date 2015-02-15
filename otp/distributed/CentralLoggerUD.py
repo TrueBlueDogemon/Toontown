@@ -2,7 +2,7 @@ from direct.directnotify import DirectNotifyGlobal
 from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobalUD
 from direct.distributed.DistributedObjectUD import DistributedObjectUD
 
-class CentralLoggerUD(DistributedObjectUD):
+class CentralLoggerUD(DistributedObjectGlobalUD):
     notify = DirectNotifyGlobal.directNotify.newCategory("CentralLoggerUD")
 
     def announceGenerate(self):
