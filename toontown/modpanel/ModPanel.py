@@ -50,6 +50,12 @@ class ModPanel(NodePath, DirectObject):
         NodePath.show(self)
         
     def load_file_dialog(self):
+        # Unload the previous buttons
+        for button in self.buttons:
+            button.destroy()
+        self.buttons = []
+
+        # Load in the new panel_save.mp
         self.load_file('panel_save.mp')
     
     def load_file(self, filepath):
