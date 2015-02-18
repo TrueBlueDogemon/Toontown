@@ -4451,7 +4451,7 @@ def maxToon(missingTrack=None):
 
     return 'Maxed your Toon!'
 
-@magicWord(category=CATEGORY_PROGRAMMER)
+@magicWord(category=CATEGORY_MODERATOR)
 def unlocks():
     """
     Unlocks the invoker's teleport access, emotions, and pet trick phrases.
@@ -4503,7 +4503,7 @@ def sos(count, name):
     invoker.d_setNPCFriendsDict(invoker.NPCFriendsDict)
     return "You were given %d %s SOS cards." % (count, name)
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+@magicWord(category=CATEGORY_MODERATOR, types=[int])
 def unites(value=32767):
     """
     Restock all resistance messages.
