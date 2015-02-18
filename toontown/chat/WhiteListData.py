@@ -30309,6 +30309,7 @@ WHITELIST = [
     'socials',
     'society',
     'soda',
+    'sodality',
     'sodas',
     'sofa',
     'sofas',
