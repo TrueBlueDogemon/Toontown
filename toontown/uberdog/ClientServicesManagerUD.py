@@ -553,6 +553,13 @@ class MySQLAccountDB(AccountDB):
         if dclass != self.csm.air.dclassesByName['AccountUD']:
             return
         self.account = fields
+        if self.account:
+            self.avList = self.account['ACCOUNT_AV_SET']
+            print self.avList
+            for avId in self.avList:
+                if avId:
+                    self.cur.execute(self.insert_avoid, (self.accountid, avId))
+                    self.cnx.commit()
 
     def lookup(self, token, callback):
         try:
@@ -592,13 +599,8 @@ class MySQLAccountDB(AccountDB):
 
                 if row[1] != 0:
                     self.account = None
-                    self.csm.air.dbInterface.queryObject(self.csm.air.dbId, row[1], self.__handleRetrieve)
-                    if self.account:
-                        self.avList = self.account['ACCOUNT_AV_SET']
-                        for avId in self.avList:
-                            if avId:
-                                self.cur.execute(self.insert_avoid, (accountId, avId))
-                                self.cnx.commit()
+                    self.accountid = row[1]
+                    self.csm.air.dbInterface.queryObject(self.csm.air.dbId,  self.accountid, self.__handleRetrieve)
 
                 response = {
                     'success': True,
