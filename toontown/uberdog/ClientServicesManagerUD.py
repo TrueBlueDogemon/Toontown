@@ -512,7 +512,7 @@ class MySQLAccountDB(AccountDB):
         self.add_account = ("REPLACE INTO Accounts (username, password, accountId, accessLevel) VALUES (%s, %s, %s, %s)")
         self.update_avid = ("UPDATE Accounts SET accountId = %s where username = %s")
         self.count_avid = ("SELECT COUNT(*) from Accounts WHERE username = %s")
-        self.insert_avoid = ("INSERT Toons SET accountId = %s,toonid=%s")
+        self.insert_avoid = ("INSERT IGNORE Toons SET accountId = %s,toonid=%s")
 
         self.select_name = ("SELECT status FROM NameApprovals where avId = %s")
         self.add_name_request = ("REPLACE INTO NameApprovals (avId, name, status) VALUES (%s, %s, %s)")
