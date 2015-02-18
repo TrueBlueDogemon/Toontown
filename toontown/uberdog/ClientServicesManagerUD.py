@@ -512,6 +512,7 @@ class MySQLAccountDB(AccountDB):
         self.add_account = ("REPLACE INTO Accounts (username, password, accountId, accessLevel) VALUES (%s, %s, %s, %s)")
         self.update_avid = ("UPDATE Accounts SET accountId = %s where username = %s")
         self.count_avid = ("SELECT COUNT(*) from Accounts WHERE username = %s")
+        self.insert_avoid = ("INSERT Toons SET accountId = %s,toonid=%s")
 
         self.select_name = ("SELECT status FROM NameApprovals where avId = %s")
         self.add_name_request = ("REPLACE INTO NameApprovals (avId, name, status) VALUES (%s, %s, %s)")
@@ -548,6 +549,11 @@ class MySQLAccountDB(AccountDB):
         self.cur.execute(self.delete_name_query, (avId,))
         return 'Success'
 
+    def __handleRetrieve(self, dclass, fields):
+        if dclass != self.csm.air.dclassesByName['AccountUD']:
+            return
+        self.account = fields
+
     def lookup(self, token, callback):
         try:
             tokenList = token.split(':')
@@ -583,6 +589,16 @@ class MySQLAccountDB(AccountDB):
                     }
                     callback(response)
                     return response
+
+                if row[1] != 0:
+                    self.account = None
+                    self.csm.air.dbInterface.queryObject(self.csm.air.dbId, row[1], self.__handleRetrieve)
+                    if self.account:
+                        self.avList = self.account['ACCOUNT_AV_SET']
+                        for avId in self.avList:
+                            if avId:
+                                self.cur.execute(self.insert_avoid, (accountId, avId))
+                                self.cnx.commit()
 
                 response = {
                     'success': True,
