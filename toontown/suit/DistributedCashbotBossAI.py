@@ -45,7 +45,7 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         self.waitingForHelmet = 0
         self.avatarHelmets = {}
         self.bossMaxDamage = ToontownGlobals.CashbotBossMaxDamage
-        return
+        self.stunBuildup = 0
 
     def generate(self):
         DistributedBossCogAI.DistributedBossCogAI.generate(self)
@@ -356,19 +356,42 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         avId = self.air.getAvatarIdFromSender()
         if not self.validate(avId, avId in self.involvedToons, 'recordHit from unknown avatar'):
             return
+
         if self.state != 'BattleThree':
             return
+
+        taskMgr.remove(self.uniqueName('clear-stun-buildup'))
+
         self.b_setBossDamage(self.bossDamage + damage)
         if self.bossDamage >= self.bossMaxDamage:
             self.b_setState('Victory')
         elif self.attackCode != ToontownGlobals.BossCogDizzy:
-            if damage >= ToontownGlobals.CashbotBossKnockoutDamage:
+            if self.validateStun(damage):
                 self.b_setAttackCode(ToontownGlobals.BossCogDizzy)
                 self.stopHelmets()
             else:
                 self.b_setAttackCode(ToontownGlobals.BossCogNoAttack)
                 self.stopHelmets()
                 self.waitForNextHelmet()
+
+        if self.attackCode == ToontownGlobals.BossCogDizzy:
+            self.clearStunBuildUp()
+
+    def validateStun(self, damage):
+        if damage >= ToontownGlobals.CashbotBossKnockoutDamage:
+            self.clearStunBuildUp()
+            return True
+
+        self.stunBuildup += damage
+        if self.stunBuildup >= 40:
+            self.clearStunBuildUp()
+            return True
+
+        taskMgr.doMethodLater(7, self.clearStunBuildUp, self.uniqueName('clear-stun-buildup'))
+        return False
+
+    def clearStunBuildUp(self, task=None):
+        self.stunBuildup = 0
 
     def b_setBossDamage(self, bossDamage):
         self.d_setBossDamage(bossDamage)
@@ -504,6 +527,13 @@ class DistributedCashbotBossAI(DistributedBossCogAI.DistributedBossCogAI, FSM.FS
         DistributedBossCogAI.DistributedBossCogAI.enterEpilogue(self)
         self.d_setRewardId(self.rewardId)
 
+    def progressRandomValue(self, fromValue, toValue, radius = 0.2):
+        t = self.progressValue(0, 1)
+        radius *= (1.0 - abs(t - 0.5) * 2.0)
+        t += radius * 1
+        t = max(min(t, 1.0), 0.0)
+        return fromValue + (toValue - fromValue) * t
+
 
 @magicWord(category=CATEGORY_PROGRAMMER)
 def restartCraneRound():
@@ -544,6 +574,7 @@ def skipCFO():
     boss.exitIntroduction()
     boss.b_setState('PrepareBattleThree')
     return 'Skipping the first round...'
+
 
 @magicWord(category=CATEGORY_PROGRAMMER)
 def killCFO():
