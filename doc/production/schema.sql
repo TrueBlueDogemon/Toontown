@@ -42,3 +42,11 @@ CREATE TABLE `Messages` (
   `receiver`    varchar(10) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
+
+CREATE TABLE `Toons` (
+  `id`          int(10) NOT NULL AUTO_INCREMENT,
+  `accountid`   int(11) NOT NULL,
+  `toonid`      int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `toonid` (`toonid`)
+) ENGINE=InnoDB;

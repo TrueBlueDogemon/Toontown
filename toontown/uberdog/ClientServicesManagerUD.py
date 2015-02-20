@@ -516,7 +516,7 @@ class MySQLAccountDB(AccountDB):
         self.update_avid = ("UPDATE Accounts SET accountId = %s where username = %s")
         self.count_avid = ("SELECT COUNT(*) from Accounts WHERE username = %s")
         self.insert_avoid = ("INSERT IGNORE Toons SET accountId = %s,toonid=%s")
-        self.insert_message = ("INSERT IGNORE Messages SET category=%s,description=%s,sender=%s,receiver=%s")
+        self.insert_message = ("INSERT IGNORE Messages SET time=%s,category=%s,description=%s,sender=%s,receiver=%s")
 
         self.select_name = ("SELECT status FROM NameApprovals where avId = %s")
         self.add_name_request = ("REPLACE INTO NameApprovals (avId, name, status) VALUES (%s, %s, %s)")
@@ -537,8 +537,6 @@ class MySQLAccountDB(AccountDB):
             pass
 
     def persistMessage(self, category, description, sender, receiver):
-        print ['MySQL persistMessage', category, description, sender, receiver]
-        self.insert_message = ("INSERT IGNORE Messages SET time=%s,category=%s,description=%s,sender=%s,receiver=%s")
         self.cur.execute(self.insert_message, (int(time.time()), str(category), description, sender, receiver))
         self.cnx.commit()
 
