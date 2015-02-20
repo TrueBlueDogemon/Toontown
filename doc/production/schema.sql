@@ -36,7 +36,7 @@ CREATE TABLE `NameApprovals` (
 CREATE TABLE `Messages` (
   `id`          int(10) NOT NULL AUTO_INCREMENT,
   `time`        int(11) NOT NULL,
-  `catagory`    varchar(40) NOT NULL,
+  `category`    varchar(40) NOT NULL,
   `description` varchar(40) NOT NULL,
   `sender`      varchar(10) NOT NULL,
   `receiver`    varchar(10) NOT NULL,
