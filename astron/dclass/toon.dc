@@ -1,3 +1,9 @@
+//from toontown.election import DistributedInvasionSuit/AI
+//from toontown.election import DistributedElectionEvent/AI
+//from toontown.election import DistributedHotAirBalloon/AI
+//from toontown.election import DistributedSafezoneInvasion/AI
+//from toontown.election import DistributedElectionCamera/AI
+//from toontown.election import DistributedElectionCameraManager/AI
 from direct.distributed import DistributedObjectGlobal
 from toontown.ai import WelcomeValleyManager/AI
 from toontown.building import DistributedAnimatedProp/AI
@@ -974,7 +980,44 @@ dclass DistributedDGFlower : DistributedObject {
   avatarExit() airecv clsend;
   setHeight(uint8/10) broadcast ram;
 };
+dclass DistributedElectionEvent : DistributedObject {
+  setState(string state, int32 timestamp) required broadcast ram;
+  wheelbarrowAvatarEnter() clsend airecv;
+  slappyAvatarEnter() clsend airecv;
+  requestSuit() clsend airecv;
+  setSuitPhrase(string phrase) clsend airecv;
+  setSuitState(string state) clsend airecv;
+  setSuitDamage(uint8 damage, bool) clsend airecv;
+  phraseSaidToFlippy(uint16 phraseId) clsend airecv;
+  saySurleePhrase(string phrase, bool, bool) broadcast;
+  flippySpeech(uint32 avId, uint16 phraseId) broadcast;
+};
 
+dclass DistributedElectionCamera : DistributedNode
+{
+  setState(string state, int32 ts, int16/10 x, int16/10 y, int16/10 z, int16%360/10 h, int16%360/10 p, uint32 target) required broadcast ram;
+
+};
+
+dclass DistributedElectionCameraManager : DistributedObject
+{
+  setMainCamera(uint32 doId) required broadcast ram;
+  setCameraIds(uint32[]) required broadcast ram;
+};
+
+dclass DistributedHotAirBalloon : DistributedObject {
+  setState(string state, int32 timestamp, uint32 avId) required broadcast ram;
+  requestEnter() clsend airecv;
+  setFlightPath(uint8 flightPathIndex) required broadcast ram;
+};
+
+dclass DistributedSafezoneInvasion : DistributedObject {
+  pieHitToon(uint32 avId) clsend airecv;
+  pieHitSuit(uint32 avId) clsend airecv;
+  takeDamage(uint8 damage) clsend airecv;
+  setInvasionStarted(bool started) required broadcast ram;
+  stopMusic() broadcast ram;
+};
 dclass DistributedFishingPond : DistributedObject {
   hitTarget(uint32) airecv clsend;
   setArea(uint32) required broadcast ram;

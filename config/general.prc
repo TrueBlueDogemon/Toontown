@@ -1,3 +1,6 @@
+#elections
+want-hourly-doomsday #f
+want-doomsday #f
 # Window settings:
 window-title Toontown Fellowship
 win-origin -1 -1
