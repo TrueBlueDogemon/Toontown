@@ -5173,6 +5173,6 @@ def immortal():
 
 @magicWord(category=CATEGORY_PROGRAMMER)
 def catalog():
-    # Gibs next catalog.
+    # Gives next catalog.
     simbase.air.catalogManager.deliverCatalogFor(spellbook.getTarget())
     return 'The catalog has come early!'
