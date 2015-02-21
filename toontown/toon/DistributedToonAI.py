@@ -5170,3 +5170,9 @@ def immortal():
     invoker = spellbook.getInvoker()
     invoker.setImmortalMode(not invoker.immortalMode)
     return 'Immortal Mode: %s' % ('ON' if invoker.immortalMode else 'OFF')
+
+@magicWord(category=CATEGORY_PROGRAMMER)
+def catalog():
+    # Gibs next catalog.
+    simbase.air.catalogManager.deliverCatalogFor(spellbook.getTarget())
+    return 'The catalog has come early!'
