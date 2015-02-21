@@ -102,9 +102,9 @@ want-lawbot-headquarters #t
 want-bossbot-headquarters #t
 
 # Cashbot boss:
-want-resistance-toonup #f
-want-resistance-restock #f
-want-resistance-dance #f
+want-resistance-toonup #t
+want-resistance-restock #t
+want-resistance-dance #t
 
 # Cog battles:
 base-xp-multiplier 1.0
