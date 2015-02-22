@@ -84,7 +84,10 @@ class ToontownLoadingScreen:
             if base.localAvatarStyle:
                 from toontown.toon import Toon
                 bored = {'emote':'bored', 'frame':135} #must define before list
-                emotelist = [bored]
+                run = {'emote':'run', 'frame':7}
+                victory = {'emote':'victory', 'frame':10}
+                applause = {'emote':'applause', 'frame':23}
+                emotelist = [bored, run, victory, applause]
                 emotechosen = random.choice(emotelist)
                 self.toon = Toon.Toon()
                 self.toon.setDNA(base.localAvatarStyle)
