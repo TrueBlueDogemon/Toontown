@@ -1,3 +1,4 @@
+
 from pandac.PandaModules import *
 from direct.gui.DirectGui import *
 from toontown.toonbase import ToontownGlobals
@@ -82,9 +83,15 @@ class ToontownLoadingScreen:
         if gui:
             if base.localAvatarStyle:
                 from toontown.toon import Toon
+                import random
+                emotelist = [bored]
+                emotechosen = random.choice(emotelist)
+                emotename = emotechosen['emote']
+                emoteframe = emotechosen['frame']
+                bored = {'emote':'bored', 'frame':135}
                 self.toon = Toon.Toon()
                 self.toon.setDNA(base.localAvatarStyle)
-                self.toon.loop('bored', fromFrame=135, toFrame=135)
+                self.toon.loop(emotename, fromFrame=emoteframe, toFrame=emoteframe)
                 self.toon.getGeomNode().setDepthWrite(1)
                 self.toon.getGeomNode().setDepthTest(1)
                 self.toon.setHpr(205, 0, 0)
