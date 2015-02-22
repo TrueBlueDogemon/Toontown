@@ -84,14 +84,12 @@ class ToontownLoadingScreen:
             if base.localAvatarStyle:
                 from toontown.toon import Toon
                 import random
-                bored = {'emote':'bored', 'frame':135}
+                bored = {'emote':'bored', 'frame':135} #must define before list
                 emotelist = [bored]
                 emotechosen = random.choice(emotelist)
-                emotename = emotechosen['emote']
-                emoteframe = emotechosen['frame']
                 self.toon = Toon.Toon()
                 self.toon.setDNA(base.localAvatarStyle)
-                self.toon.loop(emotename, fromFrame=emoteframe, toFrame=emoteframe)
+                self.toon.loop(emotechosen['emote'], fromFrame=emotechosen['frame'], toFrame=emotechosen['frame'])
                 self.toon.getGeomNode().setDepthWrite(1)
                 self.toon.getGeomNode().setDepthTest(1)
                 self.toon.setHpr(205, 0, 0)
