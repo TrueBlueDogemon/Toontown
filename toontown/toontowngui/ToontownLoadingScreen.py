@@ -83,7 +83,6 @@ class ToontownLoadingScreen:
         if gui:
             if base.localAvatarStyle:
                 from toontown.toon import Toon
-                import random
                 bored = {'emote':'bored', 'frame':135} #must define before list
                 emotelist = [bored]
                 emotechosen = random.choice(emotelist)
