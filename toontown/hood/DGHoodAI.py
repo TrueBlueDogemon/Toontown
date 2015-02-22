@@ -67,12 +67,11 @@ class DGHoodAI(HoodAI.HoodAI):
         self.classicChar.start()
 
     def createButterflies(self):
-        hood = ToontownGlobals.DaisyGardens
         playground = ButterflyGlobals.DG
         for area in range(ButterflyGlobals.NUM_BUTTERFLY_AREAS[playground]):
             for b in range(ButterflyGlobals.NUM_BUTTERFLIES[playground]):
                 butterfly = DistributedButterflyAI.DistributedButterflyAI(self.air)
                 butterfly.setArea(playground, area)
                 butterfly.setState(0, 0, 0, 1, 1)
-                butterfly.generateWithRequired(hood)
+                butterfly.generateWithRequired(self.zoneId)
                 self.butterflies.append(butterfly)
