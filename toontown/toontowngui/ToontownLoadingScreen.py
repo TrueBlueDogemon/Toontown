@@ -88,7 +88,16 @@ class ToontownLoadingScreen:
                 applause = {'emote':'applause', 'frame':23}
                 dust = {'emote':'sprinkle-dust', 'frame':40}
                 hypno = {'emote':'hypnotize', 'frame':25}
-                emotelist = [bored, run, victory, applause, dust, hypno]
+                cringe = {'emote':'cringe', 'frame':25}
+                wave = {'emote':'wave', 'frame':25}
+                shrug = {'emote':'shrug', 'frame':30}
+                duck = {'emote':'duck', 'frame':40}
+                up = {'emote':'up', 'frame':60}
+                pushup = {'emote':'down', 'frame':23}
+                bow = {'emote':'bow', 'frame':45}
+                emotelist = [bored, run, victory, applause, dust,
+                             hypno, cringe, wave, shrug, duck,
+                             up, pushup, bow]
                 emotechosen = random.choice(emotelist)
                 self.toon = Toon.Toon()
                 self.toon.setDNA(base.localAvatarStyle)
