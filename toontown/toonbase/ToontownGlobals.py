@@ -1473,7 +1473,7 @@ ColorNoChat = (0.8,
  0.5,
  0.1,
  1)
-FactoryLaffMinimums = [(0, 31),
+FactoryLaffMinimums = [(0, 31, 0),
  (0, 66, 71),
  (0,
   81,
