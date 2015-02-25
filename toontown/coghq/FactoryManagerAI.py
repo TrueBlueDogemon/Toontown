@@ -19,7 +19,7 @@ class FactoryManagerAI(DirectObject.DirectObject):
         factoryZone = self.air.allocateZone()
         if FactoryManagerAI.factoryId is not None:
             factoryId = FactoryManagerAI.factoryId
-        if factoryId == ToontownGlobals.SellbotBrutalFactoryInt:
+        if entranceId == 2:
             factory = DistributedBrutalFactoryAI.DistributedBrutalFactoryAI(self.air, factoryId, factoryZone, entranceId, players)
         else:    
             factory = DistributedFactoryAI.DistributedFactoryAI(self.air, factoryId, factoryZone, entranceId, players)
