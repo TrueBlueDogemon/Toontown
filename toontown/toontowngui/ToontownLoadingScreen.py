@@ -82,9 +82,26 @@ class ToontownLoadingScreen:
         if gui:
             if base.localAvatarStyle:
                 from toontown.toon import Toon
+                bored = {'emote':'bored', 'frame':135} #must define before list
+                run = {'emote':'run', 'frame':7}
+                victory = {'emote':'victory', 'frame':10}
+                applause = {'emote':'applause', 'frame':23}
+                dust = {'emote':'sprinkle-dust', 'frame':40}
+                hypno = {'emote':'hypnotize', 'frame':25}
+                cringe = {'emote':'cringe', 'frame':25}
+                wave = {'emote':'wave', 'frame':25}
+                shrug = {'emote':'shrug', 'frame':30}
+                duck = {'emote':'duck', 'frame':40}
+                up = {'emote':'up', 'frame':60}
+                pushup = {'emote':'down', 'frame':23}
+                bow = {'emote':'bow', 'frame':45}
+                emotelist = [bored, run, victory, applause, dust,
+                             hypno, cringe, wave, shrug, duck,
+                             up, pushup, bow]
+                emotechosen = random.choice(emotelist)
                 self.toon = Toon.Toon()
                 self.toon.setDNA(base.localAvatarStyle)
-                self.toon.loop('bored', fromFrame=135, toFrame=135)
+                self.toon.loop(emotechosen['emote'], fromFrame=emotechosen['frame'], toFrame=emotechosen['frame'])
                 self.toon.getGeomNode().setDepthWrite(1)
                 self.toon.getGeomNode().setDepthTest(1)
                 self.toon.setHpr(205, 0, 0)
