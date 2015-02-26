@@ -50,6 +50,7 @@ class ToontownLoadingScreen:
         self.__count = 0
         self.gui = loader.loadModel('phase_3/models/gui/progress-background.bam')
         self.title = DirectLabel(guiId='ToontownLoadingScreenTitle', parent=self.gui, relief=None, pos=(base.a2dRight/5, 0, 0.235), text='', textMayChange=1, text_scale=0.08, text_fg=(0.03, 0.83, 0, 1), text_align=TextNode.ALeft, text_font=ToontownGlobals.getSignFont())
+        self.tip = DirectLabel(guiId='ToontownLoadingScreenTip', parent=self.gui, relief=None, pos=(0.1, 0, .45), text='', textMayChange=1, text_scale=0.06, text_fg=(1, 1, 1, 1), text_shadow=(0, 0, 0, 1), text_wordwrap=25, text_align=TextNode.ACenter, text_font=ToontownGlobals.getSignFont())
         self.waitBar = DirectWaitBar(guiId='ToontownLoadingScreenWaitBar', parent=self.gui, frameSize=(base.a2dLeft+(base.a2dRight/4.95), base.a2dRight-(base.a2dRight/4.95), -0.03, 0.03), pos=(0, 0, 0.15), text='')
         logoScale = 0.5625  # Scale for our locked aspect ratio (2:1).
         self.logo = OnscreenImage(
@@ -63,6 +64,7 @@ class ToontownLoadingScreen:
         self.toon = None
 
     def destroy(self):
+        self.tip.destroy()
         self.title.destroy()
         self.gui.removeNode()
         if self.toon:
@@ -111,6 +113,7 @@ class ToontownLoadingScreen:
                 self.waitBar['frameSize'] = (base.a2dLeft+(base.a2dRight/8.15), base.a2dRight-(base.a2dRight/2.57), -0.03, 0.03)
             self.title.reparentTo(base.a2dpBottomLeft, LOADING_SCREEN_SORT_INDEX)
             self.title.setPos(0.24, 0, 0.23)
+            self.tip['text'] = self.getTip(tipCategory)
             self.gui.setPos(0, -0.1, 0)
             self.gui.reparentTo(aspect2d, LOADING_SCREEN_SORT_INDEX)
             self.gui.setTexture(self.background, 1)
@@ -120,6 +123,7 @@ class ToontownLoadingScreen:
             self.title.reparentTo(base.a2dpBottomLeft, LOADING_SCREEN_SORT_INDEX)
             self.gui.reparentTo(hidden)
             self.logo.reparentTo(hidden)
+        self.tip.reparentTo(base.a2dpBottomCenter, LOADING_SCREEN_SORT_INDEX)
         self.waitBar.reparentTo(base.a2dpBottomCenter, LOADING_SCREEN_SORT_INDEX)
         self.waitBar.update(self.__count)
 
@@ -127,6 +131,7 @@ class ToontownLoadingScreen:
         self.waitBar.finish()
         self.waitBar.reparentTo(self.gui)
         self.title.reparentTo(self.gui)
+        self.tip.reparentTo(self.gui)
         self.gui.reparentTo(hidden)
         if self.toon:
             self.toon.reparentTo(hidden)
