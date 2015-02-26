@@ -159,7 +159,7 @@ class ShardPage(ShtikerPage.ShtikerPage):
                                         text1_bg=self.textDownColor,
                                         text2_bg=self.textRolloverColor,
                                         text3_fg=self.textDisabledColor,
-                                        textMayChange=1, pos=(0.6, 0, 0),
+                                        textMayChange=1, pos=(0.4, 0, 0),
                                         command=self.choseShard,
                                         extraArgs=[shardId])
 
