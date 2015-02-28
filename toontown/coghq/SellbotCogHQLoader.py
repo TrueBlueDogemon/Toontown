@@ -6,6 +6,7 @@ from direct.gui import DirectGui
 from toontown.toonbase import TTLocalizer
 from toontown.toon import Toon
 from direct.fsm import State
+import BrutalFactoryInterior
 import FactoryExterior
 import FactoryInterior
 import SellbotHQExterior
@@ -24,6 +25,7 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
             state.addTransition('factoryExterior')
 
         self.fsm.addState(State.State('factoryInterior', self.enterFactoryInterior, self.exitFactoryInterior, ['quietZone', 'factoryExterior']))
+        self.fsm.addState(State.State('brutalFactoryInterior', self.enterBrutalFactoryInterior, self.exitBrutalFactoryInterior, ['quietZone', 'factoryExterior']))
         for stateName in ['quietZone']:
             state = self.fsm.getStateNamed(stateName)
             state.addTransition('factoryInterior')
@@ -165,6 +167,14 @@ class SellbotCogHQLoader(CogHQLoader.CogHQLoader):
         self.hood.hideTitleText()
         self.exitPlace()
         self.placeClass = None
+        
+    def enterBrutalFactoryInterior(self, requestStatus):
+        self.placeClass = BrutalFactoryInterior.BrutalFactoryInterior
+        self.enterPlace(requestStatus)
+        
+    def exitBrutalFactoryInterior(self):
+        self.exitPlace()
+        self.placeClass = None        
 
     def enterFactoryInterior(self, requestStatus):
         self.placeClass = FactoryInterior.FactoryInterior
