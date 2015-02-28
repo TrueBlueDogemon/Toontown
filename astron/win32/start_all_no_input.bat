@@ -1,0 +1,3 @@
+start start_astron_cluster
+start start_ai_server_no_input
+start start_uberdog_server_no_input
