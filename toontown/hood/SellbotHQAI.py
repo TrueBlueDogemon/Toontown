@@ -52,6 +52,12 @@ class SellbotHQAI(CogHQAI.CogHQAI):
                 self.air, self.air.factoryMgr, ToontownGlobals.SellbotFactoryInt, i)
             factoryElevator.generateWithRequired(ToontownGlobals.SellbotFactoryExt)
             self.factoryElevators.append(factoryElevator)
+       
+        if simbase.config.GetBool('want-brutal-factory', True):
+            factoryElevator = DistributedFactoryElevatorExtAI(
+                self.air, self.air.factoryMgr, ToontownGlobals.SellbotBrutalFactoryInt, 2)
+            factoryElevator.generateWithRequired(ToontownGlobals.SellbotFactoryExt)
+            self.factoryElevators.append(factoryElevator)             
 
     def createFactoryBoardingParty(self):
         factoryIdList = []
