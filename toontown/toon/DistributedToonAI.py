@@ -54,7 +54,6 @@ from toontown.toonbase import ToontownGlobals
 from toontown.toonbase.ToontownGlobals import *
 from toontown.toonbase.TTLocalizerEnglish import SuitNameDropper
 
-
 if simbase.wantPets:
     from toontown.pets import PetLookerAI, PetObserve
 else:
@@ -4388,7 +4387,7 @@ def allSummons():
     return 'Lots of summons!'
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str])
-def maxToon(missingTrack=None):
+def maxToon(missingTrack=None, accessLevel=None):
     """
     Max the invoker's stats for end-level gameplay.
     """
