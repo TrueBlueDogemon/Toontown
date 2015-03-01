@@ -1273,3 +1273,12 @@ def hpr(h, p, r):
     Modifies the rotation of the invoker.
     """
     base.localAvatar.setHpr(h, p, r)
+
+@magicWord(category=CATEGORY_MODERATOR)
+def keepalive():
+    self = spellbook.getInvoker()
+    now = globalClock.getFrameTime()
+    self.lastMoved = globalClock.getFrameTime()
+    self.sleepTimeout = base.config.GetInt('sleep-timeout', 86400)
+    if now - self.lastMoved > self.sleepTimeout:
+        return "Keepalive is active."
