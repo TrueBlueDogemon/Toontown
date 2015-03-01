@@ -66,7 +66,12 @@ class BanFSM(FSM):
             self.cnx = mysql.connector.connect(**self.mysql_config)
             self.cur = self.cnx.cursor(buffered=True)
             self.cnx.database = mysql_db
+            self.insert_action = ("INSERT IGNORE Actions SET username=%s,currentTime=%s,releaseTime=%s,type=%s,reason=%s,actedBy=%s")
             self.update_ban = ("UPDATE Accounts SET canPlay = 0, bannedTime = %s, banRelease = %s, banReason = %s, banBy = %s where username = %s")
+
+    def persistAction(self, username, releaseTime, type, reason, actedBy):
+        self.cur.execute(self.insert_action, username, ( int(time.time()), releaseTime, type, reason, actedBy ) )
+        self.cnx.commit()
 
     def performBan(self, bannedUntil):
         accountDBType = simbase.config.GetString('accountdb-type', 'developer')
@@ -74,9 +79,8 @@ class BanFSM(FSM):
             executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
                            Reason=self.comment)
         if accountDBType == 'mysqldb':
-            print (self.update_ban, (int(time.time()), bannedUntil, self.comment, self.bannerId, self.accountId))
-            self.cur.execute(self.update_ban, (int(time.time()), int(bannedUntil), self.comment, self.bannerId, self.accountId))
-            self.cnx.commit()
+            self.cur.execute(self.update_ban, ( int(time.time()), int(bannedUntil), self.comment, self.bannerId, self.accountId ))
+            self.persistAction(self.avId, int(bannedUntil), "ban", self.comment, self.bannerId)
 
     def ejectPlayer(self):
         av = self.air.doId2do.get(self.avId)
@@ -203,6 +207,7 @@ def kick(reason='No reason specified'):
     datagram.addUint16(155)
     datagram.addString('You were kicked by a moderator for the following reason: %s' % reason)
     simbase.air.send(datagram)
+    simbase.air.banManager.persistAction(target.doId, 0, "kick", reason, spellbook.getInvoker().doId)
     return "Kicked %s from the game server!" % target.getName()
 
 
