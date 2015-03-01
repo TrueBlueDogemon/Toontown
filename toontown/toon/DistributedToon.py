@@ -2680,6 +2680,9 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def setCanUseUnites(self, canUseUnites):
         self.canUseUnites = canUseUnites
 
+    def magicTeleportRequest(self, requesterId):
+        self.sendUpdate('magicTeleportResponse', [requesterId, base.cr.playGame.getPlaceId()])
+
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER)
 def globalTeleport():
     """
@@ -2733,3 +2736,12 @@ def unmute():
     print ['unmute', target.doId]
     base.cr.chatAgent.sendUnmuteAccount(target.doId)
     return 'Unmute request sent'
+
+@magicWord(category=CATEGORY_MODERATOR)
+def sleep():
+    if not base.localAvatar.neverSleep:
+        base.localAvatar.disableSleeping()
+        return "Sleeping has been deactivated for the current session."
+    else:
+        base.localAvatar.enableSleeping()
+        return "Sleeping has been activated for the current session."

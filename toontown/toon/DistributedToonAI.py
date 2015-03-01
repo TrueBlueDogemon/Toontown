@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from direct.directnotify import DirectNotifyGlobal
 from direct.distributed import DistributedSmoothNodeAI
 from direct.distributed.ClockDelta import *
@@ -194,6 +195,7 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self._gmDisabled = False
         self.promotionStatus = [0, 0, 0, 0]
         self.buffs = []
+        self.magicWordTeleportRequests = []
 
     def generate(self):
         DistributedPlayerAI.DistributedPlayerAI.generate(self)
@@ -4295,6 +4297,36 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.setHouseType(houseType)
         self.d_setHouseType(houseType)
 
+    def magicTeleportResponse(self, requesterId, hoodId):
+        toon = self.air.doId2do.get(requesterId)
+        if toon:
+            toon.magicTeleportInitiate(self.getDoId(), hoodId, self.getLocation()[1])
+
+    def magicTeleportInitiate(self, targetId, hoodId, zoneId):
+        if targetId not in self.magicWordTeleportRequests:
+            return
+        self.magicWordTeleportRequests.remove(targetId)
+        self.sendUpdate('magicTeleportInitiate', [hoodId, zoneId])
+
+    def teleportResponseToAI(self, toAvId, available, shardId, hoodId, zoneId, fromAvId):
+        if not self.WantTpTrack:
+            return
+        senderId = self.air.getAvatarIdFromSender()
+        if toAvId != self.doId:
+            self.air.writeServerEvent('suspicious', avId=self.doId, issue='toAvId=%d is not equal to self.doId' % toAvId)
+            return
+        if available != 1:
+            self.air.writeServerEvent('suspicious', avId=self.doId, issue='invalid availableValue=%d' % available)
+            return
+        if fromAvId == 0:
+            return
+        self.air.teleportRegistrar.registerValidTeleport(toAvId, available, shardId, hoodId, zoneId, fromAvId)
+        dg = self.dclass.aiFormatUpdate('teleportResponse', fromAvId, fromAvId, self.doId, [toAvId,
+         available,
+         shardId,
+         hoodId,
+         zoneId])
+        self.air.send(dg)
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int])
 def cheesyEffect(value, hood=0, expire=0):
@@ -4360,7 +4392,7 @@ def maxToon(missingTrack=None):
     """
     Max the invoker's stats for end-level gameplay.
     """
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
 
     # First, unlock the invoker's Gag tracks:
     gagTracks = [1, 1, 1, 1, 1, 1, 1]
@@ -4592,7 +4624,7 @@ def maxFishTank(maxFishTank):
     target.b_setMaxFishTank(maxFishTank)
     return "Set %s's max fish tank value to %d!" % (target.getName(), maxFishTank)
 
-@magicWord(category=CATEGORY_ADMINISTRATOR, types=[str])
+@magicWord(category=CATEGORY_PROGRAMMER, types=[str])
 def name(name=''):
     """
     Modify the target's name.
@@ -4801,7 +4833,7 @@ def inventory(a, b=None, c=None):
 @magicWord(category=CATEGORY_CREATIVE, types=[str, str])
 def dna(part, value):
     """Modify a DNA part on the invoker."""
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
 
     dna = ToonDNA.ToonDNA()
     dna.makeFromNetString(invoker.getDNAString())
@@ -4998,12 +5030,68 @@ def dna(part, value):
 
 
 @magicWord(category=CATEGORY_CREATIVE, types=[int])
-def bringTheMadness(clothes):
+def bringTheMadness():
     """
     Applies the Pegboard Nerds Clothes
     """
-    pass # TODO
+    invoker = spellbook.getTarget()
 
+    dna = ToonDNA.ToonDNA()
+    dna.makeFromNetString(invoker.getDNAString())
+
+    dna.topTex = 148
+    invoker.b_setDNAString(dna.makeNetString())
+
+    dna.topTexColor = 26
+    invoker.b_setDNAString(dna.makeNetString())
+
+    dna.sleeveTex = 135
+    invoker.b_setDNAString(dna.makeNetString())
+
+    dna.sleeveTexColor = 26
+    invoker.b_setDNAString(dna.makeNetString())
+
+    dna.botTex = 57
+    invoker.b_setDNAString(dna.makeNetString())
+
+    dna.botTexColor = 26
+    invoker.b_setDNAString(dna.makeNetString())
+
+    target = spellbook.getTarget()
+    target.b_setNametagStyle(15)
+
+    return 'Here It Comes\n You’re about to become Disconnected\n I might Self Destruct if you try to be my Hero\n Ill give you a FrainBreeze\n Held at Gunpoint\n Im ready to Fire In The Hole\n Come over here BADBOI\n This is an Emergency\n My Pressure Cooker is Bassline Kickin\n 20K bitch\n im a High Roller\n Although We Are One\n this is my New Style\n Razor Sharp\n You are in a Close Encounter\n however\n This is Not the End\n So What\n I might get Rocktronik\n This isnt 2012\n its time to get Lawless\n How U Feelin’?\n We are all Nerds on Mushrooms\n However, here comes the world\n and when it comes\n Ill Bring The Madness\n'
+
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+def resistanceRanger():
+    """
+    Applies the Resistance Ranger Clothes
+    """
+    invoker = spellbook.getTarget()
+
+    dna = ToonDNA.ToonDNA()
+    dna.makeFromNetString(invoker.getDNAString())
+
+    dna.topTex = 111
+    invoker.b_setDNAString(dna.makeNetString())
+
+    dna.topTexColor = 26
+    invoker.b_setDNAString(dna.makeNetString())
+
+    dna.sleeveTex = 98
+    invoker.b_setDNAString(dna.makeNetString())
+
+    dna.sleeveTexColor = 26
+    invoker.b_setDNAString(dna.makeNetString())
+
+    dna.botTex = 41
+    invoker.b_setDNAString(dna.makeNetString())
+
+    dna.botTexColor = 26
+    invoker.b_setDNAString(dna.makeNetString())
+
+    target = spellbook.getTarget()
+    target.b_setNametagStyle(6)
 
 @magicWord(category=CATEGORY_ADMINISTRATOR, types=[int])
 def trophyScore(value):
@@ -5171,8 +5259,77 @@ def immortal():
     invoker.setImmortalMode(not invoker.immortalMode)
     return 'Immortal Mode: %s' % ('ON' if invoker.immortalMode else 'OFF')
 
+@magicWord(category=CATEGORY_CREATIVE, types=[int])
+def pouch(amt):
+    """ Set the target's max gag limit. """
+    spellbook.getTarget().b_setMaxCarry(amt)
+    return "Set %s's pouch size to %d" % (spellbook.getTarget().getName(), amt)
+
 @magicWord(category=CATEGORY_PROGRAMMER)
 def catalog():
     # Gives next catalog.
     simbase.air.catalogManager.deliverCatalogFor(spellbook.getTarget())
     return 'The catalog has come early!'
+
+@magicWord(category=CATEGORY_MODERATOR, types=[int])
+def online(doId):
+    """ Check if a toon is online. """
+    av = spellbook.getTarget()
+    doId = 100000000 + doId
+    simbase.air.getActivated(doId, lambda x,y: av.d_setSystemMessage(0, '%d is %s!' % (x, 'online' if y else 'offline')))
+
+@magicWord(category=CATEGORY_MODERATOR, types=[int, str])
+def locate(avIdShort=0, returnType=''):
+    #Locate an avatar anywhere on the [CURRENT] AI
+    # TODO: Use Astron msgs to get location of avId from anywhere in the Astron cyber-space.
+    # NOTE: The avIdShort concept needs changing, especially when we start entering 200000000's for avIds
+    #if avIdShort <= 0:
+    #    return "Please enter a valid avId to find! Note: You only need to enter the last few digits of the full avId!"
+    avIdFull = 400000000 - (300000000 - avIdShort)
+    av = simbase.air.doId2do.get(avIdFull, None)
+    if not av:
+        return "Could not find the avatar on the current AI."
+
+    # Get the avatar's location.
+    zoneId = av.getLocation()[1] # This returns: (parentId, zoneId)
+    trueZoneId = zoneId
+    interior = False
+
+    if returnType == 'zone':
+        # The avatar that called the MagicWord wants a zoneId... Provide them with the untouched zoneId.
+        return "%s is in zoneId %d." % (av.getName(), trueZoneId)
+
+    if returnType == 'playground':
+        # The avatar that called the MagicWord wants the playground name that the avatar is currently in.
+        zoneId = ZoneUtil.getCanonicalHoodId(zoneId)
+
+    if ZoneUtil.isInterior(zoneId):
+        # If we're in an interior, we want to fetch the street/playground zone, since there isn't
+        # any mapping for interiorId -> shop name (afaik).
+        zoneId -= 500
+        interior = True
+
+    if ZoneUtil.isPlayground(zoneId):
+        # If it's a playground, TTG contains a map of all hoodIds -> playground names.
+        where = ToontownGlobals.hoodNameMap.get(zoneId, None)
+    else:
+        # If it's not a playground, the TTL contains a list of all streetId -> street names.
+        zoneId = zoneId - zoneId % 100 # This essentially truncates the last 2 digits.
+        where = TTLocalizer.GlobalStreetNames.get(zoneId, None)
+
+    if not where:
+        return "Failed to map the zoneId %d [trueZoneId: %d] to a location..." % (zoneId, trueZoneId)
+
+    if interior:
+        return "%s has been located %s %s, inside a building." % (av.getName(), where[1], where[2])
+    return "%s has been located %s %s." % (av.getName(), where[1], where[2])
+
+@magicWord(category=CATEGORY_MODERATOR, types=[int])
+def goto(avIdShort):
+    """ Teleport to the avId specified. """
+    avId = 100000000+avIdShort # To get target doId.
+    toon = simbase.air.doId2do.get(avId)
+    if not toon:
+        return "Unable to teleport to target, they are not currently on this district."
+    spellbook.getInvoker().magicWordTeleportRequests.append(avId)
+    toon.sendUpdate('magicTeleportRequest', [spellbook.getInvoker().getDoId()])
