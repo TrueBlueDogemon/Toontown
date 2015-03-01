@@ -145,7 +145,29 @@ class BanFSM(FSM):
     def log(self):
         simbase.air.writeServerEvent('ban', self.accountId, self.comment)
 
+    def closeMysql():
+        try:
+            if this.cur != None:
+                this.cur.close()
+                this.cur = None;
+        except:
+            pass
+
+        try:
+            if this.cnx != None:
+                this.cnx.close()
+                this.cnx = None;
+        except:
+            pass
+
+    def __del__(self):
+        if accountDBType == 'mysqldb':
+            self.closeMysql();
+
     def cleanup(self):
+        if accountDBType == 'mysqldb':
+            self.closeMysql();
+
         self.air = None
         self.avId = None
 
@@ -207,7 +229,7 @@ def kick(reason='No reason specified'):
     datagram.addUint16(155)
     datagram.addString('You were kicked by a moderator for the following reason: %s' % reason)
     simbase.air.send(datagram)
-    simbase.air.banManager.persistAction(target.doId, 0, "kick", reason, spellbook.getInvoker().doId)
+#    simbase.air.banManager.persistAction(target.doId, 0, "kick", reason, spellbook.getInvoker().doId)
     return "Kicked %s from the game server!" % target.getName()
 
 
