@@ -2683,6 +2683,31 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
     def magicTeleportRequest(self, requesterId):
         self.sendUpdate('magicTeleportResponse', [requesterId, base.cr.playGame.getPlaceId()])
 
+    def magicTeleportInitiate(self, hoodId, zoneId):
+        loaderId = ZoneUtil.getBranchLoaderName(zoneId)
+        whereId = ZoneUtil.getToonWhereName(zoneId)
+        # TEMP HACK: Currently assume that the whereId is a boss battle if hoodId = cogHQ
+        # and zoneId is dynamic.
+        if ZoneUtil.isDynamicZone(zoneId) and hoodId in [ToontownGlobals.BossbotHQ, ToontownGlobals.LawbotHQ, ToontownGlobals.CashbotHQ, ToontownGlobals.SellbotHQ]:
+            #whereId = 'cogHQBossBattle'
+            return 'They are in a boss, you cannot teleport to them!'
+        if zoneId in [ToontownGlobals.BossbotLobby, ToontownGlobals.LawbotLobby, ToontownGlobals.CashbotLobby, ToontownGlobals.SellbotLobby, ToontownGlobals.LawbotOfficeExt]:
+            #how = 'walk'
+            return 'They are in a lobby, you cannot teleport to them!'
+        else:
+            how = 'teleportIn'
+        requestStatus = [{
+            'loader': loaderId,
+            'where': whereId,
+            'how': how,
+            'hoodId': hoodId,
+            'zoneId': zoneId,
+            'shardId': None,
+            'avId': -1
+        }]
+        base.cr.playGame.getPlace().fsm.forceTransition('teleportOut', requestStatus)
+
+
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER)
 def globalTeleport():
     """
