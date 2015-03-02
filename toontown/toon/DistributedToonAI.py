@@ -4544,7 +4544,7 @@ def unites(value=32767):
     invoker.restockAllResistanceMessages(value)
     return 'Restocked %d unites!' % value
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+@magicWord(category=CATEGORY_MODERATOR, types=[int])
 def fires(count):
     """
     Modifies the invoker's pink slip count.
@@ -4780,7 +4780,7 @@ def cogIndex(index):
     invoker.b_setCogIndex(index)
     return 'Set your Cog index to %d!' % index
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int])
+@magicWord(category=CATEGORY_MODERATOR, types=[str, int, int])
 def inventory(a, b=None, c=None):
     invoker = spellbook.getInvoker()
     inventory = invoker.inventory
@@ -5028,7 +5028,7 @@ def dna(part, value):
     return 'Invalid part: ' + part
 
 
-@magicWord(category=CATEGORY_CREATIVE, types=[int])
+@magicWord(category=CATEGORY_MODERATOR, types=[int])
 def bringTheMadness():
     """
     Applies the Pegboard Nerds Clothes
@@ -5061,7 +5061,7 @@ def bringTheMadness():
 
     return 'Here It Comes\n You’re about to become Disconnected\n I might Self Destruct if you try to be my Hero\n Ill give you a FrainBreeze\n Held at Gunpoint\n Im ready to Fire In The Hole\n Come over here BADBOI\n This is an Emergency\n My Pressure Cooker is Bassline Kickin\n 20K bitch\n im a High Roller\n Although We Are One\n this is my New Style\n Razor Sharp\n You are in a Close Encounter\n however\n This is Not the End\n So What\n I might get Rocktronik\n This isnt 2012\n its time to get Lawless\n How U Feelin’?\n We are all Nerds on Mushrooms\n However, here comes the world\n and when it comes\n Ill Bring The Madness\n'
 
-@magicWord(category=CATEGORY_PROGRAMMER, types=[int])
+@magicWord(category=CATEGORY_MODERATOR, types=[int])
 def resistanceRanger():
     """
     Applies the Resistance Ranger Clothes
@@ -5258,7 +5258,7 @@ def immortal():
     invoker.setImmortalMode(not invoker.immortalMode)
     return 'Immortal Mode: %s' % ('ON' if invoker.immortalMode else 'OFF')
 
-@magicWord(category=CATEGORY_CREATIVE, types=[int])
+@magicWord(category=CATEGORY_MODERATOR, types=[int])
 def pouch(amt):
     """ Set the target's max gag limit. """
     spellbook.getTarget().b_setMaxCarry(amt)
