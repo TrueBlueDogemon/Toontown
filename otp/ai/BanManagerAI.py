@@ -229,7 +229,6 @@ def kick(reason='No reason specified'):
     datagram.addUint16(155)
     datagram.addString('You were kicked by a moderator for the following reason: %s' % reason)
     simbase.air.send(datagram)
-#    simbase.air.banManager.persistAction(target.doId, 0, "kick", reason, spellbook.getInvoker().doId)
     return "Kicked %s from the game server!" % target.getName()
 
 
