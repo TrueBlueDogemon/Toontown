@@ -204,7 +204,6 @@ class BanManagerAI(DirectObject):
         self.banFSMs = {}
 
     def ban(self, avId, duration, comment, bannerId):
-        print BanManagerAI.ban
         self.banFSMs[avId] = BanFSM(self.air, avId, comment, duration, bannerId)
         self.banFSMs[avId].request('Start')
 
