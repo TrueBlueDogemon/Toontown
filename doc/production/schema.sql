@@ -12,17 +12,43 @@ CREATE TABLE `Accounts` (
   `banRelease` varchar(30) NOT NULL,
   `bannedTime` varchar(30) NOT NULL,
   `banBy` varchar(20) NOT NULL,
-  `isMod` tinyint(10) NOT NULL,
   `status` text NOT NULL,
   `name` varchar(25) NOT NULL,
   `newsname` varchar(25) NOT NULL,
-  `registrationdate` varchar(40) NOT NULL,
   `allowemails` tinyint(10) NOT NULL DEFAULT '1',
-  `registrationip` varchar(50) NOT NULL,
-  `lastloggedinip` varchar(50) NOT NULL,
   `rpwkey` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `Actions` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `username` varchar(20) NOT NULL,
+  `currentTime` varchar(20) NOT NULL,
+  `releaseTime` varchar(20) NOT NULL,
+  `type` varchar(100) NOT NULL,
+  `reason` varchar(255) NOT NULL,
+  `actedBy` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `ChatAudit` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `time` int(11) NOT NULL,
+  `sender` varchar(40) NOT NULL,
+  `message` varchar(255) NOT NULL,
+  `channel` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `Messages` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `time` int(11) NOT NULL,
+  `category` varchar(40) NOT NULL,
+  `description` varchar(40) NOT NULL,
+  `sender` varchar(10) NOT NULL,
+  `receiver` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `NameApprovals` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
@@ -31,26 +57,7 @@ CREATE TABLE `NameApprovals` (
   `status` varchar(10) NOT NULL,
   `reviewedby` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
-CREATE TABLE `Messages` (
-  `id`          int(10) NOT NULL AUTO_INCREMENT,
-  `time`        int(11) NOT NULL,
-  `category`    varchar(40) NOT NULL,
-  `description` varchar(40) NOT NULL,
-  `sender`      varchar(10) NOT NULL,
-  `receiver`    varchar(10) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
-CREATE TABLE `ChatAudit` (
-  `id`          int(10) NOT NULL AUTO_INCREMENT,
-  `time`        int(11) NOT NULL,
-  `sender`      varchar(40) NOT NULL,
-  `message`     varchar(255) NOT NULL,
-  `channel`     varchar(10) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `Toons` (
   `id`          int(10) NOT NULL AUTO_INCREMENT,

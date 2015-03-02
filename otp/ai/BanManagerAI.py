@@ -66,6 +66,7 @@ class BanFSM(FSM):
             self.cnx = mysql.connector.connect(**self.mysql_config)
             self.cur = self.cnx.cursor(buffered=True)
             self.cnx.database = mysql_db
+            self.insert_action = ("INSERT Actions SET username=%s,currentTime=%s,releaseTime=%s,type=%s,reason=%s,actedBy=%s")
             self.update_ban = ("UPDATE Accounts SET canPlay = 0, bannedTime = %s, banRelease = %s, banReason = %s, banBy = %s where username = %s")
 
     def performBan(self, bannedUntil):
@@ -74,9 +75,13 @@ class BanFSM(FSM):
             executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
                            Reason=self.comment)
         if accountDBType == 'mysqldb':
-            print (self.update_ban, (int(time.time()), bannedUntil, self.comment, self.bannerId, self.accountId))
-            self.cur.execute(self.update_ban, (int(time.time()), int(bannedUntil), self.comment, self.bannerId, self.accountId))
-            self.cnx.commit()
+            try:
+                self.cur.execute(self.update_ban, ( int(time.time()), int(bannedUntil), self.comment, self.bannerId, self.accountId ))
+                self.cnx.commit()
+                self.cur.execute(self.insert_action, (self.avId, int(time.time()), int(bannedUntil), "ban", self.comment, self.bannerId ) )
+                self.cnx.commit()
+            except:
+                print "mysql exception"
 
     def ejectPlayer(self):
         av = self.air.doId2do.get(self.avId)
@@ -141,7 +146,29 @@ class BanFSM(FSM):
     def log(self):
         simbase.air.writeServerEvent('ban', self.accountId, self.comment)
 
+    def closeMysql(self):
+        try:
+            if this.cur != None:
+                this.cur.close()
+                this.cur = None;
+        except:
+            pass
+
+        try:
+            if this.cnx != None:
+                this.cnx.close()
+                this.cnx = None;
+        except:
+            pass
+
+    def __del__(self):
+        if accountDBType == 'mysqldb':
+            self.closeMysql();
+
     def cleanup(self):
+        if accountDBType == 'mysqldb':
+            self.closeMysql();
+
         self.air = None
         self.avId = None
 
