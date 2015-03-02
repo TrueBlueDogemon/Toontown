@@ -145,7 +145,7 @@ class BanFSM(FSM):
     def log(self):
         simbase.air.writeServerEvent('ban', self.accountId, self.comment)
 
-    def closeMysql():
+    def closeMysql(self):
         try:
             if this.cur != None:
                 this.cur.close()
