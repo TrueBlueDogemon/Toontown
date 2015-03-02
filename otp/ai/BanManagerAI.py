@@ -66,12 +66,8 @@ class BanFSM(FSM):
             self.cnx = mysql.connector.connect(**self.mysql_config)
             self.cur = self.cnx.cursor(buffered=True)
             self.cnx.database = mysql_db
-            self.insert_action = ("INSERT IGNORE Actions SET username=%s,currentTime=%s,releaseTime=%s,type=%s,reason=%s,actedBy=%s")
+            self.insert_action = ("INSERT Actions SET username=%s,currentTime=%s,releaseTime=%s,type=%s,reason=%s,actedBy=%s")
             self.update_ban = ("UPDATE Accounts SET canPlay = 0, bannedTime = %s, banRelease = %s, banReason = %s, banBy = %s where username = %s")
-
-    def persistAction(self, username, releaseTime, type, reason, actedBy):
-        self.cur.execute(self.insert_action, username, ( int(time.time()), releaseTime, type, reason, actedBy ) )
-        self.cnx.commit()
 
     def performBan(self, bannedUntil):
         accountDBType = simbase.config.GetString('accountdb-type', 'developer')
@@ -79,8 +75,13 @@ class BanFSM(FSM):
             executeHttpRequest('accounts/ban/', Id=self.accountId, Release=bannedUntil,
                            Reason=self.comment)
         if accountDBType == 'mysqldb':
-            self.cur.execute(self.update_ban, ( int(time.time()), int(bannedUntil), self.comment, self.bannerId, self.accountId ))
-            self.persistAction(self.avId, int(bannedUntil), "ban", self.comment, self.bannerId)
+            try:
+                self.cur.execute(self.update_ban, ( int(time.time()), int(bannedUntil), self.comment, self.bannerId, self.accountId ))
+                self.cnx.commit()
+                self.cur.execute(self.insert_action, (self.avId, int(time.time()), int(bannedUntil), "ban", self.comment, self.bannerId ) )
+                self.cnx.commit()
+            except:
+                print "mysql exception"
 
     def ejectPlayer(self):
         av = self.air.doId2do.get(self.avId)
