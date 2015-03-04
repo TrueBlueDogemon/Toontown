@@ -11,14 +11,17 @@ import CogDisguiseGlobals
 from toontown.suit import DistributedFactorySuitAI
 from toontown.toonbase import ToontownGlobals, ToontownBattleGlobals
 from toontown.coghq import DistributedBattleFactoryAI
+from toontown.toon import NPCToons
+import random
 
 class DistributedFactoryAI(DistributedLevelAI.DistributedLevelAI, FactoryBase.FactoryBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedFactoryAI')
 
-    def __init__(self, air, factoryId, zoneId, entranceId, avIds):
+    def __init__(self, air, factoryId, zoneId, entranceId, avIds, isBrutal = False):
         DistributedLevelAI.DistributedLevelAI.__init__(self, air, zoneId, entranceId, avIds)
         FactoryBase.FactoryBase.__init__(self)
         self.setFactoryId(factoryId)
+        self.isBrutal = isBrutal
 
     def createEntityCreator(self):
         return FactoryEntityCreatorAI.FactoryEntityCreatorAI(level=self)
@@ -102,6 +105,11 @@ class DistributedFactoryAI(DistributedLevelAI.DistributedLevelAI, FactoryBase.Fa
             self.air.writeServerEvent('factoryDefeated', avId, description)
         for toon in activeVictors:
             simbase.air.questManager.toonDefeatedFactory(toon, self.factoryId, activeVictors)
+        if self.isBrutal:
+            npcId = random.choice(NPCToons.getNPCListFromRarity(3))
+            for toon in activeVictors:
+                toon.attemptAddNPCFriend(npcId)
+                toon.d_setSystemMessage(0, 'You got a %s SOS card.' % (NPCToons.getNPCName(npcId)))
 
     def b_setDefeated(self):
         self.d_setDefeated()
@@ -132,3 +140,4 @@ class DistributedFactoryAI(DistributedLevelAI.DistributedLevelAI, FactoryBase.Fa
             suitIds.append(suit[0].doId)
 
         return suitIds
+
