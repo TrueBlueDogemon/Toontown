@@ -7,6 +7,7 @@ from toontown.catalog.CatalogRadioButton import CatalogRadioButton
 from toontown.catalog import CatalogGlobals
 from toontown.toonbase import ToontownGlobals
 from toontown.toonbase import TTLocalizer
+from direct.gui.DirectGui import *
 
 
 class CatalogGUI(NodePath, DirectObject):
@@ -42,6 +43,12 @@ class CatalogGUI(NodePath, DirectObject):
                                    text_fg=Vec4(1), text_scale=0.07, text_pos=(0.0, 0.14),
                                    command=self.hangUp)
         guiItems.removeNode()
+        
+        jarGui = loader.loadModel('phase_3.5/models/gui/jar_gui')
+        self.moneyDisplay = DirectLabel(parent=self, relief=None, pos=(2.28, 0, -0.9), scale=0.8, text=str(base.localAvatar.getMoney()), text_scale=0.18, text_fg=(0.95, 0.95, 0, 1), text_shadow=(0, 0, 0, 1), text_pos=(0, -0.1, 0), image=jarGui.find('**/Jar'), text_font=ToontownGlobals.getSignFont())
+        
+        jarGui.removeNode()
+        return
 
     def setCurrentTab(self, tab):
         self.currentTab = tab
@@ -151,12 +158,14 @@ class CatalogGUI(NodePath, DirectObject):
 
     def show(self):
         self.accept('CatalogItemPurchaseRequest', self.__handlePurchaseRequest)
+        self.accept(localAvatar.uniqueName('moneyChange'), self.__moneyChange)
         base.setBackgroundColor(Vec4(0.570312, 0.449219, 0.164062, 1.0))
         NodePath.show(self)
         render.hide()
 
     def hide(self):
         self.ignore('CatalogItemPurchaseRequest')
+        self.ignore(localAvatar.uniqueName('moneyChange'))
         base.setBackgroundColor(ToontownGlobals.DefaultBackgroundColor)
         NodePath.hide(self)
         render.show()
@@ -187,9 +196,11 @@ class CatalogGUI(NodePath, DirectObject):
 
     def __handlePurchaseRequest(self, item):
         item.requestPurchase(self.phone, self.__handlePurchaseResponse)
+        self.accept(localAvatar.uniqueName('moneyChange'), self.__moneyChange)
 
     def __handlePurchaseResponse(self, retCode, item):
         self.lockItems()
+        self.accept(localAvatar.uniqueName('moneyChange'), self.__moneyChange)
 
     def lockItems(self):
         for tab in self.tabButtons:
@@ -198,3 +209,6 @@ class CatalogGUI(NodePath, DirectObject):
     def updateItems(self):
         for tab in self.tabButtons:
             self.tabButtons[tab].updateItems(self.gifting)
+      
+    def __moneyChange(self, money):
+        self.moneyDisplay['text'] = str(money)
