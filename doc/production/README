@@ -29,6 +29,10 @@ this document.)
 
   git checkout a8949abe
 
+for non mongo, I do
+
+  git checkout 3a15606a
+
 Then retrieve the mongo-cxx-driver-v2.4 drivers, place them some handy, 
 and put a symbol link to them in the Astron/src directory.  You can find them
 at https://www.mongodb.org/dl/linux/x86_64.   These are all old drivers so 
