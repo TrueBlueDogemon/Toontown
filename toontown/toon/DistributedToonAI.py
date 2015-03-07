@@ -5271,20 +5271,26 @@ def catalog():
     return 'The catalog has come early!'
 
 @magicWord(category=CATEGORY_MODERATOR, types=[int])
-def online(doId):
+def online(avId):
     """ Check if a toon is online. """
-    av = spellbook.getTarget()
-    doId = 100000000 + doId
-    simbase.air.getActivated(doId, lambda x,y: av.d_setSystemMessage(0, '%d is %s!' % (x, 'online' if y else 'offline')))
+    if len(str(avId)) >= 9:
+        targetAvId = avId
+    else: 
+        targetAvId = 100000000+avId # To get target doId.
+
+    simbase.air.getActivated(targetAvId, lambda x,y: av.d_setSystemMessage(0, '%d is %s!' % (x, 'online' if y else 'offline')))
 
 @magicWord(category=CATEGORY_MODERATOR, types=[int, str])
-def locate(avIdShort=0, returnType=''):
+def locate(avId=0, returnType=''):
     #Locate an avatar anywhere on the [CURRENT] AI
     # TODO: Use Astron msgs to get location of avId from anywhere in the Astron cyber-space.
     # NOTE: The avIdShort concept needs changing, especially when we start entering 200000000's for avIds
     #if avIdShort <= 0:
     #    return "Please enter a valid avId to find! Note: You only need to enter the last few digits of the full avId!"
-    avIdFull = 400000000 - (300000000 - avIdShort)
+    if len(str(avId)) >= 9:
+        targetAvId = avId
+    else: 
+        targetAvId = 100000000+avId # To get target doId.
     av = simbase.air.doId2do.get(avIdFull, None)
     if not av:
         return "Could not find the avatar on the current AI."
@@ -5324,11 +5330,14 @@ def locate(avIdShort=0, returnType=''):
     return "%s has been located %s %s." % (av.getName(), where[1], where[2])
 
 @magicWord(category=CATEGORY_MODERATOR, types=[int])
-def goto(avIdShort):
+def goto(avId):
     """ Teleport to the avId specified. """
-    avId = 100000000+avIdShort # To get target doId.
-    toon = simbase.air.doId2do.get(avId)
+    if len(str(avId)) >= 9:
+        targetAvId = avId
+    else: 
+        targetAvId = 100000000+avId # To get target doId.
+    toon = simbase.air.doId2do.get(targetAvId)
     if not toon:
         return "Unable to teleport to target, they are not currently on this district."
-    spellbook.getInvoker().magicWordTeleportRequests.append(avId)
+    spellbook.getInvoker().magicWordTeleportRequests.append(targetAvId)
     toon.sendUpdate('magicTeleportRequest', [spellbook.getInvoker().getDoId()])
