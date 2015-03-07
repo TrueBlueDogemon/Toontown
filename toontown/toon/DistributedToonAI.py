@@ -5271,14 +5271,14 @@ def catalog():
     return 'The catalog has come early!'
 
 @magicWord(category=CATEGORY_MODERATOR, types=[int])
-def online(doId):
+def online(avId):
     """ Check if a toon is online. """
-    av = spellbook.getTarget()
-    if len(str(doId)) >= 9:
-        simbase.air.getActivated(doId, lambda x,y: av.d_setSystemMessage(0, '%d is %s!' % (x, 'online' if y else 'offline')))
-    else:
-        doId = 100000000 + doId
-        simbase.air.getActivated(doId, lambda x,y: av.d_setSystemMessage(0, '%d is %s!' % (x, 'online' if y else 'offline')))
+    if len(str(avId)) >= 9:
+        targetAvId = avId
+    else: 
+        targetAvId = 100000000+avId # To get target doId.
+
+    simbase.air.getActivated(targetAvId, lambda x,y: av.d_setSystemMessage(0, '%d is %s!' % (x, 'online' if y else 'offline')))
 
 @magicWord(category=CATEGORY_MODERATOR, types=[int, str])
 def locate(avId=0, returnType=''):
@@ -5288,9 +5288,9 @@ def locate(avId=0, returnType=''):
     #if avIdShort <= 0:
     #    return "Please enter a valid avId to find! Note: You only need to enter the last few digits of the full avId!"
     if len(str(avId)) >= 9:
-        avIdFull = avId
-    else:
-        avIdFull = 400000000 - (300000000 - avId)
+        targetAvId = avId
+    else: 
+        targetAvId = 100000000+avId # To get target doId.
     av = simbase.air.doId2do.get(avIdFull, None)
     if not av:
         return "Could not find the avatar on the current AI."
