@@ -11900,11 +11900,3 @@ def getNPCTrackLevelHpRarity(npcId):
     if npcId in npcFriends:
         return npcFriends[npcId]
     return (None, None, None, None)
-
-def getNPCListFromRarity(rarity):
-    npcList = []
-    for npcId in npcFriends:
-        npcInfo = npcFriends[npcId]
-        if npcInfo[3] == rarity:
-            npcList.append(npcId)
-    return npcList
