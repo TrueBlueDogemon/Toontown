@@ -7,6 +7,7 @@ import HouseGlobals
 import functools
 
 class LoadHouseFSM(FSM):
+    notify = DirectNotifyGlobal.directNotify.newCategory('LoadHouseFSM')
     def __init__(self, mgr, estate, houseIndex, toon, callback):
         FSM.__init__(self, 'LoadHouseFSM')
         self.mgr = mgr
@@ -99,7 +100,43 @@ class LoadHouseFSM(FSM):
     def enterOff(self):
         self.done = True
         self.callback(self.house)
+        
+class LoadPetFSM(FSM):
+    def __init__(self, mgr, estate, toon, callback):
+        FSM.__init__(self, 'LoadPetFSM')
+        self.mgr = mgr
+        self.estate = estate
+        self.toon = toon
+        self.callback = callback
+        self.pet = None
 
+        self.done = False
+
+    def start(self):
+        print 'Started LoadPetFSM'
+        self.petId = self.toon['setPetId'][0]
+        if not self.petId in self.mgr.air.doId2do:
+            print 'Pet not in doid2do'
+            print 'petId=' + str(self.petId)
+            self.mgr.air.sendActivate(self.petId, self.mgr.air.districtId, self.estate.zoneId)
+            self.acceptOnce('generate-%d' % self.petId, self.__generated)
+            print 'acceptOnce'
+            
+        else:
+            print '__generated'
+            self.__generated(self.mgr.air.doId2do[self.petId])
+
+    def __generated(self, pet):
+        print 'recieved __generated'
+        self.pet = pet
+        self.estate.pets.append(pet)
+        self.demand('Off')
+
+    def enterOff(self):
+        print 'entering off...'
+        self.done = True
+        self.callback(self.pet)
+        
 class LoadEstateFSM(FSM):
     def __init__(self, mgr, callback):
         FSM.__init__(self, 'LoadEstateFSM')
@@ -201,6 +238,7 @@ class LoadEstateFSM(FSM):
 
     def __gotEstate(self, estate):
         self.estate = estate
+        self.estate.pets = []
         
         self.estate.toons = self.toonIds
         self.estate.updateToons()
@@ -229,7 +267,29 @@ class LoadEstateFSM(FSM):
 
         # A houseFSM just finished! Let's see if all of them are done:
         if all(houseFSM.done for houseFSM in self.houseFSMs):
-            self.demand('Finished')
+            self.demand('LoadPets')
+            
+    def enterLoadPets(self):
+        print 'enterLoadPets'
+        self.petFSMs = []
+        for houseIndex in range(6):
+            toon = self.toons[houseIndex]
+            if toon and toon['setPetId'][0] != 0:
+                print 'init loadpetfsm'
+                fsm = LoadPetFSM(self.mgr, self.estate, toon, self.__petDone)
+                print 'made FSM object'
+                self.petFSMs.append(fsm)
+                print 'appended'
+                fsm.start()
+            
+    def __petDone(self, pet):
+        if self.state != 'LoadPets':
+            pet.requestDelete()
+            return
+
+        if all(petFSM.done for petFSM in self.petFSMs):
+            print 'finished loading pets'
+            self.demand('Finished')            
 
     def enterFinished(self):
         self.callback(True)
@@ -404,3 +464,6 @@ class EstateManagerAI(DistributedObjectAI):
 
     def _lookupEstate(self, toon):
         return self.toon2estate.get(toon)
+        
+    def getOwnerFromZone(self, avId):
+        return False
