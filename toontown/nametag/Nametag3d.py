@@ -113,7 +113,7 @@ class Nametag3d(Nametag, Clickable3d):
             distance = self.SCALING_MAX_DISTANCE
 
         if distance != self.distance:
-            self.contents.setScale(math.sqrt(distance) * self.SCALING_FACTOR / extraScale)
+            self.contents.setScale(math.sqrt(distance) * self.SCALING_FACTOR * extraScale)
             self.distance = distance
 
         self.updateClickRegion()
