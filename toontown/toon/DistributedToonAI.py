@@ -5273,6 +5273,7 @@ def catalog():
 @magicWord(category=CATEGORY_MODERATOR, types=[int])
 def online(avId):
     """ Check if a toon is online. """
+    av = spellbook.getTarget()
     if len(str(avId)) >= 9:
         targetAvId = avId
     else: 
