@@ -113,8 +113,8 @@ class PetMoverAI(FSM):
         
     def walkToPoint(self, target):
         here = self.pet.getPos()
-        dist = Vec3(here - target).length()
-        
+        dist = Vec3((here - target)).length()
+        dist = dist * 0.9
         self.__seq = Sequence(Func(self.pet.lookAt, target), self.pet.posInterval(dist / self.fwdSpeed, target, here),
                               Func(self.__stateComplete))
         self.__seq.start()
@@ -157,6 +157,7 @@ class PetMoverAI(FSM):
             target.setPos(self.getPoint())
             
         self.walkToPoint(target.getPos())
+        
         
     def exitChase(self):
         if self.__chaseCallback:
