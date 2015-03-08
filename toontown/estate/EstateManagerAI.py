@@ -281,6 +281,10 @@ class LoadEstateFSM(FSM):
                 self.petFSMs.append(fsm)
                 print 'appended'
                 fsm.start()
+            else:
+                continue
+        if not self.petFSMs:
+            self.demand('Finished')
             
     def __petDone(self, pet):
         if self.state != 'LoadPets':
