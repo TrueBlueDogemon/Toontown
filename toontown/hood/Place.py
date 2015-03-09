@@ -729,7 +729,7 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
                         avatar = base.cr.doId2do[friend.getDoId()]
                         base.localAvatar.gotoNode(avatar)
                         base.localAvatar.b_teleportGreeting(friend.getDoId())                
-                    self.acceptOnce('generate-%d' % friend.getDoId(), lambda: taskMgr.doMethodLater(1, doTeleport))
+                    self.acceptOnce('generate-%d' % friend.getDoId(), doTeleport)
         base.transitions.irisIn()
         self.nextState = requestStatus.get('nextState', 'walk')
         base.localAvatar.attachCamera()
