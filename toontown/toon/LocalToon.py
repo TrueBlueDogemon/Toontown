@@ -149,6 +149,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.shovelRelatedDoId = 0
             self.shovelAbility = ''
             self.plantToWater = 0
+            self.petId = 0
             self.shovelButtonActiveCount = 0
             self.wateringCanButtonActiveCount = 0
             self.showingWateringCan = 0
