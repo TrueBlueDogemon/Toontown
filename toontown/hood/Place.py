@@ -725,11 +725,12 @@ class Place(StateData.StateData, FriendsListManager.FriendsListManager):
                     base.localAvatar.setSystemMessage(avId, OTPLocalizer.WhisperTargetLeftVisit % (friend.getName(),))
                     friend.d_teleportGiveup(base.localAvatar.doId)
                 else:
-                    def doTeleport(self):
+                    def doTeleport(task):
                         avatar = base.cr.doId2do[friend.getDoId()]
                         base.localAvatar.gotoNode(avatar)
-                        base.localAvatar.b_teleportGreeting(friend.getDoId())                
-                    self.acceptOnce('generate-%d' % friend.getDoId(), doTeleport)
+                        base.localAvatar.b_teleportGreeting(friend.getDoId())
+                        return task.done
+                    self.acceptOnce('generate-%d' % friend.getDoId(), lambda x: taskMgr.doMethodLater(1, doTeleport, uniqueName('doTeleport')))
         base.transitions.irisIn()
         self.nextState = requestStatus.get('nextState', 'walk')
         base.localAvatar.attachCamera()
