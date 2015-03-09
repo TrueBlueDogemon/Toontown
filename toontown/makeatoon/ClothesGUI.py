@@ -191,12 +191,20 @@ class ClothesGUI(StateData.StateData):
     def setupButtons(self):
         self.girlInShorts = 0
         if self.gender == 'f':
-            if self.bottomStyleChoice == -1:
-                botTex = self.bottoms[0][0]
+            if self.type == CLOTHES_CLOSET:            
+                if self.bottomChoice == -1:
+                    botTex = self.bottoms[0][0]
+                else:
+                    botTex = self.bottoms[self.bottomChoice][0]
+                if ToonDNA.GirlBottoms[botTex][1] == ToonDNA.SHORTS:
+                    self.girlInShorts = 1
             else:
-                botTex = self.bottoms[self.bottomChoice][0]
-            if ToonDNA.GirlBottoms[botTex][1] == ToonDNA.SHORTS:
-                self.girlInShorts = 1
+                if self.bottomStyleChoice == -1:
+                    botTex = self.bottoms[0][0]
+                else:
+                    botTex = self.bottoms[self.bottomChoice][0]
+                if ToonDNA.GirlBottoms[botTex][1] == ToonDNA.SHORTS:
+                    self.girlInShorts = 1            
         if self.toon.style.getGender() == 'm':
             if self.type == CLOTHES_CLOSET:
                 self.bottomFrame['text'] = TTLocalizer.ClothesShopShorts
