@@ -1963,3 +1963,6 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             pet = base.cr.doId2do(self.petId)
             return pet.petDNA
         return None
+        
+    def getPetId(self):
+        return self.petId
