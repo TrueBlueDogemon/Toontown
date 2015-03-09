@@ -1967,3 +1967,4 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
         
     def getPetId(self):
         return self.petId
+
