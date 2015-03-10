@@ -267,6 +267,7 @@ class TownBattle(StateData.StateData):
     def __enterCogPanels(self, num):
         for cogPanel in self.cogPanels:
             cogPanel.hide()
+            cogPanel.updateHealthBar()
             cogPanel.setPos(0, 0, 0.75)
 
         if num == 1:
@@ -346,9 +347,6 @@ class TownBattle(StateData.StateData):
 
     def updateLaffMeter(self, toonNum, hp):
         self.toonPanels[toonNum].updateLaffMeter(hp)
-        
-    def updateCogHealthMeter(self, cogNum, hp):
-        self.cogPanels[cogNum].updateHealthMeter(hp)
 
     def enterOff(self):
         if self.isLoaded:
@@ -477,6 +475,7 @@ class TownBattle(StateData.StateData):
         return (canHeal, canTrap, canLure)
 
     def adjustCogsAndToons(self, cogs, luredIndices, trappedIndices, toons):
+        print 'def adjustCogsAndToons'
         numCogs = len(cogs)
         self.notify.debug('adjustCogsAndToons() numCogs: %s self.numCogs: %s' % (numCogs, self.numCogs))
         self.notify.debug('adjustCogsAndToons() luredIndices: %s self.luredIndices: %s' % (luredIndices, self.luredIndices))
@@ -491,8 +490,18 @@ class TownBattle(StateData.StateData):
             cogFireCostIndex += 1
 
         creditLevel = maxSuitLevel
+        resetActivateMode = 0
         if numCogs == self.numCogs and creditLevel == self.creditLevel and luredIndices == self.luredIndices and trappedIndices == self.trappedIndices and toonIds == self.toons:
-            resetActivateMode = 0
+            for i in xrange(len(cogs)):
+                if cogs[i].getHP() == self.cogPanels[i].getDisplayedCurrHp():
+                    if cogs[i].getMaxHP() == self.cogPanels[i].getDisplayedMaxHp():
+                        if cogs[i] == self.cogPanels[i].getSuit():
+                            print 'HP unchanged for cog'+str(i)
+                            continue
+                else:
+                    print 'nope'
+                    resetActivateMode = 1
+                    break
         else:
             resetActivateMode = 1
         self.notify.debug('adjustCogsAndToons() resetActivateMode: %s' % resetActivateMode)
@@ -511,12 +520,7 @@ class TownBattle(StateData.StateData):
                 
             self.__enterCogPanels(self.numCogs)
             for i in xrange(len(cogs)):
-                self.cogPanels[i].setLevelText(cogs[i].getActualLevel())
-                self.cogPanels[i].setSuitHead(cogs[i].getStyleName())
-                if self.cogPanels[i].maxHP is None:
-                    print 'setting maxhp'
-                    self.cogPanels[i].setMaxHp(cogs[i].getMaxHp())                
-                self.cogPanels[i].setHp(cogs[i].getCurrHp())
+                self.cogPanels[i].setSuit(cogs[i])
 
             if currStateName == 'ChooseCog':
                 self.chooseCogPanel.adjustCogs(self.numCogs, self.luredIndices, self.trappedIndices, self.track)
