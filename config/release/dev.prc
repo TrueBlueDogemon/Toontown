@@ -24,6 +24,7 @@ want-pets #f
 want-parties #f
 want-cogdominiums #f
 want-achievements #f
+estate-day-night #t
 
 # Chat:
 want-whitelist #t

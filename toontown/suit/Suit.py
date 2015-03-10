@@ -188,7 +188,8 @@ def loadModels():
         print 'Preloading suits...'
         for filepath in SuitParts:
             Preloaded[filepath] = loader.loadModel(filepath)
-            Preloaded[filepath].flattenMedium()
+            if filepath != 'phase_3.5/models/char/suitA-mod':
+                Preloaded[filepath].flattenMedium()
 
 def loadTutorialSuit():
     loader.loadModel('phase_3.5/models/char/suitC-mod')
