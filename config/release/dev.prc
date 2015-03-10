@@ -10,6 +10,7 @@ min-access-level 600
 accountdb-type developer
 shard-low-pop 50
 shard-mid-pop 100
+battle-input-timeout 42
 
 # RPC:
 want-rpc-server #f

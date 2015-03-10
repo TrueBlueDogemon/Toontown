@@ -243,6 +243,8 @@ class ToonBase(OTPBase.OTPBase):
 
         # Free black/white Toons:
         self.wantYinYang = config.GetBool('want-yin-yang', False)
+        
+        self.wantActiveBattleCamera = settings.get('ActiveBattleCamera', True)
 
     def openMainWindow(self, *args, **kw):
         result = OTPBase.OTPBase.openMainWindow(self, *args, **kw)
