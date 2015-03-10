@@ -753,6 +753,8 @@ class MoreOptionsTabPage(DirectFrame):
         self.speed_chat_scale = 0.055    
         self.BattleCamera_toggleButton = DirectButton(parent=self, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=button_image_scale, text='', text_scale=options_text_scale, text_pos=button_textpos, pos=(buttonbase_xcoord, 0.0, buttonbase_ycoord), command=self.__doToggleBattleCamera)
         self.BattleCamera_Label = DirectLabel(parent=self, relief=None, text='', text_align=TextNode.ALeft, text_scale=options_text_scale, pos=(leftMargin, 0, textStartHeight))
+        self.WASD_Label = DirectLabel(parent=self, relief=None, text='', text_align=TextNode.ALeft, text_scale=options_text_scale, text_wordwrap=16, pos=(leftMargin, 0, textStartHeight - textRowHeight))
+        self.WASD_toggleButton = DirectButton(parent=self, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=button_image_scale, text='', text_scale=options_text_scale, text_pos=button_textpos, pos=(buttonbase_xcoord, 0.0, buttonbase_ycoord - textRowHeight), command=self.__doToggleWASD)
         gui.removeNode()
         guiButton.removeNode()
         
@@ -760,6 +762,7 @@ class MoreOptionsTabPage(DirectFrame):
         self.show()
         self.settingsChanged = 0
         self.__setBattleCameraButton()
+        self.__setWASDButton()
 
     def exit(self):
         self.ignore('confirmDone')
@@ -770,15 +773,17 @@ class MoreOptionsTabPage(DirectFrame):
         del self.BattleCamera_Label
         self.BattleCamera_toggleButton.destroy()
         del self.BattleCamera_toggleButton
+        self.WASD_Label.destroy()
+        del self.WASD_Label
+        self.WASD_toggleButton.destroy()
+        del self.WASD_toggleButton
 
     def __doToggleBattleCamera(self):
         messenger.send('wakeup')
         if base.wantActiveBattleCamera:
-            print 'active on, turning off...'
             base.wantActiveBattleCamera = 0
             settings['ActiveBattleCamera'] = False
         else:
-            print 'active off, turning on...'
             base.wantActiveBattleCamera = 1
             settings['ActiveBattleCamera'] = True
         self.settingsChanged = 1
@@ -791,3 +796,24 @@ class MoreOptionsTabPage(DirectFrame):
         else:
             self.BattleCamera_Label['text'] = 'Battle Camera Mode:'
             self.BattleCamera_toggleButton['text'] = 'Static'
+            
+    def __doToggleWASD(self):
+        messenger.send('wakeup')
+        if base.wantWASD:
+            base.wantWASD = False
+            settings['want-WASD'] = False
+            base.localAvatar.setSystemMessage(0, 'WASD controls will be disabled at next login.')
+        else:
+            base.wantWASD = True
+            settings['want-WASD'] = True
+            base.localAvatar.setSystemMessage(0, 'WASD controls will be enabled at next login.')
+        self.settingsChanged = 1
+        self.__setWASDButton()
+
+    def __setWASDButton(self):
+        if base.wantWASD:
+            self.WASD_Label['text'] = 'WASD Support:'
+            self.WASD_toggleButton['text'] = 'On'
+        else:
+            self.WASD_Label['text'] = 'WASD Support:'
+            self.WASD_toggleButton['text'] = 'Off'            

@@ -1,9 +1,9 @@
 from direct.showbase.DirectObject import DirectObject
 from pandac.PandaModules import ModifierButtons
-ROTATE_LEFT_KEY = 'arrow_left'
-ROTATE_RIGHT_KEY = 'arrow_right'
-FORWARD_KEY = 'arrow_up'
-BACKWARDS_KEY = 'arrow_down'
+ROTATE_LEFT_KEY = base.Move_Left
+ROTATE_RIGHT_KEY = base.Move_Right
+FORWARD_KEY = base.Move_Up
+BACKWARDS_KEY = base.Move_Down
 THROW_PIE_KEYS = ['control', 'delete', 'insert']
 
 class PartyCogActivityInput(DirectObject):

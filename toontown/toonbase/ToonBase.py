@@ -245,7 +245,20 @@ class ToonBase(OTPBase.OTPBase):
         self.wantYinYang = config.GetBool('want-yin-yang', False)
         
         self.wantActiveBattleCamera = settings.get('ActiveBattleCamera', True)
-
+        
+        self.wantWASD = settings.get('want-WASD', False)
+        
+        self.Move_Up = 'arrow_up'
+        self.Move_Left = 'arrow_left'       
+        self.Move_Down = 'arrow_down'
+        self.Move_Right = 'arrow_right'
+        
+        if self.wantWASD:
+            self.Move_Up = 'w'
+            self.Move_Left = 'a'            
+            self.Move_Down = 's'
+            self.Move_Right = 'd'
+        
     def openMainWindow(self, *args, **kw):
         result = OTPBase.OTPBase.openMainWindow(self, *args, **kw)
         self.setCursorAndIcon()
