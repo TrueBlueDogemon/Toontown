@@ -149,6 +149,7 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
             self.shovelRelatedDoId = 0
             self.shovelAbility = ''
             self.plantToWater = 0
+            self.petId = 0
             self.shovelButtonActiveCount = 0
             self.wateringCanButtonActiveCount = 0
             self.showingWateringCan = 0
@@ -1974,7 +1975,3 @@ class LocalToon(DistributedToon.DistributedToon, LocalAvatar.LocalAvatar):
 
     def getPetId(self):
         return self.petId
-
-    def hasPet(self):
-        return self.petId != 0        
-        
