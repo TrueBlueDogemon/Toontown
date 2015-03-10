@@ -5,6 +5,7 @@ import random
 
 from toontown.hood import ZoneUtil
 from toontown.toonbase import ToontownGlobals
+from toontown.toonbase.BitmaskGlobals import WallBitmask, GhostBitmask
 
 
 class HoodMgr(DirectObject.DirectObject):
@@ -149,18 +150,24 @@ class HoodMgr(DirectObject.DirectObject):
             [130.9, -8.6, -1.3, 105.5, 0, 0],
         ),
         ToontownGlobals.SellbotHQ: (
-            [64, -128, 0.26, 36, 0, 0],
-            [9, -140, 0.26, 0, 0, 0],
-            [-82, -112, 0.26, -127, 0, 0],
-            [-73, -213, 0.26, -23, 0, 0],
-            [-20, -243, 0.26, -9, 0, 0],
-            [79, -208, 0.26, 43, 0, 0]
+            [-15.1324, -197.522, -19.5944, 4.92024, 0, 0],
+            [35.9713, -193.266, -19.5944, 4.38194, 0, 0],
+            [136.858, -155.959, -0.139187, 88.4705, 0, 0],
+            [0.2818, -281.656, 0.883273, 355.735, 0, 0],
+            [53.7832, -160.498, -4.33266, 397.602, 0, 0],
+            [-55.1619, -184.358, -3.06033, 342.677, 0, 0]
+        ),
+        ToontownGlobals.BossbotHQ: (
+            [65, 45, 0.025, 0, 0, 0],
+            [-0.045, 125.9, 0.025, 558, 0, 0],
+            [138,110, 0.025, 497, 0, 0],
+            [172, 3, 0.025, 791, 0, 0]
         ),
         ToontownGlobals.CashbotHQ: (
-            [102, -437, -23.439, 0, 0, 0],
-            [124, -437, -23.439, 0, 0, 0],
-            [110, -446, -23.439, 0, 0, 0],
-            [132, -446, -23.439, 0, 0, 0]
+            [24.5136, -366.32, -63.2443, 303.631, 0, 0],
+            [181.964, 84.0868, -23.4389, 488.509, 0, 0],
+            [49.1866, -402.669, -23.4389, -145.904, 0, 0],
+            [189.054, -400.387, -23.4389, 123.627, 0, 0]
         ),
         ToontownGlobals.LawbotHQ: (
             [77.5, 129.13, -68.4, -166.6, 0, 0],
@@ -286,7 +293,7 @@ class HoodMgr(DirectObject.DirectObject):
                 if not linkSphere.isEmpty():
                     cnode = linkSphere.node()
                     cnode.setName('tunnel_trigger_' + hoodStr + '_' + zoneStr)
-                    cnode.setCollideMask(ToontownGlobals.WallBitmask | ToontownGlobals.GhostBitmask)
+                    cnode.setCollideMask(WallBitmask | GhostBitmask)
                 else:
                     linkSphere = linkTunnel.find('**/tunnel_trigger_' + hoodStr + '_' + zoneStr)
                     if linkSphere.isEmpty():

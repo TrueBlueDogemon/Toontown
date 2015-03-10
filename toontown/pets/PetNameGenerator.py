@@ -5,6 +5,7 @@ import os
 from direct.showbase import AppRunnerGlobal
 from direct.directnotify import DirectNotifyGlobal
 from pandac.PandaModules import *
+import PetNameMasterEnglish
 
 class PetNameGenerator:
     notify = DirectNotifyGlobal.directNotify.newCategory('PetNameGenerator')
@@ -20,30 +21,16 @@ class PetNameGenerator:
         self.girlFirsts = []
         self.neutralFirsts = []
         self.nameDictionary = {}
-        searchPath = DSearchPath()
-        if AppRunnerGlobal.appRunner:
-            searchPath.appendDirectory(Filename.expandFrom('$TT_3_ROOT/phase_3/etc'))
-        else:
-            searchPath.appendDirectory(Filename('/phase_3/etc'))
-            if os.path.expandvars('$TOONTOWN') != '':
-                searchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('$TOONTOWN/src/configfiles')))
-            else:
-                searchPath.appendDirectory(Filename.fromOsSpecific(os.path.expandvars('toontown/src/configfiles')))
-            searchPath.appendDirectory(Filename('.'))
-        if __debug__:
-            filename = '../resources/phase_3/etc/'+TTLocalizer.PetNameMaster
-        else:
-            filename = '/phase_3/etc/'+TTLocalizer.PetNameMaster
-        input = open(filename, 'r')
-        if not input:
-            self.notify.error('PetNameGenerator: Error opening name list text file.')
-        currentLine = input.readline()
-        while currentLine:
-            if currentLine.lstrip()[0:1] != '#':
-                a1 = currentLine.find('*')
-                a2 = currentLine.find('*', a1 + 1)
-                self.nameDictionary[int(currentLine[0:a1])] = (int(currentLine[a1 + 1:a2]), currentLine[a2 + 1:len(currentLine) - 1].strip())
-            currentLine = input.readline()
+        contents = PetNameMasterEnglish.NAMES
+        if not contents:
+            self.notify.error('PetNameGenerator: Error opening name list text file.')        
+        lines = contents.split('\n')
+        for line in lines:
+            if line is not None:
+                if line.lstrip()[0:1] != '#':
+                    a1 = line.find('*')
+                    a2 = line.find('*', a1 + 1)
+                    self.nameDictionary[int(line[0:a1])] = (int(line[a1 + 1:a2]), line[a2 + 1:len(line) - 1].strip())
 
         masterList = [self.boyFirsts, self.girlFirsts, self.neutralFirsts]
         for tu in self.nameDictionary.values():

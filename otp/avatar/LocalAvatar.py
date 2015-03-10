@@ -49,6 +49,7 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
         self.initializeCollisions()
         self.initializeSmartCamera()
         self.cameraPositions = []
+        self.cameraWork = None
         self.animMultiplier = 1.0
         self.runTimeout = 2.5
         self.customMessages = []
@@ -615,7 +616,9 @@ class LocalAvatar(DistributedAvatar.DistributedAvatar, DistributedSmoothNode.Dis
             camera.setPos(savePos)
             camera.setHpr(saveHpr)
             taskMgr.remove('posCamera')
-            camera.lerpPosHpr(x, y, z, h, p, r, time, task='posCamera')
+            #camera.lerpPosHpr(x, y, z, h, p, r, time, task='posCamera') This was deprecated in Panda3D
+            cameraWork = camera.posHprInterval(2, Point3(x, y, z), Point3(h, p, r))
+            cameraWork.start()
 
     def getClampedAvatarHeight(self):
         return max(self.getHeight(), 3.0)
