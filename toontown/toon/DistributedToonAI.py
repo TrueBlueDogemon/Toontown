@@ -4636,7 +4636,7 @@ def name(name=''):
     else:
         return "%s's name is now empty!" % _name
 
-@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int, int])
+@magicWord(category=CATEGORY_CREATIVE, types=[int, int])
 def hat(hatIndex, hatTex=0):
     """
     Modify the invoker's hat.
@@ -4649,7 +4649,7 @@ def hat(hatIndex, hatTex=0):
     invoker.b_setHat(hatIndex, hatTex, 0)
     return "Set %s's hat to %d, %d!" % (invoker.getName(), hatIndex, hatTex)
 
-@magicWord(category=CATEGORY_ADMINISTRATOR, types=[int, int])
+@magicWord(category=CATEGORY_CREATIVE, types=[int, int])
 def glasses(glassesIndex, glassesTex=0):
     """
     Modify the invoker's glasses.
@@ -5074,19 +5074,19 @@ def resistanceRanger():
     dna.topTex = 111
     invoker.b_setDNAString(dna.makeNetString())
 
-    dna.topTexColor = 26
+    dna.topTexColor = 27
     invoker.b_setDNAString(dna.makeNetString())
 
     dna.sleeveTex = 98
     invoker.b_setDNAString(dna.makeNetString())
 
-    dna.sleeveTexColor = 26
+    dna.sleeveTexColor = 27
     invoker.b_setDNAString(dna.makeNetString())
 
     dna.botTex = 41
     invoker.b_setDNAString(dna.makeNetString())
 
-    dna.botTexColor = 26
+    dna.botTexColor = 27
     invoker.b_setDNAString(dna.makeNetString())
 
     target = spellbook.getTarget()
@@ -5167,7 +5167,7 @@ def track(command, track, value=None):
         return 'Set the experience of the %s track to: %d!' % (track, value)
     return 'Invalid command.'
 
-@magicWord(category=CATEGORY_ADMINISTRATOR, types=[str, str])
+@magicWord(category=CATEGORY_PROGRAMMER, types=[str, str])
 def suit(command, suitName):
     invoker = spellbook.getInvoker()
     command = command.lower()
@@ -5330,14 +5330,11 @@ def locate(avId=0, returnType=''):
     return "%s has been located %s %s." % (av.getName(), where[1], where[2])
 
 @magicWord(category=CATEGORY_MODERATOR, types=[int])
-def goto(avId):
+def goto(avIdShort):
     """ Teleport to the avId specified. """
-    if len(str(avId)) >= 9:
-        targetAvId = avId
-    else: 
-        targetAvId = 100000000+avId # To get target doId.
-    toon = simbase.air.doId2do.get(targetAvId)
+    avId = 100000000+avIdShort # To get target doId.
+    toon = simbase.air.doId2do.get(avId)
     if not toon:
         return "Unable to teleport to target, they are not currently on this district."
-    spellbook.getInvoker().magicWordTeleportRequests.append(targetAvId)
+    spellbook.getInvoker().magicWordTeleportRequests.append(avId)
     toon.sendUpdate('magicTeleportRequest', [spellbook.getInvoker().getDoId()])
