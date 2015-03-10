@@ -55,9 +55,7 @@ class TownBattleCogPanel(DirectFrame):
         
     def setSuit(self, suit):
         if self.suit == suit:
-            print 'same suit'
             messenger.send(self.suit.uniqueName('hpChange'))
-            print 'sent messenger'
             return
         self.suit = suit
         self.setLevelText(self.suit.getActualLevel())
@@ -68,32 +66,24 @@ class TownBattleCogPanel(DirectFrame):
         self.setHp(self.suit.getHP())
         self.hpChangeEvent = self.suit.uniqueName('hpChange')
         if self.blinkTask:
-            print 'remove task'
             taskMgr.remove(self.blinkTask)
             self.blinkTask = None
         self.accept(self.hpChangeEvent, self.updateHealthBar)
         self.updateHealthBar()
         self.healthBar.show()
-        print 'Max HP:'+str(self.maxHP)
-        print 'Curr HP:'+str(self.currHP)
-        print 'end of setSuit'
         
     def getSuit(self, suit):
         return self.suit
 
     def setLevelText(self, level):
-        print 'setLevelText'
         self.levelText['text'] = 'Level '+ str(level)
 
     def setSuitHead(self, suitName):
-        print 'setSuitHead'
         self.head = Suit.attachSuitHead(self, suitName)
         self.head.setX(0.1)
         self.head.setZ(0.01)
-        print 'end of setSuitHead'
-        
+
     def generateHealthBar(self):
-        print 'generateHealthBar'
         model = loader.loadModel('phase_3.5/models/gui/matching_game_gui')
         button = model.find('**/minnieCircle')
         model.removeNode()
@@ -113,13 +103,10 @@ class TownBattleCogPanel(DirectFrame):
         self.healthBarGlow = glow
         self.healthBar.hide()
         self.healthCondition = 0 
-        print 'done gerating healthbar'
 
     def updateHealthBar(self):
         if not self.suit:
-            print 'no suit'
             return
-        print 'updateHealthBar'
         self.setHp(self.suit.getHP())
         print 'k set hp'
         print str(self.currHP)
