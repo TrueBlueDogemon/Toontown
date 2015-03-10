@@ -475,7 +475,6 @@ class TownBattle(StateData.StateData):
         return (canHeal, canTrap, canLure)
 
     def adjustCogsAndToons(self, cogs, luredIndices, trappedIndices, toons):
-        print 'def adjustCogsAndToons'
         numCogs = len(cogs)
         self.notify.debug('adjustCogsAndToons() numCogs: %s self.numCogs: %s' % (numCogs, self.numCogs))
         self.notify.debug('adjustCogsAndToons() luredIndices: %s self.luredIndices: %s' % (luredIndices, self.luredIndices))
@@ -496,10 +495,8 @@ class TownBattle(StateData.StateData):
                 if cogs[i].getHP() == self.cogPanels[i].getDisplayedCurrHp():
                     if cogs[i].getMaxHP() == self.cogPanels[i].getDisplayedMaxHp():
                         if cogs[i] == self.cogPanels[i].getSuit():
-                            print 'HP unchanged for cog'+str(i)
                             continue
                 else:
-                    print 'nope'
                     resetActivateMode = 1
                     break
         else:
