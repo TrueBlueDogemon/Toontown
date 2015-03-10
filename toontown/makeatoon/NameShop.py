@@ -395,7 +395,7 @@ class NameShop(StateData.StateData):
         self.nameMessages = OnscreenText.OnscreenText(TTLocalizer.NameMessages, parent=aspect2d, style=OnscreenText.ScreenPrompt, scale=0.06, pos=(-0.0163333, -0.05))
         self.nameMessages.wrtReparentTo(self.typeNamePanel, sort=2)
         self.typeANameGUIElements.append(self.nameMessages)
-        self.nameEntry = DirectEntry(parent=aspect2d, relief=None, scale=TTLocalizer.NSnameEntry, entryFont=getToonFont(), width=MAX_NAME_WIDTH, numLines=2, focus=0, cursorKeys=1, pos=(0.0, 0.0, 0.39), text_align=TextNode.ACenter, command=self.__typedAName, autoCapitalize=1)
+        self.nameEntry = DirectEntry(parent=aspect2d, relief=None, scale=TTLocalizer.NSnameEntry, entryFont=getToonFont(), width=MAX_NAME_WIDTH, numLines=2, focus=0, cursorKeys=1, pos=(0.0, 0.0, 0.39), text_align=TextNode.ACenter, command=self.__typedAName, autoCapitalize=0)
         self.nameEntry.wrtReparentTo(self.typeNamePanel, sort=2)
         self.typeANameGUIElements.append(self.nameEntry)
         self.submitButton = DirectButton(parent=aspect2d, relief=None, image=(self.squareUp,
