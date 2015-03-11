@@ -47,7 +47,7 @@ class QuestManagerAI:
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i:i + 5]
             questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
-            questClass = Quests.getQuest(questId)
+            questClass = Quests.getQuest(questId, avId)
             if questClass:
                 completeStatus = questClass.getCompletionStatus(av, questDesc, npc)
             else:
@@ -198,7 +198,7 @@ class QuestManagerAI:
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i:i + 5]
             questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
-            questClass = Quests.getQuest(questId)
+            questClass = Quests.getQuest(questId, av.doId)
 
             if questId == completeQuestId:
                 av.removeQuest(questId)
@@ -476,7 +476,7 @@ class QuestManagerAI:
         pass
 
     def toonKilledCogs(self, av, suitsKilled, zoneId, activeToonList):
-        # Get the avatar's current quests.
+         # Get the avatar's current quests.
         avQuests = av.getQuests()
         questList = []
 
@@ -508,14 +508,14 @@ class QuestManagerAI:
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int])
 def quests(command, arg0=0, arg1=0):
-    target = spellbook.getTarget()
-    currQuests = target.getQuests()
+    invoker = spellbook.getInvoker()
+    currQuests = invoker.getQuests()
     currentQuestIds = []
 
     for i in xrange(0, len(currQuests), 5):
         currentQuestIds.append(currQuests[i])
 
-    pocketSize = target.getQuestCarryLimit()
+    pocketSize = invoker.getQuestCarryLimit()
     carrying = len(currQuests) / 5
     canCarry = False
 
@@ -523,10 +523,10 @@ def quests(command, arg0=0, arg1=0):
         canCarry = True
 
     if command == 'clear':
-        target.b_setQuests([])
+        invoker.b_setQuests([])
         return 'Cleared quests'
     elif command == 'clearHistory':
-        target.d_setQuestHistory([])
+        invoker.d_setQuestHistory([])
         return 'Cleared quests history'
     elif command == 'add':
         if arg0:
@@ -542,12 +542,12 @@ def quests(command, arg0=0, arg1=0):
     elif command == 'remove':
         if arg0:
             if arg0 in currentQuestIds:
-                target.removeQuest(arg0)
+                invoker.removeQuest(arg0)
                 return 'Removed QuestID %s'%(arg0)
             elif arg0 < pocketSize and arg0 > 0:
                 if len(currentQuestIds) <= arg0:
                     questIdToRemove = currentQuestIds[arg0 - 1]
-                    target.removeQuest(questIdToRemove)
+                    invoker.removeQuest(questIdToRemove)
                     return 'Removed quest from slot %s'%(arg0)
                 else:
                     return 'Invalid quest slot'
@@ -567,7 +567,7 @@ def quests(command, arg0=0, arg1=0):
             return 'CurrentQuests: %s'%(currentQuestIds)
     elif command == 'bagSize':
         if arg0 > 0 and arg0 < 5:
-            target.b_setQuestCarryLimit(arg0)
+            invoker.b_setQuestCarryLimit(arg0)
             return 'Set carry limit to %s'%(arg0)
         else:
             return 'Argument 0 must be between 1 and 4.'
@@ -585,7 +585,7 @@ def quests(command, arg0=0, arg1=0):
 
                     questList.append(questDesc)
 
-                target.b_setQuests(questList)
+                invoker.b_setQuests(questList)
                 return 'Set quest slot %s progress to %s'%(arg0, arg1)
             elif arg0 in Quests.QuestDict.keys():
                 if arg0 in currentQuestIds:
@@ -599,7 +599,7 @@ def quests(command, arg0=0, arg1=0):
 
                         questList.append(questDesc)
 
-                    target.b_setQuests(questList)
+                    invoker.b_setQuests(questList)
                     return 'Set QuestID %s progress to %s'%(arg0, arg1)
                 else:
                     return 'Cannot progress QuestID: %s.'%(arg0)
@@ -609,7 +609,7 @@ def quests(command, arg0=0, arg1=0):
             return 'progress needs 2 arguments.'
     elif command == 'tier':
         if arg0:
-            target.b_setRewardHistory(arg0, target.getRewardHistory()[1])
+            invoker.b_setRewardHistory(arg0, invoker.getRewardHistory()[1])
             return 'Set tier to %s'%(arg0)
         else:
             return 'tier needs 1 argument.'

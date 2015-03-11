@@ -303,7 +303,7 @@ class Quest:
 
     filterFunc = staticmethod(filterFunc)
 
-    def __init__(self, id, quest):
+    def __init__(self, id, avId, quest):
         self.id = id
         self.quest = quest
 
@@ -372,8 +372,8 @@ class Quest:
 
 
 class LocationBasedQuest(Quest):
-    def __init__(self, id, quest):
-        Quest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        Quest.__init__(self, id, avId, quest)
         self.checkLocation(self.quest[0])
 
     def getLocation(self):
@@ -456,8 +456,8 @@ class NewbieQuest:
 
 
 class CogQuest(LocationBasedQuest):
-    def __init__(self, id, quest):
-        LocationBasedQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        LocationBasedQuest.__init__(self, id, avId, quest)
         if self.__class__ == CogQuest:
             self.checkNumCogs(self.quest[1])
             self.checkCogType(self.quest[2])
@@ -534,8 +534,8 @@ class CogQuest(LocationBasedQuest):
 
 
 class CogNewbieQuest(CogQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        CogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogQuest.__init__(self, id, avId, quest)
         if self.__class__ == CogNewbieQuest:
             self.checkNumCogs(self.quest[1])
             self.checkCogType(self.quest[2])
@@ -568,8 +568,8 @@ class CogTrackQuest(CogQuest):
      TTLocalizer.CashbotP,
      TTLocalizer.SellbotP]
 
-    def __init__(self, id, quest):
-        CogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogQuest.__init__(self, id, avId, quest)
         if self.__class__ == CogTrackQuest:
             self.checkNumCogs(self.quest[1])
             self.checkCogTrack(self.quest[2])
@@ -623,8 +623,8 @@ class CogTrackQuest(CogQuest):
 
 
 class CogLevelQuest(CogQuest):
-    def __init__(self, id, quest):
-        CogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogQuest.__init__(self, id, avId, quest)
         self.checkNumCogs(self.quest[1])
         self.checkCogLevel(self.quest[2])
 
@@ -695,8 +695,8 @@ class SkelecogQBase:
 
 
 class SkelecogQuest(CogQuest, SkelecogQBase):
-    def __init__(self, id, quest):
-        CogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogQuest.__init__(self, id, avId, quest)
         self.checkNumSkelecogs(self.quest[1])
 
     def getCogType(self):
@@ -710,8 +710,8 @@ class SkelecogQuest(CogQuest, SkelecogQBase):
 
 
 class SkelecogNewbieQuest(SkelecogQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        SkelecogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        SkelecogQuest.__init__(self, id, avId, quest)
         self.checkNewbieLevel(self.quest[2])
 
     def getNewbieLevel(self):
@@ -737,8 +737,8 @@ class SkelecogTrackQuest(CogTrackQuest, SkelecogQBase):
      TTLocalizer.CashbotSkelP,
      TTLocalizer.SellbotSkelP]
 
-    def __init__(self, id, quest):
-        CogTrackQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogTrackQuest.__init__(self, id, avId, quest)
         self.checkNumSkelecogs(self.quest[1])
         self.checkSkelecogTrack(self.quest[2])
 
@@ -750,8 +750,8 @@ class SkelecogTrackQuest(CogTrackQuest, SkelecogQBase):
 
 
 class SkelecogLevelQuest(CogLevelQuest, SkelecogQBase):
-    def __init__(self, id, quest):
-        CogLevelQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogLevelQuest.__init__(self, id, avId, quest)
         self.checkNumSkelecogs(self.quest[1])
         self.checkSkelecogLevel(self.quest[2])
 
@@ -778,8 +778,8 @@ class SkeleReviveQBase:
 
 
 class SkeleReviveQuest(CogQuest, SkeleReviveQBase):
-    def __init__(self, id, quest):
-        CogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogQuest.__init__(self, id, avId, quest)
         self.checkNumSkeleRevives(self.quest[1])
 
     def getCogType(self):
@@ -793,8 +793,8 @@ class SkeleReviveQuest(CogQuest, SkeleReviveQBase):
 
 
 class ForemanQuest(CogQuest):
-    def __init__(self, id, quest):
-        CogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogQuest.__init__(self, id, avId, quest)
         self.checkNumForemen(self.quest[1])
 
     def getCogType(self):
@@ -812,8 +812,8 @@ class ForemanQuest(CogQuest):
 
 
 class ForemanNewbieQuest(ForemanQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        ForemanQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        ForemanQuest.__init__(self, id, avId, quest)
         self.checkNewbieLevel(self.quest[2])
 
     def getNewbieLevel(self):
@@ -830,8 +830,8 @@ class ForemanNewbieQuest(ForemanQuest, NewbieQuest):
 
 
 class VPQuest(CogQuest):
-    def __init__(self, id, quest):
-        CogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogQuest.__init__(self, id, avId, quest)
         self.checkNumVPs(self.quest[1])
 
     def getCogType(self):
@@ -852,8 +852,8 @@ class VPQuest(CogQuest):
 
 
 class VPNewbieQuest(VPQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        VPQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        VPQuest.__init__(self, id, avId, quest)
         self.checkNewbieLevel(self.quest[2])
 
     def getNewbieLevel(self):
@@ -870,8 +870,8 @@ class VPNewbieQuest(VPQuest, NewbieQuest):
 
 
 class SupervisorQuest(CogQuest):
-    def __init__(self, id, quest):
-        CogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogQuest.__init__(self, id, avId, quest)
         self.checkNumSupervisors(self.quest[1])
 
     def getCogType(self):
@@ -889,8 +889,8 @@ class SupervisorQuest(CogQuest):
 
 
 class SupervisorNewbieQuest(SupervisorQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        SupervisorQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        SupervisorQuest.__init__(self, id, avId, quest)
         self.checkNewbieLevel(self.quest[2])
 
     def getNewbieLevel(self):
@@ -907,8 +907,8 @@ class SupervisorNewbieQuest(SupervisorQuest, NewbieQuest):
 
 
 class CFOQuest(CogQuest):
-    def __init__(self, id, quest):
-        CogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogQuest.__init__(self, id, avId, quest)
         self.checkNumCFOs(self.quest[1])
 
     def getCogType(self):
@@ -929,8 +929,8 @@ class CFOQuest(CogQuest):
 
 
 class CFONewbieQuest(CFOQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        CFOQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CFOQuest.__init__(self, id, avId, quest)
         self.checkNewbieLevel(self.quest[2])
 
     def getNewbieLevel(self):
@@ -947,8 +947,8 @@ class CFONewbieQuest(CFOQuest, NewbieQuest):
 
 
 class RescueQuest(VPQuest):
-    def __init__(self, id, quest):
-        VPQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        VPQuest.__init__(self, id, avId, quest)
 
     def getNumToons(self):
         return self.getNumCogs()
@@ -989,8 +989,8 @@ class RescueQuest(VPQuest):
 
 
 class RescueNewbieQuest(RescueQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        RescueQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        RescueQuest.__init__(self, id, avId, quest)
         self.checkNewbieLevel(self.quest[2])
 
     def getNewbieLevel(self):
@@ -1016,8 +1016,8 @@ class BuildingQuest(CogQuest):
      TTLocalizer.Cashbot,
      TTLocalizer.Sellbot]
 
-    def __init__(self, id, quest):
-        CogQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogQuest.__init__(self, id, avId, quest)
         self.checkNumBuildings(self.quest[1])
         self.checkBuildingTrack(self.quest[2])
         self.checkBuildingFloors(self.quest[3])
@@ -1114,8 +1114,8 @@ class BuildingQuest(CogQuest):
 
 
 class BuildingNewbieQuest(BuildingQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        BuildingQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        BuildingQuest.__init__(self, id, avId, quest)
         self.checkNewbieLevel(self.quest[4])
 
     def getNewbieLevel(self):
@@ -1137,8 +1137,8 @@ class FactoryQuest(LocationBasedQuest):
      FT_Arm: TTLocalizer.FactoryTypeArm,
      FT_Torso: TTLocalizer.FactoryTypeTorso}
 
-    def __init__(self, id, quest):
-        LocationBasedQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        LocationBasedQuest.__init__(self, id, avId, quest)
         self.checkNumFactories(self.quest[1])
 
     def getNumQuestItems(self):
@@ -1211,8 +1211,8 @@ class FactoryQuest(LocationBasedQuest):
 
 
 class FactoryNewbieQuest(FactoryQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        FactoryQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        FactoryQuest.__init__(self, id, avId, quest)
         self.checkNewbieLevel(self.quest[2])
 
     def getNewbieLevel(self):
@@ -1232,8 +1232,8 @@ class FactoryNewbieQuest(FactoryQuest, NewbieQuest):
 
 
 class MintQuest(LocationBasedQuest):
-    def __init__(self, id, quest):
-        LocationBasedQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        LocationBasedQuest.__init__(self, id, avId, quest)
         self.checkNumMints(self.quest[1])
 
     def getNumQuestItems(self):
@@ -1287,8 +1287,8 @@ class MintQuest(LocationBasedQuest):
 
 
 class MintNewbieQuest(MintQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        MintQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        MintQuest.__init__(self, id, avId, quest)
         self.checkNewbieLevel(self.quest[2])
 
     def getNewbieLevel(self):
@@ -1308,8 +1308,8 @@ class MintNewbieQuest(MintQuest, NewbieQuest):
 
 
 class CogPartQuest(LocationBasedQuest):
-    def __init__(self, id, quest):
-        LocationBasedQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        LocationBasedQuest.__init__(self, id, avId, quest)
         self.checkNumCogParts(self.quest[1])
 
     def getNumQuestItems(self):
@@ -1364,8 +1364,8 @@ class CogPartQuest(LocationBasedQuest):
 
 
 class CogPartNewbieQuest(CogPartQuest, NewbieQuest):
-    def __init__(self, id, quest):
-        CogPartQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        CogPartQuest.__init__(self, id, avId, quest)
         self.checkNewbieLevel(self.quest[2])
 
     def getNewbieLevel(self):
@@ -1385,8 +1385,8 @@ class CogPartNewbieQuest(CogPartQuest, NewbieQuest):
 
 
 class DeliverGagQuest(Quest):
-    def __init__(self, id, quest):
-        Quest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        Quest.__init__(self, id, avId, quest)
         self.checkNumGags(self.quest[0])
         self.checkGagTrack(self.quest[1])
         self.checkGagItem(self.quest[2])
@@ -1465,8 +1465,8 @@ class DeliverGagQuest(Quest):
         return takenGags
 
 class DeliverItemQuest(Quest):
-    def __init__(self, id, quest):
-        Quest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        Quest.__init__(self, id, avId, quest)
         self.checkDeliveryItem(self.quest[0])
 
     def getItem(self):
@@ -1509,8 +1509,8 @@ class DeliverItemQuest(Quest):
 
 
 class VisitQuest(Quest):
-    def __init__(self, id, quest):
-        Quest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        Quest.__init__(self, id, avId, quest)
 
     def getCompletionStatus(self, av, questDesc, npc = None):
         questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
@@ -1545,8 +1545,8 @@ class VisitQuest(Quest):
 
 
 class RecoverItemQuest(LocationBasedQuest):
-    def __init__(self, id, quest):
-        LocationBasedQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        LocationBasedQuest.__init__(self, id, avId, quest)
         self.checkNumItems(self.quest[1])
         self.checkRecoveryItem(self.quest[2])
         self.checkPercentChance(self.quest[3])
@@ -1724,13 +1724,29 @@ class RecoverItemQuest(LocationBasedQuest):
 
 
 class TrackChoiceQuest(Quest):
-    def __init__(self, id, quest):
-        Quest.__init__(self, id, quest)
-        self.checkTrackChoice(self.quest[0])
-        self.checkTrackChoice(self.quest[1])
+    def __init__(self, id, avId, quest):
+        print 'called init'
+        self.avId = avId
+        try:
+            resp = base.cr
+        except:
+            print 'TrackChoiceQuest: AI init'
+            resp = simbase.air
+        print 'av id =' + str(avId)
+        try:
+            self.av = resp.doId2do[self.avId]
+        except KeyError:
+            self.av = base.localAvatar
+        self.tracks = avatarGetRemainingTrackIds(self.av)   
+        print 'got tracks'
+        for track in self.tracks:
+            self.checkTrackChoice(track)
+        print 'id=' + str(id) + ' quest=' + str(quest) + ' self.tracks=' + str(self.tracks)
+        Quest.__init__(self, id, avId, self.tracks)            
+        print 'finished'   
 
     def getChoices(self):
-        return (self.quest[0], self.quest[1])
+        return self.tracks
 
     def getCompletionStatus(self, av, questDesc, npc = None):
         questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
@@ -1746,25 +1762,30 @@ class TrackChoiceQuest(Quest):
             return NotChosenString
 
     def getObjectiveStrings(self):
-        trackA, trackB = self.getChoices()
-        trackAName = ToontownBattleGlobals.Tracks[trackA].capitalize()
-        trackBName = ToontownBattleGlobals.Tracks[trackB].capitalize()
-        return [trackAName, trackBName]
+        trackNames = []
+        for track in self.tracks:
+            trackNames.append(ToontownBattleGlobals.Tracks[track].capitalize())
+        print 'got objectiveStrings'    
+        return trackNames
 
     def getString(self):
-        return TTLocalizer.QuestsTrackChoiceQuestString % {'trackA': self.getObjectiveStrings()[0],
-         'trackB': self.getObjectiveStrings()[1]}
+        trackNames = []
+        for track in self.tracks:
+            trackNames.append(self.getTrackName(track)+', ')
+        trackNames[-1] = self.getTrackName(self.tracks[-1])
+        return "".join(trackNames)
+        
+    def getTrackName(self, trackId):
+        return ToontownBattleGlobals.Tracks[trackId].capitalize()
 
     def getSCStrings(self, toNpcId, progress):
-        trackA, trackB = self.getChoices()
-        trackAName = ToontownBattleGlobals.Tracks[trackA].capitalize()
-        trackBName = ToontownBattleGlobals.Tracks[trackB].capitalize()
-        return [TTLocalizer.QuestsTrackChoiceQuestSCString % {'trackA': trackAName,
-          'trackB': trackBName}, TTLocalizer.QuestsTrackChoiceQuestMaybeSCString % trackAName, TTLocalizer.QuestsTrackChoiceQuestMaybeSCString % trackBName] + getVisitSCStrings(toNpcId)
+        trackNames = self.getObjectiveStrings()
+        SCStrings = [TTLocalizer.QuestsTrackChoiceQuestSCString % self.getString()]
+        SCStrings.extend([TTLocalizer.QuestsTrackChoiceQuestMaybeSCString % self.getTrackName(track) for track in self.tracks])
+        return SCStrings + getVisitSCStrings(toNpcId)
 
     def getHeadlineString(self):
         return TTLocalizer.QuestsTrackChoiceQuestHeadline
-
 
 class FriendQuest(Quest):
     def filterFunc(avatar):
@@ -1774,9 +1795,10 @@ class FriendQuest(Quest):
             return 0
 
     filterFunc = staticmethod(filterFunc)
+    filterFunc = staticmethod(filterFunc)
 
-    def __init__(self, id, quest):
-        Quest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        Quest.__init__(self, id, avId, quest)
 
     def getCompletionStatus(self, av, questDesc, npc = None):
         questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
@@ -1813,8 +1835,8 @@ class FriendNewbieQuest(FriendQuest, NewbieQuest):
 
     filterFunc = staticmethod(filterFunc)
 
-    def __init__(self, id, quest):
-        FriendQuest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        FriendQuest.__init__(self, id, avId, quest)
         self.checkNumFriends(self.quest[0])
         self.checkNewbieLevel(self.quest[1])
 
@@ -1854,8 +1876,8 @@ class FriendNewbieQuest(FriendQuest, NewbieQuest):
 
 
 class TrolleyQuest(Quest):
-    def __init__(self, id, quest):
-        Quest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        Quest.__init__(self, id, avId, quest)
 
     def getCompletionStatus(self, av, questDesc, npc = None):
         questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
@@ -1884,8 +1906,8 @@ class TrolleyQuest(Quest):
 
 
 class MailboxQuest(Quest):
-    def __init__(self, id, quest):
-        Quest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        Quest.__init__(self, id, avId, quest)
 
     def getCompletionStatus(self, av, questDesc, npc = None):
         questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
@@ -1914,8 +1936,8 @@ class MailboxQuest(Quest):
 
 
 class PhoneQuest(Quest):
-    def __init__(self, id, quest):
-        Quest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        Quest.__init__(self, id, avId, quest)
 
     def getCompletionStatus(self, av, questDesc, npc = None):
         questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
@@ -1944,8 +1966,8 @@ class PhoneQuest(Quest):
 
 
 class MinigameNewbieQuest(Quest, NewbieQuest):
-    def __init__(self, id, quest):
-        Quest.__init__(self, id, quest)
+    def __init__(self, id, avId, quest):
+        Quest.__init__(self, id, avId, quest)
         self.checkNumMinigames(self.quest[0])
         self.checkNewbieLevel(self.quest[1])
 
@@ -2028,11 +2050,13 @@ def isQuestJustForFun(questId, rewardId):
     else:
         return False
 
-NoRewardTierZeroQuests = (101, 110, 121, 131, 141, 145, 150, 160, 161, 162, 163)
+NoRewardTierZeroQuests = (50, 51, 101, 110, 121, 131, 141, 145, 150, 160, 161, 162, 163)
 RewardTierZeroQuests = ()
 PreClarabelleQuestIds = NoRewardTierZeroQuests + RewardTierZeroQuests
 QuestDict = {
-    101: (TT_TIER, Start, (CogQuest, Anywhere, 1, 'f'), Any, ToonHQ, NA, 110, DefaultDialog),
+    50: (TT_TIER, Start,(TrackChoiceQuest,), 20000, 20000, NA, 51, DefaultDialog),
+    51: (TT_TIER, Cont, (TrackChoiceQuest,), 20000, 20000, NA, 101, DefaultDialog),
+    101: (TT_TIER, Cont, (CogQuest, Anywhere, 1, 'f'), Any, ToonHQ, NA, 110, DefaultDialog),
     110: (TT_TIER, Cont, (TrolleyQuest,), Any, ToonHQ, NA, 145, DefaultDialog),
     120: (TT_TIER, OBSOLETE, (DeliverItemQuest, 5), ToonHQ, 2002, NA, 121, DefaultDialog),
     121: (TT_TIER, OBSOLETE, (RecoverItemQuest, ToontownGlobals.ToontownCentral, 1, 2, VeryEasy, Any, 'type'), 2002, 2002, NA, 150, DefaultDialog),
@@ -2056,7 +2080,7 @@ QuestDict = {
     170: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2005, NA, 400, TTLocalizer.QuestDialogDict[170]),
     171: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2311, NA, 400, TTLocalizer.QuestDialogDict[171]),
     172: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2119, NA, 400, TTLocalizer.QuestDialogDict[172]),
-    400: (TT_TIER + 1, Cont, (TrackChoiceQuest, ToontownBattleGlobals.SOUND_TRACK, ToontownBattleGlobals.HEAL_TRACK), Same, Same, 400, NA, TTLocalizer.QuestDialogDict[400]),
+    400: (TT_TIER + 1, Cont, (TrackChoiceQuest,), Same, Same, 400, NA, TTLocalizer.QuestDialogDict[400]),
     1001: (TT_TIER + 2, Start, (CogQuest, ToontownGlobals.ToontownCentral, 3, Any), Any, ToonHQ, Any, NA, DefaultDialog),
     1002: (TT_TIER + 2, Start, (CogQuest, ToontownGlobals.ToontownCentral, 4, Any), Any, ToonHQ, Any, NA, DefaultDialog),
     1003: (TT_TIER + 2, Start, (CogQuest, ToontownGlobals.ToontownCentral, 5, Any), Any, ToonHQ, Any, NA, DefaultDialog),
@@ -2162,7 +2186,7 @@ QuestDict = {
     1210: (TT_TIER + 3, Start, (CogQuest, Anywhere, 4, 'pp'), Any, ToonHQ, Any, NA, DefaultDialog),
     1211: (TT_TIER + 3, Start, (CogQuest, Anywhere, 4, 'cc'), Any, ToonHQ, Any, NA, DefaultDialog),
     1212: (TT_TIER + 3, Start, (CogQuest, Anywhere, 4, 'tm'), Any, ToonHQ, Any, NA, DefaultDialog),
-    401: (DD_TIER, Start, (TrackChoiceQuest, ToontownBattleGlobals.DROP_TRACK, ToontownBattleGlobals.LURE_TRACK), Any, ToonHQ, 400, NA, TTLocalizer.QuestDialogDict[401]),
+    401: (DD_TIER, Start, (TrackChoiceQuest,), Any, ToonHQ, 400, NA, TTLocalizer.QuestDialogDict[401]),
     2001: (DD_TIER, Start, (CogQuest, Anywhere, 3, Any), Any, ToonHQ, Any, NA, DefaultDialog),
     2002: (DD_TIER, Start, (CogQuest, Anywhere, 4, Any), Any, ToonHQ, Any, NA, DefaultDialog),
     2003: (DD_TIER, Start, (CogQuest, Anywhere, 5, Any), Any, ToonHQ, Any, NA, DefaultDialog),
@@ -2420,8 +2444,8 @@ QuestDict = {
     3263: (DG_TIER, Start, (CogQuest, ToontownGlobals.SellbotHQ, 20, Any), 5313, 5313, 702, NA, TTLocalizer.QuestDialogDict[3263]),
     3500: (DG_TIER, Start, (CogQuest, ToontownGlobals.DaisyGardens, 25, Any), Any, ToonHQ, NA, 3501, DefaultDialog),
     3501: (DG_TIER, Cont, (DeliverItemQuest, 1000), Any, 5007, 1000, NA, DefaultDialog),
-    4001: (MM_TIER, Start, (TrackChoiceQuest, ToontownBattleGlobals.TRAP_TRACK, ToontownBattleGlobals.HEAL_TRACK), Any, ToonHQ, 400, NA, TTLocalizer.QuestDialogDict[4001]),
-    4002: (MM_TIER, Start, (TrackChoiceQuest, ToontownBattleGlobals.TRAP_TRACK, ToontownBattleGlobals.SOUND_TRACK), Any, ToonHQ, 400, NA, TTLocalizer.QuestDialogDict[4002]),
+    4001: (MM_TIER, Start, (TrackChoiceQuest,), Any, ToonHQ, 400, NA, TTLocalizer.QuestDialogDict[4001]),
+    4002: (MM_TIER, Start, (TrackChoiceQuest,), Any, ToonHQ, 400, NA, TTLocalizer.QuestDialogDict[4002]),
     4010: (MM_TIER, Start, (CogQuest, Anywhere, 16, Any), Any, ToonHQ, Any, NA, DefaultDialog),
     4011: (MM_TIER, Start, (CogQuest, Anywhere, 18, Any), Any, ToonHQ, Any, NA, DefaultDialog),
     4012: (MM_TIER, Start, (CogQuest, Anywhere, 20, Any), Any, ToonHQ, Any, NA, DefaultDialog),
@@ -2587,14 +2611,14 @@ QuestDict = {
     5258: (BR_TIER, Cont, (BuildingQuest, Anywhere, 2, 'c', 4), Same, Same, NA, (5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008), TTLocalizer.QuestDialogDict[5258]),
     5259: (BR_TIER, Cont, (BuildingQuest, Anywhere, 2, 'm', 4), Same, Same, NA, (5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008), TTLocalizer.QuestDialogDict[5259]),
     5260: (BR_TIER, Cont, (BuildingQuest, Anywhere, 2, 's', 4), Same, Same, NA, (5001, 5002, 5003, 5004, 5005, 5006, 5007, 5008), TTLocalizer.QuestDialogDict[5260]),
-    5001: (BR_TIER, Cont, (TrackChoiceQuest, ToontownBattleGlobals.SOUND_TRACK, ToontownBattleGlobals.DROP_TRACK), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
-    5002: (BR_TIER, Cont, (TrackChoiceQuest, ToontownBattleGlobals.SOUND_TRACK, ToontownBattleGlobals.LURE_TRACK), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
-    5003: (BR_TIER, Cont, (TrackChoiceQuest, ToontownBattleGlobals.HEAL_TRACK, ToontownBattleGlobals.DROP_TRACK), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
-    5004: (BR_TIER, Cont, (TrackChoiceQuest, ToontownBattleGlobals.HEAL_TRACK, ToontownBattleGlobals.LURE_TRACK), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
-    5005: (BR_TIER, Cont, (TrackChoiceQuest, ToontownBattleGlobals.TRAP_TRACK, ToontownBattleGlobals.SOUND_TRACK), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
-    5006: (BR_TIER, Cont, (TrackChoiceQuest, ToontownBattleGlobals.TRAP_TRACK, ToontownBattleGlobals.HEAL_TRACK), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
-    5007: (BR_TIER, Cont, (TrackChoiceQuest, ToontownBattleGlobals.TRAP_TRACK, ToontownBattleGlobals.DROP_TRACK), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
-    5008: (BR_TIER, Cont, (TrackChoiceQuest, ToontownBattleGlobals.TRAP_TRACK, ToontownBattleGlobals.LURE_TRACK), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
+    5001: (BR_TIER, Cont, (TrackChoiceQuest,), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
+    5002: (BR_TIER, Cont, (TrackChoiceQuest,), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
+    5003: (BR_TIER, Cont, (TrackChoiceQuest,), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
+    5004: (BR_TIER, Cont, (TrackChoiceQuest,), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
+    5005: (BR_TIER, Cont, (TrackChoiceQuest,), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
+    5006: (BR_TIER, Cont, (TrackChoiceQuest,), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
+    5007: (BR_TIER, Cont, (TrackChoiceQuest,), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
+    5008: (BR_TIER, Cont, (TrackChoiceQuest,), Same, Same, 400, NA, TTLocalizer.TheBrrrghTrackQuestDict),
     5020: (BR_TIER, Start, (CogQuest, Anywhere, 36, Any), Any, ToonHQ, Any, NA, DefaultDialog),
     5021: (BR_TIER, Start, (CogQuest, Anywhere, 38, Any), Any, ToonHQ, Any, NA, DefaultDialog),
     5022: (BR_TIER, Start, (CogQuest, Anywhere, 40, Any), Any, ToonHQ, Any, NA, DefaultDialog),
@@ -3601,37 +3625,18 @@ def chooseTrackChoiceQuest(tier, av, fixed = 0):
 
     bestQuest = None
     trackAccess = av.getTrackAccess()
-    if tier == MM_TIER:
-        if trackAccess[ToontownBattleGlobals.HEAL_TRACK] == 1:
-            bestQuest = 4002
-        elif trackAccess[ToontownBattleGlobals.SOUND_TRACK] == 1:
-            bestQuest = 4001
-        else:
-            notify.warning('av %s has bogus trackAccess: %s' % (av.getDoId(), trackAccess))
-            return fixAndCallAgain()
+    if tier == TT_TIER:
+        bestQuest = 100
+    elif tier == TT_TIER + 1:
+        bestQuest = 400    
+    elif tier == DD_TIER:
+        bestQuest = 401
+    elif tier == MM_TIER:
+        bestQuest = 4001
     elif tier == BR_TIER:
-        if trackAccess[ToontownBattleGlobals.SOUND_TRACK] + trackAccess[ToontownBattleGlobals.DROP_TRACK] == 0:
-            bestQuest = 5001
-        elif trackAccess[ToontownBattleGlobals.SOUND_TRACK] + trackAccess[ToontownBattleGlobals.LURE_TRACK] == 0:
-            bestQuest = 5002
-        elif trackAccess[ToontownBattleGlobals.HEAL_TRACK] + trackAccess[ToontownBattleGlobals.DROP_TRACK] == 0:
-            bestQuest = 5003
-        elif trackAccess[ToontownBattleGlobals.HEAL_TRACK] + trackAccess[ToontownBattleGlobals.LURE_TRACK] == 0:
-            bestQuest = 5004
-        elif trackAccess[ToontownBattleGlobals.TRAP_TRACK] + trackAccess[ToontownBattleGlobals.SOUND_TRACK] == 0:
-            bestQuest = 5005
-        elif trackAccess[ToontownBattleGlobals.TRAP_TRACK] + trackAccess[ToontownBattleGlobals.HEAL_TRACK] == 0:
-            bestQuest = 5006
-        elif trackAccess[ToontownBattleGlobals.TRAP_TRACK] + trackAccess[ToontownBattleGlobals.DROP_TRACK] == 0:
-            bestQuest = 5007
-        elif trackAccess[ToontownBattleGlobals.TRAP_TRACK] + trackAccess[ToontownBattleGlobals.LURE_TRACK] == 0:
-            bestQuest = 5008
-        else:
-            notify.warning('av %s has bogus trackAccess: %s' % (av.getDoId(), trackAccess))
-            return fixAndCallAgain()
+        bestQuest = 5001
     else:
-        if notify.getDebug():
-            notify.debug('questPool for reward 400 had no dynamic choice, tier: %s' % tier)
+        notify.warning('questPool for reward 400 had no dynamic choice, tier: %s' % tier)
         bestQuest = seededRandomChoice(Tier2Reward2QuestsDict[tier][400])
     if notify.getDebug():
         notify.debug('chooseTrackChoiceQuest: avId: %s trackAccess: %s tier: %s bestQuest: %s' % (av.getDoId(),
@@ -3723,6 +3728,7 @@ def chooseBestQuests(tier, currentNpc, av):
 
     seedRandomGen(currentNpc.getNpcId(), av.getDoId(), tier, rewardHistory)
     numChoices = getNumChoices(tier)
+    print 'numChoices:'+str(numChoices)
     rewards = getNextRewards(numChoices, tier, av)
     if not rewards:
         return []
@@ -3771,12 +3777,12 @@ def questExists(id):
     return id in QuestDict
 
 
-def getQuest(id):
+def getQuest(id, avId=None):
     questEntry = QuestDict.get(id)
     if questEntry:
         questDesc = questEntry[QuestDictDescIndex]
         questClass = questDesc[0]
-        return questClass(id, questDesc[1:])
+        return questClass(id, avId, questDesc[1:])
     else:
         return None
     return None
@@ -4340,9 +4346,6 @@ def getNextRewards(numChoices, tier, av):
     rewardTier = list(getRewardsInTier(tier))
     optRewards = list(getOptionalRewardsInTier(tier))
 
-    if av.getGameAccess() == OTPGlobals.AccessFull and tier == TT_TIER + 3:
-        optRewards = []
-
     if isLoopingFinalTier(tier):
         rewardHistory = map(lambda questDesc: questDesc[3], av.quests)
         if notify.getDebug():
@@ -4372,7 +4375,9 @@ def getNextRewards(numChoices, tier, av):
                 rewardTier.remove(genericRewardId)
 
     if numChoices == 0:
+        print 'numChoices is 0'
         if len(rewardTier) == 0:
+            print 'rewardTier has length of 0'
             return []
         else:
             return [rewardTier[0]]
@@ -4405,6 +4410,8 @@ def getNextRewards(numChoices, tier, av):
 
 
 RewardDict = {
+    50: (TrackCompleteReward, None),
+    51: (TrackCompleteReward, None),
     100: (MaxHpReward, 1),
     101: (MaxHpReward, 2),
     102: (MaxHpReward, 3),
@@ -4708,7 +4715,7 @@ def getRewardIdFromTrackId(trackId):
 RequiredRewardTrackDict = {
     TT_TIER: (100,),
     TT_TIER + 1: (400,),
-    TT_TIER + 2: (100, 801, 200, 802, 803, 101, 804, 805, 102, 806, 807, 100, 808, 809, 101, 810, 811, 500, 812, 813, 814, 815, 300),
+    TT_TIER + 2: (801, 200, 802, 803, 804, 805, 102, 806, 807, 100, 808, 809, 101, 810, 811, 500, 812, 813, 814, 815, 300),
     TT_TIER + 3: (900,),
     DD_TIER: (400,),
     DD_TIER + 1: (100, 801, 802, 201, 803, 804, 101, 805, 806, 102, 807, 808, 100, 809, 810, 101, 811, 812, 813, 814, 815, 301),
@@ -4774,6 +4781,8 @@ def getItemName(itemId):
 def getPluralItemName(itemId):
     return ItemDict[itemId][1]
 
+def avatarGetRemainingTrackIds(av):
+   return [track for track in xrange(7) if not av.hasTrackAccess(track)]
 
 def avatarHasTrolleyQuest(av):
     return len(av.quests) == 1 and av.quests[0][0] == TROLLEY_QUEST_ID

@@ -236,12 +236,15 @@ class QuestPoster(DirectFrame):
         return
 
     def showChoicePoster(self, questId, fromNpcId, toNpcId, rewardId, callback):
+        print 'showChoicePoster'
         self.update((questId,
          fromNpcId,
          toNpcId,
          rewardId,
          0))
+        print 'updated choiceposter'
         quest = Quests.getQuest(questId)
+        print 'got quest'
         self.rewardText.show()
         self.rewardText.setZ(-0.205)
         self.questProgress.hide()
@@ -269,6 +272,7 @@ class QuestPoster(DirectFrame):
     def update(self, questDesc):
         questId, fromNpcId, toNpcId, rewardId, toonProgress = questDesc
         quest = Quests.getQuest(questId)
+        print 'qp gotQuest'
         if quest == None:
             self.notify.warning('Tried to display poster for unknown quest %s' % questId)
             return
@@ -282,6 +286,7 @@ class QuestPoster(DirectFrame):
             rewardString = reward.getPosterString()
         else:
             rewardString = ''
+        print 'got rewardString'    
         self.rewardText['text'] = rewardString
         self.fitLabel(self.rewardText)
         if Quests.isQuestJustForFun(questId, rewardId):
@@ -293,6 +298,7 @@ class QuestPoster(DirectFrame):
         else:
             self.hideDeleteButton()
         fComplete = quest.getCompletionStatus(base.localAvatar, questDesc) == Quests.COMPLETE
+        print 'qp got complete stat'
         if toNpcId == Quests.ToonHQ:
             toNpcName = TTLocalizer.QuestPosterHQOfficer
             toNpcBuildingName = TTLocalizer.QuestPosterHQBuildingName
@@ -311,6 +317,7 @@ class QuestPoster(DirectFrame):
             toNpcBuildingName = NPCToons.getBuildingTitle(toNpcZone)
             toNpcBranchId = ZoneUtil.getBranchZone(toNpcZone)
             toNpcStreetName = ZoneUtil.getStreetName(toNpcBranchId)
+        print 'setting vars'
         lPos = Vec3(0, 0, 0.13)
         lIconGeom = None
         lIconGeomScale = 1
@@ -324,6 +331,7 @@ class QuestPoster(DirectFrame):
         objectiveStrings = quest.getObjectiveStrings()
         captions = map(string.capwords, quest.getObjectiveStrings())
         imageColor = Vec4(*self.colors['white'])
+        print 'checking for type'
         if quest.getType() == Quests.DeliverGagQuest or quest.getType() == Quests.DeliverItemQuest:
             frameBgColor = 'red'
             if quest.getType() == Quests.DeliverGagQuest:
@@ -400,20 +408,15 @@ class QuestPoster(DirectFrame):
             if not fComplete:
                 infoText = TTLocalizer.QuestPageDestination % (toNpcBuildingName, toNpcStreetName, toNpcLocationName)
         elif quest.getType() == Quests.TrackChoiceQuest:
+            print 'task is trackchoicequest'
             frameBgColor = 'green'
-            invModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            track1, track2 = quest.getChoices()
-            lIconGeom = invModel.find('**/' + AvPropsNew[track1][1])
-            if not fComplete:
-                auxText = TTLocalizer.QuestPosterAuxOr
-                lPos.setX(-0.18)
-                rIconGeom = invModel.find('**/' + AvPropsNew[track2][1])
-                infoText = TTLocalizer.QuestPageNameAndDestination % (toNpcName,
-                 toNpcBuildingName,
-                 toNpcStreetName,
-                 toNpcLocationName)
-                infoZ = -0.02
-            invModel.removeNode()
+            filmstrip = loader.loadModel('phase_3.5/models/gui/filmstrip')
+            lIconGeom = DirectFrame(parent=self, relief=None, image=filmstrip, image_scale=.5)
+            self.question = DirectLabel(parent=lIconGeom, relief=None, pos=(0, 0, 0), text='?', text_scale=0.2, text_pos=(0, -0.04), text_fg=(0.72, 0.72, 0.72, 1))
+            lIconGeom['image_color'] = Vec4(0.7, 0.7, 0.7, 1)
+            self.question['text_fg'] = Vec4(0.6, 0.6, 0.6, 1)
+            rIconGeom = None
+            filmstrip.removeNode()
         elif quest.getType() == Quests.BuildingQuest:
             frameBgColor = 'blue'
             track = quest.getBuildingTrack()
@@ -891,14 +894,19 @@ class QuestPoster(DirectFrame):
         self['image_color'] = imageColor
         self.headline['text_fg'] = textColor
         self.headline['text'] = headlineString
-        self.lPictureFrame.show()
-        self.lPictureFrame.setPos(lPos)
-        self.lPictureFrame['text_scale'] = TEXT_SCALE
-        if lPos[0] != 0:
-            self.lPictureFrame['text_scale'] = 0.0325
-        self.lPictureFrame['text'] = captions[0]
-        self.lPictureFrame['image_color'] = Vec4(*self.colors[frameBgColor])
-        if len(captions) > 1:
+        if quest.getType() != Quests.TrackChoiceQuest:
+            self.lPictureFrame.show()
+            self.lPictureFrame.setPos(lPos)
+            self.lPictureFrame['text_scale'] = TEXT_SCALE
+            if lPos[0] != 0:
+                self.lPictureFrame['text_scale'] = 0.0325
+            self.lPictureFrame['text'] = captions[0]
+            self.lPictureFrame['image_color'] = Vec4(*self.colors[frameBgColor])
+        else:
+            print 'SHOWING CAPTAIONNB'
+            self.lPictureFrame['text'] = 'Track Choice'
+            self.lPictureFrame['image_color'] = Vec4(*self.colors[frameBgColor])
+        if len(captions) > 1 and quest.getType() != Quests.TrackChoiceQuest:
             self.rPictureFrame.show()
             self.rPictureFrame['text'] = captions[1]
             self.rPictureFrame['text_scale'] = 0.0325
@@ -909,12 +917,14 @@ class QuestPoster(DirectFrame):
         self.lQuestIcon['geom'] = lIconGeom
         self.lQuestIcon['geom_pos'] = (0, 10, 0)
         if lIconGeom:
+            print 'task has lIconGeom'
             self.lQuestIcon['geom_scale'] = lIconGeomScale
         if self.laffMeter != None:
             self.laffMeter.reparentTo(self.lQuestIcon)
         self.rQuestIcon['geom'] = rIconGeom
         self.rQuestIcon['geom_pos'] = (0, 10, 0)
         if rIconGeom:
+            print 'task has rIconGeom'
             self.rQuestIcon['geom_scale'] = rIconGeomScale
         if auxText:
             self.auxText.show()
