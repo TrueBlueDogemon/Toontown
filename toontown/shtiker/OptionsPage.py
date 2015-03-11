@@ -802,10 +802,14 @@ class MoreOptionsTabPage(DirectFrame):
         if base.wantWASD:
             base.wantWASD = False
             settings['want-WASD'] = False
-            base.localAvatar.setSystemMessage(0, 'WASD controls will be disabled at next login.')
+            base.localAvatar.controlManager.reload()
+            base.localAvatar.chatMgr.reloadWASD()
+            base.localAvatar.setSystemMessage(0, 'WASD controls disabled.')            
         else:
             base.wantWASD = True
             settings['want-WASD'] = True
+            base.localAvatar.controlManager.reload()
+            base.localAvatar.chatMgr.reloadWASD()            
             base.localAvatar.setSystemMessage(0, 'WASD controls will be enabled at next login.')
         self.settingsChanged = 1
         self.__setWASDButton()

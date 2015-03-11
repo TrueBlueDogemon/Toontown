@@ -13,14 +13,15 @@ class ToontownControlManager(ControlManager.ControlManager):
         self.currentControls = None
         self.currentControlsName = None
         self.isEnabled = 0
-        if enable:
-            self.enable()
         self.forceAvJumpToken = None
         self.inputToDisable = []
+        self.forceTokens = None
+        self.istWASD = []    
+        self.istNormal = []        
+        if enable:
+            self.enable()
     
     def enable(self):
-        assert self.notify.debugCall(id(self))
-
         if self.isEnabled:
             assert self.notify.debug('already isEnabled')
             return
@@ -38,37 +39,36 @@ class ToontownControlManager(ControlManager.ControlManager):
         ist.append(inputState.watchWithModifiers("reverse", "mouse4", inputSource=inputState.Mouse))
         
         if self.wantWASD:
-            ist.append(inputState.watchWithModifiers("turnLeft", "arrow_left", inputSource=inputState.ArrowKeys))
-            ist.append(inputState.watch("turnLeft", "mouse-look_left", "mouse-look_left-done"))
-            ist.append(inputState.watch("turnLeft", "force-turnLeft", "force-turnLeft-stop"))
+            self.istWASD.append(inputState.watch("turnLeft", "mouse-look_left", "mouse-look_left-done"))
+            self.istWASD.append(inputState.watch("turnLeft", "force-turnLeft", "force-turnLeft-stop"))
+
+            self.istWASD.append(inputState.watch("turnRight", "mouse-look_right", "mouse-look_right-done"))
+            self.istWASD.append(inputState.watch("turnRight", "force-turnRight", "force-turnRight-stop"))
             
-            ist.append(inputState.watchWithModifiers("turnRight", "arrow_right", inputSource=inputState.ArrowKeys))
-            ist.append(inputState.watch("turnRight", "mouse-look_right", "mouse-look_right-done"))
-            ist.append(inputState.watch("turnRight", "force-turnRight", "force-turnRight-stop"))
-
-            ist.append(inputState.watchWithModifiers("forward", "w", inputSource=inputState.WASD))
-            ist.append(inputState.watchWithModifiers("reverse", "s", inputSource=inputState.WASD))
-
+            self.istWASD.append(inputState.watchWithModifiers("forward", "w", inputSource=inputState.WASD))
+            self.istWASD.append(inputState.watchWithModifiers("reverse", "s", inputSource=inputState.WASD))
             self.setWASDTurn(self.__WASDTurn)
         else:
-            ist.append(inputState.watchWithModifiers("forward", "arrow_up", inputSource=inputState.ArrowKeys))
-            ist.append(inputState.watchWithModifiers("reverse", "arrow_down", inputSource=inputState.ArrowKeys))
-            ist.append(inputState.watchWithModifiers("turnLeft", "arrow_left", inputSource=inputState.ArrowKeys))
+            self.istNormal.append(inputState.watchWithModifiers("forward", "arrow_up", inputSource=inputState.ArrowKeys))
+            self.istNormal.append(inputState.watchWithModifiers("reverse", "arrow_down", inputSource=inputState.ArrowKeys))
+            self.istNormal.append(inputState.watchWithModifiers("turnLeft", "arrow_left", inputSource=inputState.ArrowKeys))
             ist.append(inputState.watch("turnLeft", "mouse-look_left", "mouse-look_left-done"))
             ist.append(inputState.watch("turnLeft", "force-turnLeft", "force-turnLeft-stop"))
             
-            ist.append(inputState.watchWithModifiers("turnRight", "arrow_right", inputSource=inputState.ArrowKeys))
+            self.istNormal.append(inputState.watchWithModifiers("turnRight", "arrow_right", inputSource=inputState.ArrowKeys))
             ist.append(inputState.watch("turnRight", "mouse-look_right", "mouse-look_right-done"))
             ist.append(inputState.watch("turnRight", "force-turnRight", "force-turnRight-stop"))
 
         # Jump controls
         if self.wantWASD:
-            ist.append(inputState.watchWithModifiers("jump", "shift"))
+            self.istWASD.append(inputState.watchWithModifiers("jump", "shift"))
         else:
-            ist.append(inputState.watch("jump", "control", "control-up"))
+            self.istNormal.append(inputState.watch("jump", "control", "control-up"))
+
         
         if self.currentControls:
             self.currentControls.enableAvatarControls()
+            
             
             
     def setWASDTurn(self, turn):
@@ -108,3 +108,76 @@ class ToontownControlManager(ControlManager.ControlManager):
                 
             inputState.set("turnLeft", False, inputSource=inputState.WASD)
             inputState.set("turnRight", False, inputSource=inputState.WASD)
+            
+    def disable(self):
+        self.isEnabled = 0
+
+        for token in self.inputStateTokens:
+            token.release()
+        self.inputStateTokens = []
+
+        for token in self.WASDTurnTokens:
+            token.release()
+        self.WASDTurnTokens = []
+
+        if self.currentControls:
+            self.currentControls.disableAvatarControls()
+            
+        if self.passMessagesThrough: # for not breaking toontown
+            ist=self.inputStateTokens            
+            if self.wantWASD:
+                print 'WASD IS ENABLED!'
+                ist.append(inputState.watchWithModifiers("forward", "w", inputSource=inputState.ArrowKeys))
+                ist.append(inputState.watchWithModifiers("reverse", "s", inputSource=inputState.ArrowKeys))
+                ist.append(inputState.watchWithModifiers("turnLeft", "a", inputSource=inputState.ArrowKeys))
+                ist.append(inputState.watchWithModifiers("turnRight", "d", inputSource=inputState.ArrowKeys))
+            else:
+                print 'NAH'
+                ist.append(inputState.watchWithModifiers("forward", "arrow_up", inputSource=inputState.ArrowKeys))
+                ist.append(inputState.watchWithModifiers("reverse", "arrow_down", inputSource=inputState.ArrowKeys))
+                ist.append(inputState.watchWithModifiers("turnLeft", "arrow_left", inputSource=inputState.ArrowKeys))
+                ist.append(inputState.watchWithModifiers("turnRight", "arrow_right", inputSource=inputState.ArrowKeys))
+            
+    def disableWASD(self):#Disables WASD for when chat is open.
+        if self.wantWASD:
+            self.forceTokens=[
+                inputState.force(
+                  "jump", 0, 'ControlManager.disableWASD'),
+                inputState.force(
+                  "forward", 0, 'ControlManager.disableWASD'),
+                inputState.force(
+                  "turnLeft", 0, 'ControlManager.disableWASD'),
+                inputState.force(
+                  "reverse", 0, 'ControlManager.disableWASD'),         
+                inputState.force(
+                  "turnRight", 0, 'ControlManager.disableWASD')
+            ]        
+                
+                
+    def enableWASD(self):#Enables WASD after chat is closed.
+        if self.wantWASD:
+            if self.forceTokens:
+                for token in self.forceTokens:
+                    token.release()
+                self.forceTokens = []
+                
+    def reload(self):
+        self.wantWASD = base.wantWASD
+        if self.wantWASD:       
+            for token in self.istNormal:
+                token.release()
+            for token in self.inputStateTokens:
+                token.release()
+            self.istNormal = []
+            self.inputStateTokens = []
+            self.disable()
+            self.enable()
+        else:
+            for token in self.WASDTurnTokens:
+                token.release()
+            for token in self.istWASD:
+                token.release()
+            self.istWASD = []
+            self.WASDTurnTokens = []
+            self.disable()
+            self.enable()

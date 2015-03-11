@@ -400,13 +400,13 @@ class ChatManager(DirectObject.DirectObject):
 
     def enterNormalChat(self):
         if base.wantWASD:
-            base.localAvatar.disableAvatarControls()
+            base.localAvatar.controlManager.disableWASD()
         result = self.chatInputNormal.activateByData()
         return result
 
     def exitNormalChat(self):
         if base.wantWASD:
-            base.localAvatar.enableAvatarControls()
+            base.localAvatar.controlManager.enableWASD()
         self.chatInputNormal.deactivate()
 
     def enterOpenChatWarning(self):
@@ -520,3 +520,6 @@ class ChatManager(DirectObject.DirectObject):
 
     def __privacyPolicyDone(self):
         self.fsm.request('activateChat')
+
+    def reloadWASD(self):
+        self.wantBackgroundFocus = not base.wantWASD
