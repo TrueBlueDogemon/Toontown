@@ -270,13 +270,14 @@ class DisguisePage(ShtikerPage.ShtikerPage):
         self.updatePartsDisplay(index, numParts, numPartsRequired)
         self.updateMeritBar(index)
         self.cogPartRatio['text'] = '%d/%d' % (CogDisguiseGlobals.getTotalParts(numParts), numPartsRequired)
-        if base.localAvatar.cogLevels[index] == ToontownGlobals.MaxCogSuitLevel:
+        if base.localAvatar.promotionStatus[index] == ToontownGlobals.PendingPromotion:
+            self.promoteButton['extraArgs'] = [index]
+            if base.localAvatar.cogLevels[index] == ToontownGlobals.MaxCogSuitLevel:
                 self.promoteButton['state'] = DGG.DISABLED
                 self.promoteButton.hide()
             else:
                 self.promoteButton['state'] = DGG.NORMAL
                 self.promoteButton.show()
-
     def sendPromotionRequest(self, dept):
         self.promoteButton.hide()
         base.playSfx(self.promotionSfx)
