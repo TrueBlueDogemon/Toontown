@@ -62,7 +62,7 @@ class DistributedCannon(DistributedObject.DistributedObject):
     HIT_GROUND = 0
     HIT_TOWER = 1
     HIT_WATER = 2
-    FIRE_KEY = 'control'
+    FIRE_KEY = base.JUMP
     UP_KEY = base.Move_Up
     DOWN_KEY = base.Move_Down
     LEFT_KEY = base.Move_Left

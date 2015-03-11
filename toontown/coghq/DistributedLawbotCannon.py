@@ -30,7 +30,7 @@ CAMERA_PULLBACK_MAX = 40
 class DistributedLawbotCannon(DistributedObject.DistributedObject):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedLawbotCannon')
     LOCAL_CANNON_MOVE_TASK = 'localCannonMoveTask'
-    FIRE_KEY = 'control'
+    FIRE_KEY = base.JUMP
     UP_KEY = base.Move_Up
     DOWN_KEY = base.Move_Down
     LEFT_KEY = base.Move_Left

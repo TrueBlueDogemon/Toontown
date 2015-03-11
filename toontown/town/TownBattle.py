@@ -156,7 +156,7 @@ class TownBattle(StateData.StateData):
         del self.SOSPetInfoPanel
         for toonPanel in self.toonPanels:
             toonPanel.cleanup()
-            
+        
         for cogPanel in self.cogPanels:
             cogPanel.cleanup()
 
@@ -368,7 +368,8 @@ class TownBattle(StateData.StateData):
     def exitOff(self):
         if self.isLoaded:
             self.__enterPanels(self.numToons, self.localNum)
-            self.__enterCogPanels(self.numCogs)
+            if base.wantCogLevelGui:
+                self.__enterCogPanels(self.numCogs)
         self.timer.show()
         self.track = -1
         self.level = -1
@@ -514,8 +515,9 @@ class TownBattle(StateData.StateData):
             self.__enterPanels(self.numToons, self.localNum)
             for i in xrange(len(toons)):
                 self.toonPanels[i].setLaffMeter(toons[i])
-                
-            self.__enterCogPanels(self.numCogs)
+            
+            if base.wantCogLevelGui:    
+                self.__enterCogPanels(self.numCogs)
             for i in xrange(len(cogs)):
                 self.cogPanels[i].setSuit(cogs[i])
 

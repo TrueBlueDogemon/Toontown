@@ -755,6 +755,8 @@ class MoreOptionsTabPage(DirectFrame):
         self.BattleCamera_Label = DirectLabel(parent=self, relief=None, text='', text_align=TextNode.ALeft, text_scale=options_text_scale, pos=(leftMargin, 0, textStartHeight))
         self.WASD_Label = DirectLabel(parent=self, relief=None, text='', text_align=TextNode.ALeft, text_scale=options_text_scale, text_wordwrap=16, pos=(leftMargin, 0, textStartHeight - textRowHeight))
         self.WASD_toggleButton = DirectButton(parent=self, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=button_image_scale, text='', text_scale=options_text_scale, text_pos=button_textpos, pos=(buttonbase_xcoord, 0.0, buttonbase_ycoord - textRowHeight), command=self.__doToggleWASD)
+        self.CogLevel_Label = DirectLabel(parent=self, relief=None, text='', text_align=TextNode.ALeft, text_scale=options_text_scale, text_wordwrap=16, pos=(leftMargin, 0, textStartHeight - textRowHeight * 2))
+        self.CogLevel_toggleButton = DirectButton(parent=self, relief=None, image=(guiButton.find('**/QuitBtn_UP'), guiButton.find('**/QuitBtn_DN'), guiButton.find('**/QuitBtn_RLVR')), image_scale=button_image_scale, text='', text_scale=options_text_scale, text_pos=button_textpos, pos=(buttonbase_xcoord, 0.0, buttonbase_ycoord - textRowHeight * 2), command=self.__doToggleCogLevelGui)
         gui.removeNode()
         guiButton.removeNode()
         
@@ -763,6 +765,7 @@ class MoreOptionsTabPage(DirectFrame):
         self.settingsChanged = 0
         self.__setBattleCameraButton()
         self.__setWASDButton()
+        self.__setCogLevelGuiButton()
 
     def exit(self):
         self.ignore('confirmDone')
@@ -777,6 +780,10 @@ class MoreOptionsTabPage(DirectFrame):
         del self.WASD_Label
         self.WASD_toggleButton.destroy()
         del self.WASD_toggleButton
+        self.CogLevel_Label.destroy()
+        del self.CogLevel_Label
+        self.CogLevel_toggleButton.destroy()
+        del self.CogLevel_toggleButton
 
     def __doToggleBattleCamera(self):
         messenger.send('wakeup')
@@ -796,28 +803,57 @@ class MoreOptionsTabPage(DirectFrame):
         else:
             self.BattleCamera_Label['text'] = 'Battle Camera Mode:'
             self.BattleCamera_toggleButton['text'] = 'Static'
-            
+
     def __doToggleWASD(self):
         messenger.send('wakeup')
         if base.wantWASD:
             base.wantWASD = False
+            base.Move_Up = 'arrow_up'
+            base.Move_Down = 'arrow_down'
+            base.Move_Left = 'arrow_left'
+            base.Move_Right = 'arrow_right'
+            base.JUMP = 'control'
             settings['want-WASD'] = False
             base.localAvatar.controlManager.reload()
             base.localAvatar.chatMgr.reloadWASD()
             base.localAvatar.setSystemMessage(0, 'WASD controls disabled.')            
         else:
             base.wantWASD = True
+            base.Move_Up = 'w'
+            base.Move_Down = 's'
+            base.Move_Left = 'a'
+            base.Move_Right = 'd'
+            base.JUMP = 'shift'            
             settings['want-WASD'] = True
             base.localAvatar.controlManager.reload()
             base.localAvatar.chatMgr.reloadWASD()            
-            base.localAvatar.setSystemMessage(0, 'WASD controls will be enabled at next login.')
+            base.localAvatar.setSystemMessage(0, 'WASD controls enabbled.')
         self.settingsChanged = 1
         self.__setWASDButton()
 
     def __setWASDButton(self):
+        self.WASD_Label['text'] = 'WASD Support:'        
         if base.wantWASD:
-            self.WASD_Label['text'] = 'WASD Support:'
             self.WASD_toggleButton['text'] = 'On'
         else:
-            self.WASD_Label['text'] = 'WASD Support:'
-            self.WASD_toggleButton['text'] = 'Off'            
+            self.WASD_toggleButton['text'] = 'Off'
+
+            
+    def __doToggleCogLevelGui(self):
+        messenger.send('wakeup')
+        if base.wantCogLevelGui:
+            base.wantCogLevelGui = False
+            settings['want-Cog-Level-GUI'] = False        
+        else:
+            base.wantCogLevelGui = True
+            settings['want-Cog-Level-GUI'] = True
+        self.settingsChanged = 1
+        self.__setCogLevelGuiButton()
+
+    def __setCogLevelGuiButton(self):
+        if base.wantCogLevelGui:
+            self.CogLevel_Label['text'] = 'Cog Level GUI In-Battle:'
+            self.CogLevel_toggleButton['text'] = 'On'
+        else:
+            self.CogLevel_Label['text'] = 'Cog Level GUI In-Battle:'
+            self.CogLevel_toggleButton['text'] = 'Off'

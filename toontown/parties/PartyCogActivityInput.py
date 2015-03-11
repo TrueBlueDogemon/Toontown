@@ -4,7 +4,7 @@ ROTATE_LEFT_KEY = base.Move_Left
 ROTATE_RIGHT_KEY = base.Move_Right
 FORWARD_KEY = base.Move_Up
 BACKWARDS_KEY = base.Move_Down
-THROW_PIE_KEYS = ['control', 'delete', 'insert']
+THROW_PIE_KEYS = [base.JUMP, 'delete', 'insert']
 
 class PartyCogActivityInput(DirectObject):
     notify = directNotify.newCategory('PartyCogActivityInput')

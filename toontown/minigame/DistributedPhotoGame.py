@@ -56,7 +56,7 @@ class DistributedPhotoGame(DistributedMinigame, PhotoGameBase.PhotoGameBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedPhotoGame')
     font = ToontownGlobals.getToonFont()
     LOCAL_PHOTO_MOVE_TASK = 'localPhotoMoveTask'
-    FIRE_KEY = 'control'
+    FIRE_KEY = base.JUMP
     UP_KEY = base.Move_Up
     DOWN_KEY = base.Move_Down
     LEFT_KEY = base.Move_Left

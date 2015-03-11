@@ -5,7 +5,7 @@ from toontown.parties import PartyUtils
 
 class CannonGui(DirectObject):
     notify = directNotify.newCategory('CannonGui')
-    FIRE_KEY = 'control'
+    FIRE_KEY = base.JUMP
     UP_KEY = base.Move_Up
     DOWN_KEY = base.Move_Down
     LEFT_KEY = base.Move_Left

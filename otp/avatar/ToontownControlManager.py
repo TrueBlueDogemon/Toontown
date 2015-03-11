@@ -1,8 +1,10 @@
 from direct.controls import ControlManager
 from direct.showbase.InputStateGlobal import inputState
 
+#This is the new class for Toontown's ControlManager
+#Had to override some functions in order to fix 'want-WASD'
 class ToontownControlManager(ControlManager.ControlManager):
-    wantWASD = base.wantWASD
+    wantWASD = base.wantWASD#Instead of checking config.prc, get wantWASD from ToonBase
     
     def __init__(self, enable=True, passMessagesThrough = False):
         self.passMessagesThrough = passMessagesThrough
@@ -16,8 +18,8 @@ class ToontownControlManager(ControlManager.ControlManager):
         self.forceAvJumpToken = None
         self.inputToDisable = []
         self.forceTokens = None
-        self.istWASD = []    
-        self.istNormal = []        
+        self.istWASD = []
+        self.istNormal = []      
         if enable:
             self.enable()
     
@@ -85,7 +87,7 @@ class ToontownControlManager(ControlManager.ControlManager):
         for token in self.WASDTurnTokens:
             token.release()
 
-        if turn:
+        if turn:#If we want toons to be able to turn instead of sliding left to right
             self.WASDTurnTokens = (
                 inputState.watchWithModifiers("turnLeft", "a", inputSource=inputState.WASD),
                 inputState.watchWithModifiers("turnRight", "d", inputSource=inputState.WASD),
@@ -126,13 +128,13 @@ class ToontownControlManager(ControlManager.ControlManager):
         if self.passMessagesThrough: # for not breaking toontown
             ist=self.inputStateTokens            
             if self.wantWASD:
-                print 'WASD IS ENABLED!'
-                ist.append(inputState.watchWithModifiers("forward", "w", inputSource=inputState.ArrowKeys))
-                ist.append(inputState.watchWithModifiers("reverse", "s", inputSource=inputState.ArrowKeys))
-                ist.append(inputState.watchWithModifiers("turnLeft", "a", inputSource=inputState.ArrowKeys))
-                ist.append(inputState.watchWithModifiers("turnRight", "d", inputSource=inputState.ArrowKeys))
+                print ':(ToontownControlManager) WASD support was enabled.'
+                ist.append(inputState.watchWithModifiers("forward", "w", inputSource=inputState.WASD))
+                ist.append(inputState.watchWithModifiers("reverse", "s", inputSource=inputState.WASD))
+                ist.append(inputState.watchWithModifiers("turnLeft", "a", inputSource=inputState.WASD))
+                ist.append(inputState.watchWithModifiers("turnRight", "d", inputSource=inputState.WASD))
             else:
-                print 'NAH'
+                print ':(ToontownControlManager) WASD support was disabled.'
                 ist.append(inputState.watchWithModifiers("forward", "arrow_up", inputSource=inputState.ArrowKeys))
                 ist.append(inputState.watchWithModifiers("reverse", "arrow_down", inputSource=inputState.ArrowKeys))
                 ist.append(inputState.watchWithModifiers("turnLeft", "arrow_left", inputSource=inputState.ArrowKeys))
@@ -140,7 +142,7 @@ class ToontownControlManager(ControlManager.ControlManager):
             
     def disableWASD(self):#Disables WASD for when chat is open.
         if self.wantWASD:
-            self.forceTokens=[
+            self.forceTokens=[#Forces all keys to return 0. This won't affect chat input.
                 inputState.force(
                   "jump", 0, 'ControlManager.disableWASD'),
                 inputState.force(
@@ -148,26 +150,30 @@ class ToontownControlManager(ControlManager.ControlManager):
                 inputState.force(
                   "turnLeft", 0, 'ControlManager.disableWASD'),
                 inputState.force(
+                  "slideLeft", 0, 'ControlManager.disableWASD'),
+                inputState.force(
                   "reverse", 0, 'ControlManager.disableWASD'),         
                 inputState.force(
-                  "turnRight", 0, 'ControlManager.disableWASD')
-            ]        
+                  "turnRight", 0, 'ControlManager.disableWASD'),
+                inputState.force(
+                  "slideRight", 0, 'ControlManager.disableWASD')                  
+            ]
+            print 'disableWASD()'
                 
                 
     def enableWASD(self):#Enables WASD after chat is closed.
         if self.wantWASD:
             if self.forceTokens:
-                for token in self.forceTokens:
+                for token in self.forceTokens:#Release all the forced keys we added earlier.
                     token.release()
                 self.forceTokens = []
+                print 'enableWASD'
                 
-    def reload(self):
-        self.wantWASD = base.wantWASD
+    def reload(self):#Called to reload the ControlManager ingame
+        self.wantWASD = base.wantWASD#Reload wantWASD if it was recently changed.
         if self.wantWASD:       
             for token in self.istNormal:
-                token.release()
-            for token in self.inputStateTokens:
-                token.release()
+                token.release()#Release arrow key input
             self.istNormal = []
             self.inputStateTokens = []
             self.disable()

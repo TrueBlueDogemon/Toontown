@@ -232,7 +232,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
             self.leavingTrampoline = True
             self.timer.reset()
             self.trampB = self.leavingTrampB
-            self.ignore('control')
+            self.ignore(base.JUMP)
             self.quitEarlyButton.stash()
             self.gui.hide()
         return
@@ -366,7 +366,7 @@ class DistributedPartyTrampolineActivity(DistributedPartyActivity):
         self.gui.show()
         self.quitEarlyButton.unstash()
         self.notify.debug('Accepting contorl')
-        self.accept('control', self.onJump)
+        self.accept(base.JUMP, self.onJump)
         self.notify.debug('setting simulate step to true')
         self.doSimulateStep = True
 

@@ -252,12 +252,16 @@ class ToonBase(OTPBase.OTPBase):
         self.Move_Left = 'arrow_left'       
         self.Move_Down = 'arrow_down'
         self.Move_Right = 'arrow_right'
+        self.JUMP = 'control'
         
         if self.wantWASD:
             self.Move_Up = 'w'
             self.Move_Left = 'a'            
             self.Move_Down = 's'
             self.Move_Right = 'd'
+            self.JUMP = 'shift'
+            
+        self.wantCogLevelGui = settings.get('want-Cog-Level-GUI', True)
         
     def openMainWindow(self, *args, **kw):
         result = OTPBase.OTPBase.openMainWindow(self, *args, **kw)
