@@ -125,20 +125,19 @@ class ToontownControlManager(ControlManager.ControlManager):
         if self.currentControls:
             self.currentControls.disableAvatarControls()
             
-        if self.passMessagesThrough: # for not breaking toontown
-            ist=self.inputStateTokens            
+        if self.passMessagesThrough: # for not breaking toontown          
             if self.wantWASD:
                 print ':(ToontownControlManager) WASD support was enabled.'
-                ist.append(inputState.watchWithModifiers("forward", "w", inputSource=inputState.WASD))
-                ist.append(inputState.watchWithModifiers("reverse", "s", inputSource=inputState.WASD))
-                ist.append(inputState.watchWithModifiers("turnLeft", "a", inputSource=inputState.WASD))
-                ist.append(inputState.watchWithModifiers("turnRight", "d", inputSource=inputState.WASD))
+                self.istWASD.append(inputState.watchWithModifiers("forward", "w", inputSource=inputState.WASD))
+                self.istWASD.append(inputState.watchWithModifiers("reverse", "s", inputSource=inputState.WASD))
+                self.istWASD.append(inputState.watchWithModifiers("turnLeft", "a", inputSource=inputState.WASD))
+                self.istWASD.append(inputState.watchWithModifiers("turnRight", "d", inputSource=inputState.WASD))
             else:
                 print ':(ToontownControlManager) WASD support was disabled.'
-                ist.append(inputState.watchWithModifiers("forward", "arrow_up", inputSource=inputState.ArrowKeys))
-                ist.append(inputState.watchWithModifiers("reverse", "arrow_down", inputSource=inputState.ArrowKeys))
-                ist.append(inputState.watchWithModifiers("turnLeft", "arrow_left", inputSource=inputState.ArrowKeys))
-                ist.append(inputState.watchWithModifiers("turnRight", "arrow_right", inputSource=inputState.ArrowKeys))
+                self.istNormal.append(inputState.watchWithModifiers("forward", "arrow_up", inputSource=inputState.ArrowKeys))
+                self.istNormal.append(inputState.watchWithModifiers("reverse", "arrow_down", inputSource=inputState.ArrowKeys))
+                self.istNormal.append(inputState.watchWithModifiers("turnLeft", "arrow_left", inputSource=inputState.ArrowKeys))
+                self.istNormal.append(inputState.watchWithModifiers("turnRight", "arrow_right", inputSource=inputState.ArrowKeys))
             
     def disableWASD(self):#Disables WASD for when chat is open.
         if self.wantWASD:

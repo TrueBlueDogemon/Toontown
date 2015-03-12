@@ -823,11 +823,11 @@ class MoreOptionsTabPage(DirectFrame):
             base.Move_Down = 's'
             base.Move_Left = 'a'
             base.Move_Right = 'd'
-            base.JUMP = 'shift'            
+            base.JUMP = 'shift'
             settings['want-WASD'] = True
             base.localAvatar.controlManager.reload()
             base.localAvatar.chatMgr.reloadWASD()            
-            base.localAvatar.setSystemMessage(0, 'WASD controls enabbled.')
+            base.localAvatar.setSystemMessage(0, 'WASD controls enabled.')
         self.settingsChanged = 1
         self.__setWASDButton()
 
