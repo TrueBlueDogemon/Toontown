@@ -50,6 +50,7 @@ AnyLawbotSuitPart = 6
 AnyBossbotSuitPart = 7
 ToonTailor = 999
 ToonHQ = 1000
+TutorialTom= 20000
 QuestDictTierIndex = 0
 QuestDictStartIndex = 1
 QuestDictDescIndex = 2
@@ -1388,11 +1389,24 @@ class DeliverGagQuest(Quest):
     def __init__(self, id, avId, quest):
         Quest.__init__(self, id, avId, quest)
         self.checkNumGags(self.quest[0])
-        self.checkGagTrack(self.quest[1])
-        self.checkGagItem(self.quest[2])
+        if base.localAvatar.getFirstTrackPicked() == base.localAvatar.getSecondTrackPicked():#Prevents breaking toons who weren't made before the change
+            if id == 2906:
+                self.gagTrack = 5
+            else:
+                self.gagTrack = 4
+        elif self.quest[1] == 1:
+            self.gagTrack = (base.localAvatar.getFirstTrackPicked())
+        elif self.quest[1] == 2:
+            self.gagTrack = (base.localAvatar.getSecondTrackPicked())
+        else:
+            self.gagTrack = (random.choice(base.localAvatar.getFirstTrackPicked(), base.localAvatar.getSecondTrackPicked()))
+        self.checkGagItem(self.quest[2])    
+
+    def getGagTrack(self):
+        return self.gagTrack
 
     def getGagType(self):
-        return (self.quest[1], self.quest[2])
+        return (self.gagTrack, self.quest[2])
 
     def getNumQuestItems(self):
         return self.getNumGags()
@@ -1725,25 +1739,19 @@ class RecoverItemQuest(LocationBasedQuest):
 
 class TrackChoiceQuest(Quest):
     def __init__(self, id, avId, quest):
-        print 'called init'
         self.avId = avId
         try:
             resp = base.cr
         except:
-            print 'TrackChoiceQuest: AI init'
             resp = simbase.air
-        print 'av id =' + str(avId)
         try:
             self.av = resp.doId2do[self.avId]
         except KeyError:
             self.av = base.localAvatar
         self.tracks = avatarGetRemainingTrackIds(self.av)   
-        print 'got tracks'
         for track in self.tracks:
             self.checkTrackChoice(track)
-        print 'id=' + str(id) + ' quest=' + str(quest) + ' self.tracks=' + str(self.tracks)
-        Quest.__init__(self, id, avId, self.tracks)            
-        print 'finished'   
+        Quest.__init__(self, id, avId, self.tracks)  
 
     def getChoices(self):
         return self.tracks
@@ -1764,8 +1772,7 @@ class TrackChoiceQuest(Quest):
     def getObjectiveStrings(self):
         trackNames = []
         for track in self.tracks:
-            trackNames.append(ToontownBattleGlobals.Tracks[track].capitalize())
-        print 'got objectiveStrings'    
+            trackNames.append(ToontownBattleGlobals.Tracks[track].capitalize())   
         return trackNames
 
     def getString(self):
@@ -1794,7 +1801,6 @@ class FriendQuest(Quest):
         else:
             return 0
 
-    filterFunc = staticmethod(filterFunc)
     filterFunc = staticmethod(filterFunc)
 
     def __init__(self, id, avId, quest):
@@ -2054,9 +2060,10 @@ NoRewardTierZeroQuests = (50, 51, 101, 110, 121, 131, 141, 145, 150, 160, 161, 1
 RewardTierZeroQuests = ()
 PreClarabelleQuestIds = NoRewardTierZeroQuests + RewardTierZeroQuests
 QuestDict = {
-    50: (TT_TIER, Start,(TrackChoiceQuest,), 20000, 20000, NA, 51, DefaultDialog),
-    51: (TT_TIER, Cont, (TrackChoiceQuest,), 20000, 20000, NA, 101, DefaultDialog),
-    101: (TT_TIER, Cont, (CogQuest, Anywhere, 1, 'f'), Any, ToonHQ, NA, 110, DefaultDialog),
+    50: (TT_TIER, Start,(TrackChoiceQuest,), 20000, 20000, NA, 51, TTLocalizer.QuestDialogDict[50]),
+    51: (TT_TIER, Start, (TrackChoiceQuest,), 20000, 20000, NA, 101, TTLocalizer.QuestDialogDict[51]),
+    52: (TT_TIER, Start, (TrolleyQuest,), 20000, ToonHQ, NA, 145, TTLocalizer.QuestDialogDict[52]),
+    101: (TT_TIER, Start, (CogQuest, Anywhere, 1, 'f'), Any, ToonHQ, NA, 110, DefaultDialog),
     110: (TT_TIER, Cont, (TrolleyQuest,), Any, ToonHQ, NA, 145, DefaultDialog),
     120: (TT_TIER, OBSOLETE, (DeliverItemQuest, 5), ToonHQ, 2002, NA, 121, DefaultDialog),
     121: (TT_TIER, OBSOLETE, (RecoverItemQuest, ToontownGlobals.ToontownCentral, 1, 2, VeryEasy, Any, 'type'), 2002, 2002, NA, 150, DefaultDialog),
@@ -2070,7 +2077,6 @@ QuestDict = {
     161: (TT_TIER, OBSOLETE, (CogTrackQuest, ToontownGlobals.ToontownCentral, 3, 'l'), Same, ToonHQ, NA, 175, TTLocalizer.QuestDialogDict[161]),
     162: (TT_TIER, OBSOLETE, (CogTrackQuest, ToontownGlobals.ToontownCentral, 3, 's'), Same, ToonHQ, NA, 175, TTLocalizer.QuestDialogDict[162]),
     163: (TT_TIER, OBSOLETE, (CogTrackQuest, ToontownGlobals.ToontownCentral, 3, 'm'), Same, ToonHQ, NA, 175, TTLocalizer.QuestDialogDict[163]),
-    175: (TT_TIER, Cont, (PhoneQuest,), Same, ToonHQ, 100, NA, TTLocalizer.QuestDialogDict[175]),
     164: (TT_TIER + 1, Start, (VisitQuest,), Any, 2001, NA, 165, TTLocalizer.QuestDialogDict[164]),
     165: (TT_TIER + 1, Start, (CogQuest, Anywhere, 4, Any), 2001, Same, NA, (166, 167, 168, 169), TTLocalizer.QuestDialogDict[165]),
     166: (TT_TIER + 1, Cont, (CogTrackQuest, Anywhere, 4, 'c'), Same, Same, NA, 170, TTLocalizer.QuestDialogDict[166]),
@@ -2080,6 +2086,7 @@ QuestDict = {
     170: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2005, NA, 400, TTLocalizer.QuestDialogDict[170]),
     171: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2311, NA, 400, TTLocalizer.QuestDialogDict[171]),
     172: (TT_TIER + 1, Cont, (VisitQuest,), Same, 2119, NA, 400, TTLocalizer.QuestDialogDict[172]),
+    175: (TT_TIER, Cont, (PhoneQuest,), Same, ToonHQ, 100, NA, TTLocalizer.QuestDialogDict[175]),    
     400: (TT_TIER + 1, Cont, (TrackChoiceQuest,), Same, Same, 400, NA, TTLocalizer.QuestDialogDict[400]),
     1001: (TT_TIER + 2, Start, (CogQuest, ToontownGlobals.ToontownCentral, 3, Any), Any, ToonHQ, Any, NA, DefaultDialog),
     1002: (TT_TIER + 2, Start, (CogQuest, ToontownGlobals.ToontownCentral, 4, Any), Any, ToonHQ, Any, NA, DefaultDialog),
@@ -2266,10 +2273,10 @@ QuestDict = {
     2156: (DD_TIER + 1, Start, (BuildingQuest, Anywhere, 1, 's', 1), Any, ToonHQ, Any, NA, DefaultDialog),
     2157: (DD_TIER + 1, Start, (BuildingQuest, Anywhere, 1, 'c', 1), Any, ToonHQ, Any, NA, DefaultDialog),
     2158: (DD_TIER + 1, Start, (BuildingQuest, Anywhere, 1, 'l', 1), Any, ToonHQ, Any, NA, DefaultDialog),
-    2159: (DD_TIER + 1, Start, (DeliverGagQuest, 2, ToontownBattleGlobals.THROW_TRACK, 1), Any, Any, Any, NA, DefaultDialog),
-    2160: (DD_TIER + 1, Start, (DeliverGagQuest, 1, ToontownBattleGlobals.SQUIRT_TRACK, 1), Any, Any, Any, NA, DefaultDialog),
-    2161: (DD_TIER + 1, Start, (DeliverGagQuest, 1, ToontownBattleGlobals.SQUIRT_TRACK, 2), Any, Any, Any, NA, DefaultDialog),
-    2162: (DD_TIER + 1, Start, (DeliverGagQuest, 2, ToontownBattleGlobals.THROW_TRACK, 2), Any, Any, Any, NA, DefaultDialog),
+    2159: (DD_TIER + 1, Start, (DeliverGagQuest, 2, 1, 1), Any, Any, Any, NA, DefaultDialog),
+    2160: (DD_TIER + 1, Start, (DeliverGagQuest, 1, 2, 1), Any, Any, Any, NA, DefaultDialog),
+    2161: (DD_TIER + 1, Start, (DeliverGagQuest, 1, 2, 2), Any, Any, Any, NA, DefaultDialog),
+    2162: (DD_TIER + 1, Start, (DeliverGagQuest, 2, 1, 2), Any, Any, Any, NA, DefaultDialog),
     2201: (DD_TIER + 1, Start, (VisitQuest,), Any, 1101, NA, 2202, TTLocalizer.QuestDialogDict[2201]),
     2202: (DD_TIER + 1, Start, (RecoverItemQuest, Anywhere, 1, 2001, Medium, 'pp'), 1101, Same, 101, NA, TTLocalizer.QuestDialogDict[2202]),
     2203: (DD_TIER + 1, Start, (VisitQuest,), Any, 1102, NA, 2204, TTLocalizer.QuestDialogDict[2203]),
@@ -2313,7 +2320,7 @@ QuestDict = {
     2903: (DD_TIER + 2, Cont, (DeliverItemQuest, 2009), Same, 1106, NA, 2904, TTLocalizer.QuestDialogDict[2903]),
     2904: (DD_TIER + 2, Cont, (DeliverItemQuest, 2010), Same, 1203, NA, 2905, TTLocalizer.QuestDialogDict[2904]),
     2905: (DD_TIER + 2, Cont, (VisitQuest, 2009), Same, 1105, NA, 2906, TTLocalizer.QuestDialogDict[2905]),
-    2906: (DD_TIER + 2, Cont, (DeliverGagQuest, 3, ToontownBattleGlobals.SQUIRT_TRACK, 2), Same, Same, NA, 2907, TTLocalizer.QuestDialogDict[2906]),
+    2906: (DD_TIER + 2, Cont, (DeliverGagQuest, 3, 2, 2), Same, Same, NA, 2907, TTLocalizer.QuestDialogDict[2906]),
     2907: (DD_TIER + 2, Cont, (DeliverItemQuest, 2011), Same, 1203, NA, (2910, 2915, 2920), TTLocalizer.QuestDialogDict[2907]),
     2910: (DD_TIER + 2, Cont, (VisitQuest,), Same, 1107, NA, 2911, TTLocalizer.QuestDialog_2910),
     2911: (DD_TIER + 2, Cont, (CogTrackQuest, ToontownGlobals.DonaldsDock, 4, 'm'), Same, Same, NA, 2925, TTLocalizer.QuestDialogDict[2911]),
@@ -2391,7 +2398,7 @@ QuestDict = {
     3208: (DG_TIER, OBSOLETE, (CogQuest, ToontownGlobals.DaisyGardens, 10, 'cc'), Any, ToonHQ, NA, 3209, TTLocalizer.QuestDialogDict[3208]),
     3209: (DG_TIER, OBSOLETE, (CogQuest, ToontownGlobals.DaisyGardens, 10, 'tm'), Same, Same, 202, NA, TTLocalizer.QuestDialogDict[3209]),
     3247: (DG_TIER, OBSOLETE, (CogQuest, ToontownGlobals.DaisyGardens, 20, 'b'), Any, ToonHQ, 202, NA, TTLocalizer.QuestDialogDict[3247]),
-    3210: (DG_TIER, Start, (DeliverGagQuest, 10, ToontownBattleGlobals.SQUIRT_TRACK, 0), Any, 5207, NA, 3211, TTLocalizer.QuestDialogDict[3210]),
+    3210: (DG_TIER, Start, (DeliverGagQuest, 10, 0, 0), Any, 5207, NA, 3211, TTLocalizer.QuestDialogDict[3210]),
     3211: (DG_TIER, Cont, (CogQuest, 5200, 20, Any), Same, Same, 100, NA, TTLocalizer.QuestDialogDict[3211]),
     3212: (DG_TIER, OBSOLETE, (VisitQuest,), Any, 5208, NA, 3213, TTLocalizer.QuestDialogDict[3212]),
     3213: (DG_TIER, OBSOLETE, (RecoverItemQuest, ToontownGlobals.DaisyGardens, 1, 5005, VeryHard, Any), 5208, Same, NA, 3214, TTLocalizer.QuestDialogDict[3213]),
@@ -3721,6 +3728,16 @@ def transformReward(baseRewardId, av):
 
 
 def chooseBestQuests(tier, currentNpc, av):
+    if currentNpc.tutorial and (currentNpc.npcId == 20000):
+        if 50 in av.getQuestHistory():
+            if 51 in av.getQuestHistory():
+                if av.getTrackAccess() == [1, 1, 0, 0, 0, 0, 0] or av.getTrackAccess() == [1, 0, 1, 0, 0, 0, 0]:
+                    return [[52, 0, 20000]]
+                pass
+            else:
+                return [[51, 0, 20000]]
+        else:
+            return [[50, 0, 20000]]
     if isLoopingFinalTier(tier):
         rewardHistory = map(lambda questDesc: questDesc[3], av.quests)
     else:
@@ -3728,7 +3745,6 @@ def chooseBestQuests(tier, currentNpc, av):
 
     seedRandomGen(currentNpc.getNpcId(), av.getDoId(), tier, rewardHistory)
     numChoices = getNumChoices(tier)
-    print 'numChoices:'+str(numChoices)
     rewards = getNextRewards(numChoices, tier, av)
     if not rewards:
         return []
@@ -3798,7 +3814,9 @@ def getQuestClass(id):
 
 
 def getVisitSCStrings(npcId):
-    if npcId == ToonHQ:
+    if npcId == TutorialTom:
+        strings = [TTLocalizer.QuestsRecoverItemQuestTutorialSCString, TTLocalizer.QuestsRecoverItemQuestGoToTutorialSCString]
+    elif npcId == ToonHQ:
         strings = [TTLocalizer.QuestsRecoverItemQuestSeeHQSCString, TTLocalizer.QuestsRecoverItemQuestGoToHQSCString]
     elif npcId == ToonTailor:
         strings = [TTLocalizer.QuestsTailorQuestSCString]
@@ -3820,13 +3838,32 @@ def getFinishToonTaskSCStrings(npcId):
 
 
 def chooseQuestDialog(id, status):
-    questDialog = getQuestDialog(id).get(status)
-    if questDialog == None:
+    if id == 2906:
+        quest = getQuest(id)
+        trackId = base.localAvatar.getSecondTrackPicked()
         if status == QUEST:
-            quest = getQuest(id)
-            questDialog = quest.getDefaultQuestDialog()
+            questDialog = TTLocalizer.QuestDialogDict[2906].get(status)[trackId]
         else:
-            questDialog = DefaultDialog[status]
+            questDialog = getQuestDialog(id).get(status)
+            if questDialog == None:
+                questDialog = DefaultDialog[status]         
+    elif id == 4208:
+        quest = getQuest(id)
+        gag = base.localAvatar.getFirstTrackPicked()
+        if status == QUEST:
+            questDialog = TTLocalizer.QuestDialogDict[4208].get(status) % BattleGlobalAvPropStringsSingular[gag][4]
+        else:
+            questDialog = getQuestDialog(id).get(status)
+            if questDialog == None:
+                questDialog = DefaultDialog[status]
+    else:    
+        questDialog = getQuestDialog(id).get(status)
+        if questDialog == None:
+            if status == QUEST:
+                quest = getQuest(id)
+                questDialog = quest.getDefaultQuestDialog()
+            else:
+                questDialog = DefaultDialog[status]
     if type(questDialog) == type(()):
         return random.choice(questDialog)
     else:
@@ -3895,7 +3932,12 @@ def fillInQuestNames(text, avName = None, fromNpcId = None, toNpcId = None):
     if avName != None:
         text = text.replace('_avName_', avName)
     if toNpcId:
-        if toNpcId == ToonHQ:
+        if toNpcId == TutorialTom:
+            toNpcName = 'Tutorial Tom'
+            where = 'Toontorial'
+            buildingName = ''
+            streetDesc = ''
+        elif toNpcId == ToonHQ:
             toNpcName = TTLocalizer.QuestsHQOfficerFillin
             where = TTLocalizer.QuestsHQWhereFillin
             buildingName = TTLocalizer.QuestsHQBuildingNameFillin
@@ -4375,9 +4417,7 @@ def getNextRewards(numChoices, tier, av):
                 rewardTier.remove(genericRewardId)
 
     if numChoices == 0:
-        print 'numChoices is 0'
         if len(rewardTier) == 0:
-            print 'rewardTier has length of 0'
             return []
         else:
             return [rewardTier[0]]
@@ -4410,8 +4450,8 @@ def getNextRewards(numChoices, tier, av):
 
 
 RewardDict = {
-    50: (TrackCompleteReward, None),
-    51: (TrackCompleteReward, None),
+    50: (TrackTrainingReward, None),
+    51: (TrackTrainingReward, None),
     100: (MaxHpReward, 1),
     101: (MaxHpReward, 2),
     102: (MaxHpReward, 3),
@@ -4715,43 +4755,43 @@ def getRewardIdFromTrackId(trackId):
 RequiredRewardTrackDict = {
     TT_TIER: (100,),
     TT_TIER + 1: (400,),
-    TT_TIER + 2: (801, 200, 802, 803, 804, 805, 102, 806, 807, 100, 808, 809, 101, 810, 811, 500, 812, 813, 814, 815, 300),
+    TT_TIER + 2: (801, 200, 802, 803, 804, 805, 102, 806, 807, 808, 809, 810, 811, 500, 812, 813, 814, 815, 300),
     TT_TIER + 3: (900,),
     DD_TIER: (400,),
-    DD_TIER + 1: (100, 801, 802, 201, 803, 804, 101, 805, 806, 102, 807, 808, 100, 809, 810, 101, 811, 812, 813, 814, 815, 301),
+    DD_TIER + 1: (801, 802, 201, 803, 804, 101, 805, 806, 102, 807, 808, 809, 810, 811, 812, 813, 814, 815, 301),
     DD_TIER + 2: (900,),
-    DG_TIER: (100, 202, 101, 102, 100, 101, 501, 302),
+    DG_TIER: (202, 501, 302),
     MM_TIER: (400,),
-    MM_TIER + 1: (100, 801, 802, 203, 803, 804, 101, 805, 806, 102, 807, 808, 100, 809, 810, 101, 811, 812, 813, 814, 815, 303),
+    MM_TIER + 1: (801, 802, 203, 803, 804, 805, 806, 102, 807, 808, 809, 810, 811, 812, 813, 814, 815, 303),
     MM_TIER + 2: (900,),
     BR_TIER: (400,),
-    BR_TIER + 1: (100, 801, 802, 803, 804, 101, 805, 806, 502, 807, 808, 102, 809, 810, 204, 811, 812, 100, 813, 814, 101, 815, 304),
+    BR_TIER + 1: (801, 802, 803, 804, 805, 806, 502, 807, 808, 809, 810, 204, 811, 812, 100, 813, 814, 815, 304),
     BR_TIER + 2: (900,),
-    DL_TIER: (100, 205, 101, 102, 103, 305),
-    DL_TIER + 1: (100, 206, 101, 102, 103),
-    DL_TIER + 2: (100, 101, 102, 103),
-    DL_TIER + 3: (100, 101, 102, 102, 207),
+    DL_TIER: (205, 305),
+    DL_TIER + 1: (206,),
+    DL_TIER + 2: (),
+    DL_TIER + 3: (),
     ELDER_TIER: () }
 
 OptionalRewardTrackDict = {
     TT_TIER: (),
     TT_TIER + 1: (),
-    TT_TIER + 2: (1000, 601, 601, 602, 602, 2205, 2206, 2205, 2206, 3001, 3001, 3001, 3001, 3005, 3005, 3005, 3005, 3009, 3009, 3009, 3009),
-    TT_TIER + 3: (601, 601, 602, 602, 2205, 2206, 2205, 2206, 3002, 3001, 3001, 3001, 3006, 3005, 3005, 3005, 3010, 3009, 3009, 3009),
-    DD_TIER: (1000, 602, 602, 603, 603, 2101, 2102, 2105, 2106, 3002, 3002, 3002, 3001, 3006, 3006, 3006, 3005, 3010, 3010, 3010, 3009),
-    DD_TIER + 1: (1000, 602, 602, 603, 603, 2101, 2102, 2105, 2106, 3002, 3002, 3002, 3001, 3006, 3006, 3006, 3005, 3010, 3010, 3010, 3009),
-    DD_TIER + 2: (1000, 602, 602, 603, 603, 2101, 2102, 2105, 2106, 3002, 3002, 3002, 3002, 3006, 3006, 3006, 3006, 3010, 3010, 3010, 3010),
-    DG_TIER: (1000, 603, 603, 604, 604, 2501, 2502, 2503, 2504, 2505, 2506, 3002, 3002, 3002, 3002, 3006, 3006, 3006, 3006, 3010, 3010, 3010, 3010),
-    MM_TIER: (1000, 604, 604, 605, 605, 2403, 2404, 2405, 2406, 2407, 2408, 2409, 3002, 3002, 3002, 3002, 3006, 3006, 3006, 3006, 3010, 3010, 3010, 3010),
-    MM_TIER + 1: (1000, 604, 604, 605, 605, 2403, 2404, 2405, 2406, 2407, 2408, 2409, 3003, 3003, 3002, 3002, 3007, 3007, 3007, 3006, 3011, 3011, 3011, 3010),
-    MM_TIER + 2: (1000, 604, 604, 605, 605, 2403, 2404, 2405, 2406, 2407, 2408, 2409, 3003, 3003, 3002, 3002, 3007, 3007, 3007, 3006, 3011, 3011, 3011, 3010),
-    BR_TIER: (1000, 606, 606, 606, 606, 606, 607, 607, 607, 607, 607, 2305, 2306, 2307, 2308, 2309, 2310, 2311, 3003, 3003, 3003, 3003, 3007, 3007, 3007, 3007, 3011, 3011, 3011, 3011),
-    BR_TIER + 1: (1000, 606, 606, 606, 606, 606, 607, 607, 607, 607, 607, 2305, 2306, 2307, 2308, 2309, 2310, 2311, 3003, 3003, 3003, 3003, 3007, 3007, 3007, 3007, 3011, 3011, 3011, 3011),
-    BR_TIER + 2: (1000, 606, 606, 606, 606, 606, 607, 607, 607, 607, 607, 2305, 2306, 2307, 2308, 2309, 2310, 2311, 3003, 3003, 3003, 3003, 3007, 3007, 3007, 3007, 3011, 3011, 3011, 3011),
-    DL_TIER: (607, 607, 607, 607, 608, 608, 608, 608, 2901, 2902, 2907, 2908, 2909, 2910, 2911, 3003, 3003, 3004, 3004, 3007, 3007, 3008, 3008, 3011, 3011, 3012, 3012),
-    DL_TIER + 1: (1000, 607, 607, 607, 607, 608, 608, 608, 608, 2923, 2924, 2927, 2928, 2929, 2930, 2931, 3003, 3003, 3004, 3004, 3007, 3007, 3008, 3008, 3011, 3011, 3012, 3012),
-    DL_TIER + 2: (608, 608, 608, 608, 609, 609, 609, 609, 2941, 2942, 2943, 2944, 2947, 2948, 2949, 2950, 2951, 3004, 3004, 3004, 3004, 3008, 3008, 3008, 3008, 3012, 3012, 3012, 3012),
-    DL_TIER + 3: (1000, 609, 609, 609, 609, 609, 609, 2961, 2962, 2963, 2964, 2965, 2966, 2967, 2968, 2969, 2970, 2971, 3004, 3004, 3004, 3004, 3008, 3008, 3008, 3008, 3012, 3012, 3012, 3012),
+    TT_TIER + 2: (100, 101, 102, 103, 104, 1000, 601, 601, 602, 602, 2205, 2206, 2205, 2206, 3001, 3001, 3001, 3001, 3005, 3005, 3005, 3005, 3009, 3009, 3009, 3009),
+    TT_TIER + 3: (100, 101, 102, 103, 104, 601, 601, 602, 602, 2205, 2206, 2205, 2206, 3002, 3001, 3001, 3001, 3006, 3005, 3005, 3005, 3010, 3009, 3009, 3009),
+    DD_TIER: (100, 101, 102, 103, 104, 1000, 602, 602, 603, 603, 2101, 2102, 2105, 2106, 3002, 3002, 3002, 3001, 3006, 3006, 3006, 3005, 3010, 3010, 3010, 3009),
+    DD_TIER + 1: (100, 101, 102, 103, 104, 1000, 602, 602, 603, 603, 2101, 2102, 2105, 2106, 3002, 3002, 3002, 3001, 3006, 3006, 3006, 3005, 3010, 3010, 3010, 3009),
+    DD_TIER + 2: (100, 101, 102, 103, 104, 1000, 602, 602, 603, 603, 2101, 2102, 2105, 2106, 3002, 3002, 3002, 3002, 3006, 3006, 3006, 3006, 3010, 3010, 3010, 3010),
+    DG_TIER: (100, 101, 102, 103, 104, 1000, 603, 603, 604, 604, 2501, 2502, 2503, 2504, 2505, 2506, 3002, 3002, 3002, 3002, 3006, 3006, 3006, 3006, 3010, 3010, 3010, 3010),
+    MM_TIER: (100, 101, 102, 103, 104, 1000, 604, 604, 605, 605, 2403, 2404, 2405, 2406, 2407, 2408, 2409, 3002, 3002, 3002, 3002, 3006, 3006, 3006, 3006, 3010, 3010, 3010, 3010),
+    MM_TIER + 1: (100, 101, 102, 103, 104, 1000, 604, 604, 605, 605, 2403, 2404, 2405, 2406, 2407, 2408, 2409, 3003, 3003, 3002, 3002, 3007, 3007, 3007, 3006, 3011, 3011, 3011, 3010),
+    MM_TIER + 2: (100, 101, 102, 103, 104, 1000, 604, 604, 605, 605, 2403, 2404, 2405, 2406, 2407, 2408, 2409, 3003, 3003, 3002, 3002, 3007, 3007, 3007, 3006, 3011, 3011, 3011, 3010),
+    BR_TIER: (100, 101, 102, 103, 104, 1000, 606, 606, 606, 606, 606, 607, 607, 607, 607, 607, 2305, 2306, 2307, 2308, 2309, 2310, 2311, 3003, 3003, 3003, 3003, 3007, 3007, 3007, 3007, 3011, 3011, 3011, 3011),
+    BR_TIER + 1: (100, 101, 102, 103, 104, 1000, 606, 606, 606, 606, 606, 607, 607, 607, 607, 607, 2305, 2306, 2307, 2308, 2309, 2310, 2311, 3003, 3003, 3003, 3003, 3007, 3007, 3007, 3007, 3011, 3011, 3011, 3011),
+    BR_TIER + 2: (100, 101, 102, 103, 104, 1000, 606, 606, 606, 606, 606, 607, 607, 607, 607, 607, 2305, 2306, 2307, 2308, 2309, 2310, 2311, 3003, 3003, 3003, 3003, 3007, 3007, 3007, 3007, 3011, 3011, 3011, 3011),
+    DL_TIER: (100, 101, 102, 103, 104, 607, 607, 607, 607, 608, 608, 608, 608, 2901, 2902, 2907, 2908, 2909, 2910, 2911, 3003, 3003, 3004, 3004, 3007, 3007, 3008, 3008, 3011, 3011, 3012, 3012),
+    DL_TIER + 1: (100, 101, 102, 103, 104, 1000, 607, 607, 607, 607, 608, 608, 608, 608, 2923, 2924, 2927, 2928, 2929, 2930, 2931, 3003, 3003, 3004, 3004, 3007, 3007, 3008, 3008, 3011, 3011, 3012, 3012),
+    DL_TIER + 2: (100, 101, 102, 103, 104, 608, 608, 608, 608, 609, 609, 609, 609, 2941, 2942, 2943, 2944, 2947, 2948, 2949, 2950, 2951, 3004, 3004, 3004, 3004, 3008, 3008, 3008, 3008, 3012, 3012, 3012, 3012),
+    DL_TIER + 3: (100, 101, 102, 103, 104, 1000, 609, 609, 609, 609, 609, 609, 2961, 2962, 2963, 2964, 2965, 2966, 2967, 2968, 2969, 2970, 2971, 3004, 3004, 3004, 3004, 3008, 3008, 3008, 3008, 3012, 3012, 3012, 3012),
     ELDER_TIER: (1000, 1000, 610, 611, 612, 613, 614, 615, 616, 617, 618, 2961, 2962, 2963, 2964, 2965, 2966, 2967, 2968, 2969, 2970, 2971, 3004, 3004, 3004, 3008, 3008, 3008, 3012, 3012, 3012)
 }
 
@@ -4924,7 +4964,6 @@ def checkReward(questId, forked = 0):
 
 
 def assertAllQuestsValid():
-    print 'checking quests...'
     for questId in QuestDict.keys():
         try:
             quest = getQuest(questId)

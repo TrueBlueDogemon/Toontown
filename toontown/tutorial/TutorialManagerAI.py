@@ -42,13 +42,20 @@ class TutorialFSM(FSM):
     def exitIntroduction(self):
         self.building.insideDoor.setDoorLock(FADoorCodes.UNLOCKED)
 
-    def enterBattle(self):
-        self.suit = DistributedTutorialSuitAI(self.air)
-        self.suit.generateWithRequired(self.zones['street'])
+    def enterBattle(self, av):
+        if av:
+            if av.getTrackAccess() == [1, 1, 0, 0, 0, 0, 0] or av.getTrackAccess() == [1, 0, 1, 0, 0, 0, 0]:
+                self.suit = None
+                self.building.door.setDoorLock(FADoorCodes.TALK_TO_HQ)
+                self.hq.door0.setDoorLock(FADoorCodes.UNLOCKED)
+                self.hq.door1.setDoorLock(FADoorCodes.UNLOCKED)
+            else:
+                self.suit = DistributedTutorialSuitAI(self.air)
+                self.suit.generateWithRequired(self.zones['street'])
 
-        self.building.door.setDoorLock(FADoorCodes.DEFEAT_FLUNKY_TOM)
-        self.hq.door0.setDoorLock(FADoorCodes.DEFEAT_FLUNKY_HQ)
-        self.hq.door1.setDoorLock(FADoorCodes.DEFEAT_FLUNKY_HQ)
+                self.building.door.setDoorLock(FADoorCodes.DEFEAT_FLUNKY_TOM)
+                self.hq.door0.setDoorLock(FADoorCodes.DEFEAT_FLUNKY_HQ)
+                self.hq.door1.setDoorLock(FADoorCodes.DEFEAT_FLUNKY_HQ)
 
     def exitBattle(self):
         if self.suit:
@@ -125,6 +132,7 @@ class TutorialManagerAI(DistributedObjectAI):
             av.b_setQuests([[110, 1, 1000, 100, 1]])
             av.b_setQuestHistory([101])
             av.b_setRewardHistory(1, [])
+            av.b_setTrackAccess([0, 0, 0, 0, 1, 1, 0])
 
 
         # We must wait for the avatar to be generated:
@@ -171,6 +179,8 @@ class TutorialManagerAI(DistributedObjectAI):
 
         av.experience.zeroOutExp()
         av.d_setExperience(av.experience.makeNetString())
+        
+        av.b_setTrackAccess([0 for x in xrange(7)])
 
     def __handleUnexpectedExit(self, avId):
         fsm = self.avId2fsm.get(avId)

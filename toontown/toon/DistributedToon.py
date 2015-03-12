@@ -187,6 +187,8 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
         self.buffs = []
         self.houseType = 0
         self.canUseUnites = True
+        self.firstTrackPicked = 0
+        self.secondTrackPicked = 0
 
     def disable(self):
         for soundSequence in self.soundSequenceList:
@@ -2703,7 +2705,20 @@ class DistributedToon(DistributedPlayer.DistributedPlayer, Toon.Toon, Distribute
             'avId': -1
         }]
         base.cr.playGame.getPlace().fsm.forceTransition('teleportOut', requestStatus)
-
+        
+    def setFirstTrackPicked(self, trackId):
+        self.firstTrackPicked = trackId
+        
+    def getFirstTrackPicked(self):
+        return self.firstTrackPicked
+    
+    def setSecondTrackPicked(self, trackId):
+        self.secondTrackPicked = trackId
+        
+    def getSecondTrackPicked(self):
+        return self.secondTrackPicked
+    
+        
 
 @magicWord(category=CATEGORY_COMMUNITY_MANAGER)
 def globalTeleport():

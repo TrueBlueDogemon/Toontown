@@ -137,7 +137,7 @@ class DistributedNPCToon(DistributedNPCToonBase):
                 self.curQuestMovie.play()
                 return
             if isLocalToon:
-                self.setupCamera(mode)
+                self.setupCamera(mode)     
             greetingString = Quests.chooseQuestDialog(questId, Quests.GREETING)
             if greetingString:
                 fullString += greetingString + '\x07'

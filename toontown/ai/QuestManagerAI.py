@@ -245,9 +245,12 @@ class QuestManagerAI:
         self.avatarChoseQuest(avId, npc, quest[0], quest[1], 0)
 
         # Are we in the tutorial speaking to Tutorial Tom?
-        if avId in self.air.tutorialManager.avId2fsm:
-            if av.getRewardHistory()[0] == 0:
-                self.air.tutorialManager.avId2fsm[avId].demand('Battle')
+        if quest[0] not in (50, 51):
+            if avId in self.air.tutorialManager.avId2fsm:
+                if av.getRewardHistory()[0] == 0:
+                    #if av.getTrackAccess() == [1, 1, 0, 0, 0, 0, 0] or av.getTrackAccess() == [1, 0, 1, 0, 0, 0, 0]:
+                    #    self.air.tutorialManager.avId2fsm[avId].demand('Battle', 0)
+                    self.air.tutorialManager.avId2fsm[avId].demand('Battle', av)
 
     def toonRodeTrolleyFirstTime(self, av):
         # Toon played a minigame.

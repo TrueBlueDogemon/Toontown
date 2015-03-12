@@ -28,7 +28,6 @@ class DistributedNPCSpecialQuestGiverAI(DistributedNPCToonBaseAI):
 
     def avatarEnter(self):
         avId = self.air.getAvatarIdFromSender()
-        self.notify.debug('avatar enter ' + str(avId))
         self.air.questManager.requestInteract(avId, self)
         DistributedNPCToonBaseAI.avatarEnter(self)
 
@@ -80,7 +79,13 @@ class DistributedNPCSpecialQuestGiverAI(DistributedNPCToonBaseAI):
             if trackId == track:
                 self.air.questManager.avatarChoseTrack(avId, self, self.pendingTrackQuest, trackId)
                 av = self.air.doId2do.get(avId)
+                if av.getTrackAccess() == [0 for x in xrange(7)]:
+                    av.b_setFirstTrackPicked(trackId)
+                else:
+                    av.b_setSecondTrackPicked(trackId)
                 av.addTrackAccess(trackId)
+                av.inventory.addItems(trackId, 0, 2)
+                av.d_setInventory(av.inventory.makeNetString())
                 self.pendingAvId = None
                 self.pendingTracks = None
                 self.pendingTrackQuest = None
