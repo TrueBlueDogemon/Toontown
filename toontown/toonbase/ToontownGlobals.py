@@ -624,7 +624,7 @@ BossCogAttackTimes = {BossCogElectricFence: 0,
  BossCogGolfAreaAttack: 7,
  BossCogGearDirectedAttack: 4.84,
  BossCogOvertimeAttack: 5}
-BossCogDamageLevels = {BossCogElectricFence: 7,
+BossCogDamageLevels = {BossCogElectricFence: 1,
  BossCogSwatLeft: 5,
  BossCogSwatRight: 5,
  BossCogAreaAttack: 10,

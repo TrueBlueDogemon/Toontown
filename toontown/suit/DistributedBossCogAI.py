@@ -557,6 +557,8 @@ class DistributedBossCogAI(DistributedAvatarAI.DistributedAvatarAI):
             if damage == None:
                 self.notify.warning('No damage listed for attack code %s' % attackCode)
                 damage = 5
+            if self.attackCode == ToontownGlobals.BossCogDizzyNow:
+                damage = 7
             damage *= self.getDamageMultiplier()
             self.damageToon(toon, damage)
             currState = self.getCurrentOrNextState()
