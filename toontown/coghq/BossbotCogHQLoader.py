@@ -120,7 +120,6 @@ class BossbotCogHQLoader(CogHQLoader.CogHQLoader):
     def exitCogHQBossBattle(self):
         self.notify.debug('BossbotCogHQLoader.exitCogHQBossBattle')
         CogHQLoader.CogHQLoader.exitCogHQBossBattle(self)
-        base.cr.forbidCheesyEffects(0)
 
     def enterCountryClubInterior(self, requestStatus):
         self.placeClass = CountryClubInterior.CountryClubInterior

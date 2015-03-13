@@ -83,7 +83,6 @@ class StageInterior(BattlePlace.BattlePlace):
         base.transitions.fadeOut(t=0)
         self._telemLimiter = TLGatherAllAvs('StageInterior', RotationLimitToH)
         base.localAvatar.inventory.setRespectInvasions(0)
-        base.cr.forbidCheesyEffects(1)
 
         def commence(self = self):
             NametagGlobals.setWant2dNametags(True)

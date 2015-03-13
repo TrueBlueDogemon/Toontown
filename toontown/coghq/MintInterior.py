@@ -80,7 +80,6 @@ class MintInterior(BattlePlace.BattlePlace):
         self.fsm.enterInitialState()
         base.transitions.fadeOut(t=0)
         base.localAvatar.inventory.setRespectInvasions(0)
-        base.cr.forbidCheesyEffects(1)
         self._telemLimiter = TLGatherAllAvs('MintInterior', RotationLimitToH)
 
         def commence(self = self):
