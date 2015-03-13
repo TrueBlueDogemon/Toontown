@@ -109,7 +109,6 @@ class StageInterior(BattlePlace.BattlePlace):
         self._telemLimiter.destroy()
         del self._telemLimiter
         bboard.remove(DistributedStage.DistributedStage.ReadyPost)
-        base.cr.forbidCheesyEffects(0)
         base.localAvatar.inventory.setRespectInvasions(1)
         self.fsm.requestFinalState()
         self.loader.music.stop()

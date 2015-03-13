@@ -107,7 +107,6 @@ class MintInterior(BattlePlace.BattlePlace):
         bboard.remove(DistributedMint.DistributedMint.ReadyPost)
         self._telemLimiter.destroy()
         del self._telemLimiter
-        base.cr.forbidCheesyEffects(0)
         base.localAvatar.inventory.setRespectInvasions(1)
         self.fsm.requestFinalState()
         self.loader.music.stop()

@@ -112,4 +112,3 @@ class LawbotCogHQLoader(CogHQLoader.CogHQLoader):
     def exitCogHQBossBattle(self):
         self.notify.debug('LawbotCogHQLoader.exitCogHQBossBattle')
         CogHQLoader.CogHQLoader.exitCogHQBossBattle(self)
-        base.cr.forbidCheesyEffects(0)
