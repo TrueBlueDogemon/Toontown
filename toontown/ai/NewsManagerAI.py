@@ -13,18 +13,22 @@ class NewsManagerAI(DistributedObjectAI):
     def __handleAvatarEntered(self, avatar):
         if self.air.suitInvasionManager.getInvading():
             self.air.suitInvasionManager.notifyInvasionBulletin(avatar.getDoId())
+        self.holidayNotify()    
 
     def setPopulation(self, todo0):
         pass
 
-    def setBingoWin(self, todo0):
+    def setBingoWin(self, zoneId):
         pass
+        #self.sendUpdate('setBingoWin', zoneId)
 
     def setBingoStart(self):
         pass
+        #self.sendUpdateToAvatarId('setBingoStart')
 
     def setBingoEnd(self):
         pass
+        #self.sendUpdate('setBingoEnd')
 
     def setCircuitRaceStart(self):
         pass
@@ -34,9 +38,11 @@ class NewsManagerAI(DistributedObjectAI):
 
     def setTrolleyHolidayStart(self):
         pass
+        #self.sendUpdate('setTrolleyHolidayStart')
 
     def setTrolleyHolidayEnd(self):
         pass
+        #self.sendUpdate('SetTrolleyHolidayEnd')
 
     def setTrolleyWeekendStart(self):
         pass
@@ -50,20 +56,20 @@ class NewsManagerAI(DistributedObjectAI):
     def setRoamingTrialerWeekendEnd(self):
         pass
 
-    def setInvasionStatus(self, msgType, cogType, numRemaining, skeleton):
-        self.sendUpdate('setInvasionStatus', args=[msgType, cogType, numRemaining, skeleton])
+    def setInvasionStatus(self, msgType, cogType, numRemaining, flags):
+        self.sendUpdate('setInvasionStatus', args=[msgType, cogType, numRemaining, flags])
 
     def setHolidayIdList(self, holidays):
         self.sendUpdate('setHolidayIdList', holidays)
 
     def holidayNotify(self):
-        pass
+        self.sendUpdate('holidayNotify')
 
     def setWeeklyCalendarHolidays(self, todo0):
         pass
 
     def getWeeklyCalendarHolidays(self):
-        return []
+        return [(19, 0)]
 
     def setYearlyCalendarHolidays(self, todo0):
         pass
