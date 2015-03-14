@@ -102,6 +102,8 @@ class QuestPoster(DirectFrame):
         self.funQuest.hide()
         bookModel.removeNode()
         self.laffMeter = None
+        self.filmstrip = None
+        self.question = None
         return
 
     def destroy(self):
@@ -114,6 +116,11 @@ class QuestPoster(DirectFrame):
             if geom:
                 if hasattr(geom, 'delete'):
                     geom.delete()
+                elif hasattr(geom, 'destroy'):
+                    geom.destroy()
+        if self.question:
+            self.question.destroy()
+            self.question = None
 
     def mouseEnterPoster(self, event):
         self.reparentTo(self.getParent())
@@ -401,19 +408,13 @@ class QuestPoster(DirectFrame):
                 infoText = TTLocalizer.QuestPageDestination % (toNpcBuildingName, toNpcStreetName, toNpcLocationName)
         elif quest.getType() == Quests.TrackChoiceQuest:
             frameBgColor = 'green'
-            invModel = loader.loadModel('phase_3.5/models/gui/inventory_icons')
-            track1, track2 = quest.getChoices()
-            lIconGeom = invModel.find('**/' + AvPropsNew[track1][1])
-            if not fComplete:
-                auxText = TTLocalizer.QuestPosterAuxOr
-                lPos.setX(-0.18)
-                rIconGeom = invModel.find('**/' + AvPropsNew[track2][1])
-                infoText = TTLocalizer.QuestPageNameAndDestination % (toNpcName,
-                 toNpcBuildingName,
-                 toNpcStreetName,
-                 toNpcLocationName)
-                infoZ = -0.02
-            invModel.removeNode()
+            filmstrip = loader.loadModel('phase_3.5/models/gui/filmstrip')
+            lIconGeom = DirectFrame(parent=self, relief=None, image=filmstrip, image_scale=.5)
+            self.question = DirectLabel(parent=lIconGeom, relief=None, pos=(0, 0, 0), text='?', text_scale=0.2, text_pos=(0, -0.04), text_fg=(0.72, 0.72, 0.72, 1))
+            lIconGeom['image_color'] = Vec4(0.7, 0.7, 0.7, 1)
+            self.question['text_fg'] = Vec4(0.6, 0.6, 0.6, 1)
+            rIconGeom = None
+            filmstrip.removeNode()
         elif quest.getType() == Quests.BuildingQuest:
             frameBgColor = 'blue'
             track = quest.getBuildingTrack()
@@ -891,14 +892,18 @@ class QuestPoster(DirectFrame):
         self['image_color'] = imageColor
         self.headline['text_fg'] = textColor
         self.headline['text'] = headlineString
-        self.lPictureFrame.show()
-        self.lPictureFrame.setPos(lPos)
-        self.lPictureFrame['text_scale'] = TEXT_SCALE
-        if lPos[0] != 0:
-            self.lPictureFrame['text_scale'] = 0.0325
-        self.lPictureFrame['text'] = captions[0]
-        self.lPictureFrame['image_color'] = Vec4(*self.colors[frameBgColor])
-        if len(captions) > 1:
+        if quest.getType() != Quests.TrackChoiceQuest:
+            self.lPictureFrame.show()
+            self.lPictureFrame.setPos(lPos)
+            self.lPictureFrame['text_scale'] = TEXT_SCALE
+            if lPos[0] != 0:
+                self.lPictureFrame['text_scale'] = 0.0325
+            self.lPictureFrame['text'] = captions[0]
+            self.lPictureFrame['image_color'] = Vec4(*self.colors[frameBgColor])
+        else:
+            self.lPictureFrame['text'] = 'Track Choice'
+            self.lPictureFrame['image_color'] = Vec4(*self.colors[frameBgColor])
+        if len(captions) > 1 and quest.getType() != Quests.TrackChoiceQuest:
             self.rPictureFrame.show()
             self.rPictureFrame['text'] = captions[1]
             self.rPictureFrame['text_scale'] = 0.0325

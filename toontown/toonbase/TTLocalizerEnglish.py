@@ -363,6 +363,8 @@ QuestsVisitQuestStringLong = 'Visit _toNpcName_'
 QuestsVisitQuestSeeSCString = 'I need to see %s.'
 QuestsRecoverItemQuestProgress = '%(progress)s of %(numItems)s recovered'
 QuestsRecoverItemQuestHeadline = 'RECOVER'
+QuestsRecoverItemQuestTutorialSCString = 'I need to see Tutorial Tom'
+QuestsRecoverItemQuestGoToTutorialSCString = 'I need to go to the Toontorial.'
 QuestsRecoverItemQuestSeeHQSCString = 'I need to see an ' + lHQOfficerM + '.'
 QuestsRecoverItemQuestReturnToHQSCString = 'I need to return %s to an ' + lHQOfficerM + '.'
 QuestsRecoverItemQuestReturnToSCString = 'I need to return %(item)s to %(npcName)s.'
@@ -375,9 +377,9 @@ QuestsRecoverItemQuestRecoverFromSCString = 'I need to recover %(item)s from %(h
 QuestsRecoverItemQuestString = 'Recover %(item)s from %(holder)s'
 QuestsRecoverItemQuestHolderString = '%(level)s %(holder)d+ %(cogs)s'
 QuestsTrackChoiceQuestHeadline = 'CHOOSE'
-QuestsTrackChoiceQuestSCString = 'I need to choose between %(trackA)s and %(trackB)s.'
+QuestsTrackChoiceQuestSCString = 'I need to choose between %s'
 QuestsTrackChoiceQuestMaybeSCString = 'Maybe I should choose %s.'
-QuestsTrackChoiceQuestString = 'Choose between %(trackA)s and %(trackB)s'
+QuestsTrackChoiceQuestString = 'Choose between %s'
 QuestsFriendQuestHeadline = 'FRIEND'
 QuestsFriendQuestSCString = 'I need to make a friend.'
 QuestsFriendQuestString = 'Make a friend'
@@ -587,7 +589,26 @@ TheBrrrghTrackQuestDict = {GREETING: '',
  LEAVING: 'Good luck.  Return to me when you have mastered your new skill.'}
 QuestDialog_3225 = {QUEST: "Oh, thanks for coming, _avName_!\x07The Cogs in the neighborhood frightened away my delivery person.\x07I don't have anyone to deliver this salad to _toNpcName_!\x07Can you do it for me? Thanks so much!_where_"}
 QuestDialog_2910 = {QUEST: 'Back so soon?\x07Great job on the spring.\x07The final item is a counter weight.\x07Stop by and see _toNpcName_ and bring back whatever you can get._where_'}
-QuestDialogDict = {160: {GREETING: '',
+QuestDialogDict = {
+ 50: {GREETING: 'Hello there!',
+       QUEST: "Please choose the first gag track you wish to have.\x07Choose wisely...",
+       INCOMPLETE_PROGRESS: QuestsDefaultIncompleteProgress,
+       INCOMPLETE_WRONG_NPC: QuestsDefaultIncompleteWrongNPC,
+       COMPLETE: QuestsDefaultComplete,
+       LEAVING: QuestsDefaultLeaving},
+ 51: {GREETING: 'Hmm...',
+       QUEST: "Now please choose the second gag track you wish to have so we can get started with your first task.\x07Choose wisely...",
+       INCOMPLETE_PROGRESS: QuestsDefaultIncompleteProgress,
+       INCOMPLETE_WRONG_NPC: QuestsDefaultIncompleteWrongNPC,
+       COMPLETE: QuestsDefaultComplete,
+       LEAVING: QuestsDefaultLeaving},
+ 52: {GREETING: 'Interesting....',
+       QUEST: "It seems you decided to take a more defensive approach with your gag track choices...\x07I'll take care of the flunky outside this time, please report to the playground and go on the trolley.",
+       INCOMPLETE_PROGRESS: QuestsDefaultIncompleteProgress,
+       INCOMPLETE_WRONG_NPC: QuestsDefaultIncompleteWrongNPC,
+       COMPLETE: QuestsDefaultComplete,
+       LEAVING: QuestsDefaultLeaving},
+ 160: {GREETING: '',
        QUEST: "Ok, now I think you are ready for something more rewarding.\x07If you can defeat 3 Bossbots I'll give you a little bonus.",
        INCOMPLETE_PROGRESS: TheCogs + ' are out in the streets, through the tunnels.',
        INCOMPLETE_WRONG_NPC: 'Good job defeating those Cogs. Now go to the Toon Headquarters for your next step!',
@@ -808,7 +829,13 @@ QuestDialogDict = {160: {GREETING: '',
         LEAVING: 'Thanks!'},
  2904: {QUEST: 'You must be the one that Claggart sent over.\x07I think I can clean that up in short order.\x07Just a minute...\x07There you are. Good as new!\x07Tell Ahab I said hello._where_'},
  2905: {QUEST: "Ah, now this is exactly what I was looking for.\x07While you're here, I'm also going to need a very large clock spring.\x07Take a walk over to Hook's place and see if he has one._where_"},
- 2906: {QUEST: "A large spring, eh?\x07I'm sorry but the largest spring I have is still quite small.\x07Perhaps I could assemble one out of squirt gun trigger springs.\x07Bring me three of these gags and I'll see what I can do."},
+ 2906: {QUEST: ["A large spring, eh?\x07I'm sorry but the largest spring I have is still quite small.\x07Perhaps I could assemble one out of the springs in a lipstick.\x07Bring me three of these gags and I'll see what I can do.",
+                "A large spring, eh?\x07That's one of my high-end products, but we can make a deal since it's for Ahab.\x07I need marbles for the eyes of a cheshire cat cuckoo clock I'm making.\x07Bring me three of these gags and the spring is yours.",
+                "A large spring, eh?\x07That's one of my high-end products, but I can give you a bargain since it's for Ahab.\x07Bring me fifteen dollars and the spring is yours.",
+                "A large spring, eh?\x07I'm sorry but the largest spring I have is still quite small.\x07Perhaps I could assemble one out of bugle valve springs.\x07Bring me three of these gags and I'll see what I can do.",
+                "A large spring, eh?\x07That's one of my high-end products, but we can make a deal since it's for Ahab.\x07I'm craving some cream pie at the moment. Bring me three slices and the spring is yours.",
+                "A large spring, eh?\x07I'm sorry but the largest spring I have is still quite small.\x07Perhaps I could assemble one out of squirt gun trigger springs.\x07Bring me three of these gags and I'll see what I can do.",
+                "A large spring, eh?\x07I'm sorry but the largest spring I have is still quite small.\x07Perhaps I could smith one from the iron of an anvil.\x07Bring me three of these gags and I'll see what I can do."]},
  2907: {QUEST: "Let's have a look then...\x07Smashing. Simply Smashing.\x07Sometimes I even surprise myself.\x07Here you go: one large spring for Ahab!_where_",
         LEAVING: 'Bon Voyage!'},
  2911: {QUEST: "I'd be happy to help the cause, _avName_.\x07But I'm afraid the streets are no longer safe.\x07Why don't you go take out some Cashbot Cogs and we'll talk.",
@@ -926,10 +953,10 @@ QuestDialogDict = {160: {GREETING: '',
  4206: {QUEST: "Hmmm, very interesting.\x07Now we are getting somewhere.\x07Ok, the last inventory is Fifi's._where_"},
  4207: {QUEST: "Inventory?\x07How can I do an inventory if I don't have the form?\x07Go see Cleff and see if he has one for me._where_",
         INCOMPLETE_PROGRESS: 'Any sign of that form yet?'},
- 4208: {QUEST: "Sure I got an inventory form, mon!\x07But dey ain't free, you know.\x07I'll tell you woht. I trade you for a whole cream pie.",
+ 4208: {QUEST: "Sure I got an inventory form, mon!\x07But dey ain't free, you know.\x07I'll tell you woht. I trade you for %s",
         GREETING: 'Hey, mon!',
         LEAVING: 'Cool runnings...',
-        INCOMPLETE_PROGRESS: "A slice won't do.\x07I be hungry, mon. I need de WHOLE pie."},
+        INCOMPLETE_PROGRESS: "This isn' woht I'm lookin for mon."},
  4209: {GREETING: '',
         QUEST: 'Mmmm...\x07Dem mighty nice!\x07Here be your form for Fifi._where_'},
  4210: {GREETING: '',
@@ -4912,8 +4939,8 @@ NPCForceAcknowledgeMessage7 = "Don't forget to make a friend!\n\n\n\n\n\n\nClick
 NPCForceAcknowledgeMessage8 = 'Great! You made a new friend!\n\n\n\n\n\n\n\n\nYou should go back at Toon Headquarters now.'
 NPCForceAcknowledgeMessage9 = 'Good job using the phone!\n\n\n\n\n\n\n\n\nReturn to Toon Headquarters to claim your reward.'
 ToonSleepString = '. . . ZZZ . . .'
-MovieTutorialReward1 = 'You received 1 Throw point! When you get 10, you will get a new gag!'
-MovieTutorialReward2 = 'You received 1 Squirt point! When you get 10, you will get a new gag!'
+MovieTutorialReward1 = 'You received 1 %s point! When you get 10, you will get a new gag!'
+MovieTutorialReward2 = 'You received 1 %s point! When you get 10, you will get a new gag!'
 MovieTutorialReward3 = 'Good job! You completed your first ToonTask!'
 MovieTutorialReward4 = 'Go to Toon Headquarters for your reward!'
 MovieTutorialReward5 = 'Have fun!'
