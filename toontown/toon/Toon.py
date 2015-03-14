@@ -2640,8 +2640,6 @@ class Toon(Avatar.Avatar, ToonHead):
             return self.__doToonScale(None, lerpTime)
         elif effect == ToontownGlobals.CETinyToon:
             return self.__doToonScale(None, lerpTime)
-        elif effect == ToontownGlobals.CEGiantToon:
-            return self.__doToonScale(None, lerpTime)
         elif effect == ToontownGlobals.CEFlatPortrait:
             return self.__doToonScale(None, lerpTime)
         elif effect == ToontownGlobals.CEFlatProfile:

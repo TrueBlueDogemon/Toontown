@@ -35,7 +35,7 @@ class DGHoodAI(HoodAI.HoodAI):
         if simbase.config.GetBool('want-butterflies', True):
             self.createButterflies()
         
-        if simbase.air.holidayManager.isHolidayRunning(ToontownGlobals.IDES_OF_MARCH)
+        if simbase.air.holidayManager.isHolidayRunning(ToontownGlobals.IDES_OF_MARCH):
             self.GreenToonEffectManager = DistributedGreenToonEffectMgrAI.DistributedGreenToonEffectMgrAI(self.air)
             self.GreenToonEffectManager.generateWithRequired(5819)
         
