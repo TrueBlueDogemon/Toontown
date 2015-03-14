@@ -21,10 +21,32 @@ from toontown.distributed import DelayDelete
 from toontown.toon import TTEmote
 from otp.avatar import Emote
 from toontown.nametag import NametagGlobals
+import MovieCameraScroll
 
 
 class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
     notify = DirectNotifyGlobal.directNotify.newCategory('DistributedBattleBase')
+    spinPos = Point3(0, -48.6, 16.5)
+    spinHpr = Vec3(0, -24, 0)
+
+    toonScrollPos = Point3(-13, 0, 3)
+    toonScrollHpr = Vec3(180, 0, 0)
+
+    suitScrollPos = Point3(-13, -6, 8)    
+    suitScrollHpr = Vec3(0, 0, 0)
+
+    suitForwardYScrollPos = Point3(0, -11, 8)    
+    suitForwardYScrollHpr = Vec3(0, 0, 0)
+
+    suitBackwardYScrollPos = Point3(0, -6, 8)    
+    suitBackwardYScrollHpr = Vec3(0, 0, 0)    
+
+    sideScrollPos = Point3(11, -3, 3)
+    sideScrollHpr = Vec3(80, 10, 0)
+
+    backSuitScrollPos = Point3(-13, 14, 7)
+    backSuitScrollHpr = Vec3(180, -20, 0)
+    
     camPos = ToontownBattleGlobals.BattleCamDefaultPos
     camHpr = ToontownBattleGlobals.BattleCamDefaultHpr
     camFov = ToontownBattleGlobals.BattleCamDefaultFov
@@ -80,6 +102,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.adjustFsm = ClassicFSM.ClassicFSM('Adjust', [State.State('Adjusting', self.enterAdjusting, self.exitAdjusting, ['NotAdjusting']), State.State('NotAdjusting', self.enterNotAdjusting, self.exitNotAdjusting, ['Adjusting'])], 'NotAdjusting', 'NotAdjusting')
         self.adjustFsm.enterInitialState()
         self.interactiveProp = None
+        self.lastCameraId = None        
 
     def uniqueBattleName(self, name):
         DistributedBattleBase.id += 1
@@ -933,6 +956,7 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
         self.runningToons.append(toon)
         self.toonGone = 1
         self.__stopTimer()
+        self.stopCameraScroll()        
         if self.localToonRunning():
             self.townBattle.setState('Off')
         runMTrack = MovieUtil.getToonTeleportOutInterval(toon)
@@ -1055,6 +1079,8 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             self.startTimer(ts)
         if self.needAdjustTownBattle == 1:
             self.__adjustTownBattle()
+        if base.wantActiveBattleCamera:    
+            self.startCameraScroll()
         return None
 
     def exitWaitForInput(self):
@@ -1064,6 +1090,8 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
             base.camLens.setMinFov(self.camFov/(4./3.))
             self.ignore(self.localToonBattleEvent)
             self.__stopTimer()
+        if base.wantActiveBattleCamera:    
+            self.stopCameraScroll()            
         return None
 
     def __handleLocalToonBattleEvent(self, response):
@@ -1504,3 +1532,66 @@ class DistributedBattleBase(DistributedNode.DistributedNode, BattleBase):
 
     def getCollisionName(self):
         return 'enter' + self.lockoutNodePath.getName()
+
+    def startCameraScroll(self):
+        self.notify.debug('startCameraScroll()') 
+        if self.hasLocalToon():
+            taskMgr.add(self.pickCamera, 'CamMgr')
+        
+    def pickCamera(self, task):
+        self.notify.debug('pickCamera()')
+        if MovieCameraScroll.CameraIsRunning == True:
+            return Task.cont
+        rng = random.randint(0, 6)
+        if rng == self.lastCameraId:#Don't repeat the same view.
+            return Task.cont
+        if rng == 0:
+            self.notify.warning('CamMgr chose SpinCam')
+            base.camera.setPosHpr(self.spinPos, self.spinHpr)
+            taskMgr.add(MovieCameraScroll.spinCameraTask, 'CamSpin')
+            self.lastCameraId = rng
+        elif rng == 1:
+            self.notify.warning('CamMgr chose SuitScrollCam')        
+            base.camera.setPosHpr(self.suitScrollPos, self.suitScrollHpr)
+            taskMgr.add(MovieCameraScroll.suitScrollCameraTask, 'CamSuitScroll')
+            self.lastCameraId = rng
+        elif rng == 2:
+            self.notify.warning('CamMgr chose ToonScrollCam')
+            base.camera.setPosHpr(self.toonScrollPos, self.toonScrollHpr)
+            taskMgr.add(MovieCameraScroll.toonScrollCameraTask, 'CamToonScroll')
+            self.lastCameraId = rng
+        elif rng == 3:
+            self.notify.warning('CamMgr chose SideScrollCam')
+            base.camera.setPosHpr(self.sideScrollPos, self.sideScrollHpr)
+            taskMgr.add(MovieCameraScroll.sideScrollCameraTask, 'SideCam')
+            self.lastCameraId = rng
+        elif rng == 4:
+            self.notify.warning('CamMgr chose BackSuitScrollCam')        
+            base.camera.setPosHpr(self.backSuitScrollPos, self.backSuitScrollHpr)
+            taskMgr.add(MovieCameraScroll.suitScrollCameraTask, 'CamSuitBackScroll')
+            self.lastCameraId = rng
+        elif rng == 5:
+            self.notify.warning('CamMgr chose ForwardSuit Y ScrollCam')
+            base.camera.setPosHpr(self.suitForwardYScrollPos, self.suitForwardYScrollHpr)
+            taskMgr.add(MovieCameraScroll.suitForwardYScrollCameraTask, 'CamSuitForwardYScroll')
+            self.lastCameraId = rng
+        else:
+            self.notify.warning('CamMgr chose BackwardSuit Y ScrollCam')
+            base.camera.setPosHpr(self.suitBackwardYScrollPos, self.suitBackwardYScrollHpr)
+            taskMgr.add(MovieCameraScroll.suitBackwardYScrollCameraTask, 'CamSuitBackwardYScroll')    
+            self.lastCameraId = rng
+        return Task.cont
+        
+    def stopCameraScroll(self):
+        self.notify.debug('stopCameraScroll()')
+        if self.hasLocalToon():
+            taskMgr.remove('CamMgr')
+            if MovieCameraScroll.CameraIsRunning == True:
+                taskMgr.remove('CamSpin')
+                taskMgr.remove('CamSuitScroll')
+                taskMgr.remove('CamToonScroll')
+                taskMgr.remove('SideCam')
+                taskMgr.remove('CamSuitBackScroll')
+                taskMgr.remove('CamSuitForwardYScroll')
+                taskMgr.remove('CamSuitBackwardYScroll')
+            MovieCameraScroll.CameraIsRunning = False    
