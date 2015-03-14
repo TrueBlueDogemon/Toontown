@@ -49,7 +49,7 @@ CEBigWhite = 13
 CESnowMan = 14
 CEGreenToon = 15
 CETinyToon = 16
-CEGiantToon = 17
+CEVirtual = 17
 CEGhost = 'g'
 CEName2Id = {
     'normal': CENormal,
@@ -69,7 +69,7 @@ CEName2Id = {
     'snowman': CESnowMan,
     'greentoon': CEGreenToon,
     'tinytoon': CETinyToon,
-    'gianttoon': CEGiantToon
+    'virtual': CEVirtual
 }
 GiantToonScale = 5
 BigToonScale = 1.5
