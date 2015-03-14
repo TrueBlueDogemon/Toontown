@@ -6,19 +6,17 @@ import SuitBuildingGlobals
 from otp.ai.AIBaseGlobal import *
 from toontown.suit import DistributedSuitAI
 from toontown.suit import SuitDNA
-from toontown.suit.SuitInvasionGlobals import IFSkelecog, IFWaiter, IFV2
 
 
 class SuitPlannerInteriorAI:
     notify = DirectNotifyGlobal.directNotify.newCategory('SuitPlannerInteriorAI')
 
-    def __init__(self, numFloors, bldgLevel, bldgTrack, zone, randomRevives=False):
+    def __init__(self, numFloors, bldgLevel, bldgTrack, zone):
         self.dbg_4SuitsPerFloor = config.GetBool('4-suits-per-floor', 0)
         self.dbg_1SuitPerFloor = config.GetBool('1-suit-per-floor', 0)
         self.zoneId = zone
         self.numFloors = numFloors
         self.respectInvasions = 1
-        self.randomRevives = randomRevives
         dbg_defaultSuitName = simbase.config.GetString('suit-type', 'random')
         if dbg_defaultSuitName == 'random':
             self.dbg_defaultSuitType = None
@@ -70,14 +68,10 @@ class SuitPlannerInteriorAI:
                 activeDict['type'] = type
                 activeDict['track'] = bldgTrack
                 activeDict['level'] = level
-                if self.randomRevives:
-                    activeDict['revives'] = random.choice([0, 1])
-                else:
-                    activeDict['revives'] = revives
+                activeDict['revives'] = revives
                 activeDicts.append(activeDict)
 
             infoDict['activeSuits'] = activeDicts
-
             reserveDicts = []
             numReserve = len(lvls) - numActive
             joinChances = self.__genJoinChances(numReserve)
@@ -88,10 +82,7 @@ class SuitPlannerInteriorAI:
                 reserveDict['type'] = type
                 reserveDict['track'] = bldgTrack
                 reserveDict['level'] = level
-                if self.randomRevives:
-                    reserveDict['revives'] = random.choice([0, 1])
-                else:
-                    reserveDict['revives'] = revives
+                reserveDict['revives'] = revives
                 reserveDict['joinChance'] = joinChances[currReserve]
                 reserveDicts.append(reserveDict)
 
@@ -154,14 +145,20 @@ class SuitPlannerInteriorAI:
     def __genSuitObject(self, suitZone, suitType, bldgTrack, suitLevel, revives = 0):
         newSuit = DistributedSuitAI.DistributedSuitAI(simbase.air, None)
         flags = self.__setupSuitInfo(newSuit, bldgTrack, suitLevel, suitType)
-        if flags & IFSkelecog:
-            newSuit.setSkelecog(1)
+        if flags != None:
+            if flags[0] == 1:
+                newSuit.setSkelecog(1)
         newSuit.setSkeleRevives(revives)
         newSuit.generateWithRequired(suitZone)
-        if flags & IFWaiter:
-            newSuit.b_setWaiter(1)
-        if flags & IFV2:
-            newSuit.b_setSkeleRevives(1)
+        if flags !=None:
+            if flags[2]:
+                newSuit.b_setWaiter(1)
+            if flags[1]:
+                newSuit.b_setSkeleRevives(1)
+            if flags[3]:
+                newSuit.b_setVirtual(1)
+            if flags[4]:
+                newSuit.b_setRental(1)
         newSuit.node().setName('suit-%s' % newSuit.doId)
         return newSuit
 

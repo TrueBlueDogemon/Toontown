@@ -339,10 +339,25 @@ def chooseNPCExitShot(exits, exitsDuration):
 
 
 def chooseSuitShot(attack, attackDuration):
+    duration = attackDuration
+    if duration < 0:
+        notify.warning('duration < 0')
+        duration = 1e-06
+    diedTrack = None
     groupStatus = attack['group']
     target = attack['target']
     if groupStatus == ATK_TGT_SINGLE:
         toon = target['toon']
+        died = attack['target']['died']
+        if died != 0:
+            notify.warning('A toon died')
+            pbpText = attack['playByPlayText']
+            notify.warning('got pbpText')
+            diedText = toon.getName() + ' was defeated!'
+            notify.warning('set diedText')
+            diedTextList = [diedText]
+            notify.warning('playing was defeated pbp')
+            diedTrack = pbpText.getToonsDiedInterval(diedTextList, duration)
     suit = attack['suit']
     name = attack['id']
     battle = attack['battle']
@@ -433,7 +448,7 @@ def chooseSuitShot(attack, attackDuration):
     elif name == POWER_TRIP:
         camTrack.append(defaultCamera(openShotDuration=1.1))
     elif name == QUAKE:
-        shakeIntensity = 5.15
+        shakeIntensity = 8.15
         quake = 1
         camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity, quake))
     elif name == RAZZLE_DAZZLE:
@@ -455,7 +470,7 @@ def chooseSuitShot(attack, attackDuration):
     elif name == SCHMOOZE:
         camTrack.append(defaultCamera(openShotDuration=2.8))
     elif name == SHAKE:
-        shakeIntensity = 1.75
+        shakeIntensity = 3.75
         camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
     elif name == SHRED:
         camTrack.append(defaultCamera(openShotDuration=4.1))
@@ -468,7 +483,7 @@ def chooseSuitShot(attack, attackDuration):
     elif name == TEE_OFF:
         camTrack.append(defaultCamera(openShotDuration=4.5))
     elif name == TREMOR:
-        shakeIntensity = 0.25
+        shakeIntensity = 1.25
         camTrack.append(suitCameraShakeShot(suit, attackDuration, shakeIntensity))
     elif name == WATERCOOLER:
         camTrack.append(defaultCamera())
@@ -482,7 +497,16 @@ def chooseSuitShot(attack, attackDuration):
     pbpText = attack['playByPlayText']
     displayName = TTLocalizer.SuitAttackNames[attack['name']]
     pbpTrack = pbpText.getShowInterval(displayName, 3.5)
-    return Parallel(camTrack, pbpTrack)
+    track = Parallel(camTrack, pbpTrack)
+    if diedTrack == None:
+        return track
+    else:
+        pbpTrackDied = Sequence(pbpTrack, diedTrack)
+        notify.warning('set pbpTrackDied')
+        mtrack = Parallel(track, pbpTrackDied)
+        notify.warning('returning mtrack')
+        return mtrack  
+    
 
 
 def chooseSuitCloseShot(attack, openDuration, openName, attackDuration):
@@ -500,6 +524,7 @@ def chooseSuitCloseShot(attack, openDuration, openName, attackDuration):
             pbpText = attack['playByPlayText']
             diedText = av.getName() + ' was defeated!'
             diedTextList = [diedText]
+            notify.warning('playing was defeated pbp')
             diedTrack = pbpText.getToonsDiedInterval(diedTextList, duration)
     elif groupStatus == ATK_TGT_GROUP:
         av = None
