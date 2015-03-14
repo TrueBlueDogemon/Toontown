@@ -206,7 +206,7 @@ def kick(reason='No reason specified'):
 
 
 @magicWord(category=CATEGORY_MODERATOR, types=[str, str])
-def ban(reason, duration):
+def ban(duration=0, reason='No reason specified'):
     """
     Ban the target from the game server.
     arguments:  reason  hacking/language/other
@@ -215,8 +215,24 @@ def ban(reason, duration):
     target = spellbook.getTarget()
     if target == spellbook.getInvoker():
         return "You can't ban yourself!"
-    if reason not in ('hacking', 'language', 'other'):
-        return "'%s' is not a valid reason." % reason
     simbase.air.banManager.ban(target.doId, duration, reason, spellbook.getInvoker().doId)
     return "Banned %s from the game server!" % target.getName()
-
+    
+@magicWord(category=CATEGORY_MODERATOR, types=[int, str, str])
+def banId(avId, duration=0, reason='No reason specified'):
+    """
+    Ban the target from the game server.
+    arguments:  reason  hacking/language/other
+                time    10m  
+    """
+    if not avId:
+        return 'Specify an ID to ban.'
+    if not isinstance(avId, int):
+        return 'avID must be an integer.'
+    if avId < 100000000:
+        avId+=100000000
+    av = self.air.doId2do.get(avId)
+    if not av:
+        return 'Failed to find avatar.'       
+    simbase.air.banManager.ban(avId, duration, reason, spellbook.getInvoker().doId)
+    return "Banned %s from the game server!" % avId
