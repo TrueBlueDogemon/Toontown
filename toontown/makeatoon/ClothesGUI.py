@@ -334,7 +334,9 @@ class ClothesGUI(StateData.StateData):
         self.updateScrollButtons(self.bottomColorChoice, length, 0, self.bottomLButton, self.bottomRButton)
         if self.bottomColorChoice < 0 or self.bottomColorChoice >= length:
             self.notify.warning('bottomColor choice index is out of range!')
-        self.toon.style.botTexColor = colors[self.bottomColorChoice] - 1
+            self.bottomColorChoice = len(colors)
+            self.updateScrollButtons(self.bottomColorChoice, length, 0, self.bottomLButton, self.bottomRButton)            
+        self.toon.style.botTexColor = colors[self.bottomColorChoice]
         if self.toon.generateToonClothes() == 1:
             self.toon.loop('neutral', 0)
             self.swappedTorso = 1

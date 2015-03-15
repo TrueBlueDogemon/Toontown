@@ -139,6 +139,34 @@ class NewsManager(DistributedObject.DistributedObject):
             messages.append(TTLocalizer.V2InvasionBulletin2)
             messages.append(TTLocalizer.V2InvasionBulletin3)
             self.invading = 1
+        elif msgType == ToontownGlobals.VirtualInvasionBegin:
+            messages.append(TTLocalizer.VirtualInvasionBegin1)
+            messages.append(TTLocalizer.VirtualInvasionBegin2)
+            messages.append(TTLocalizer.VirtualInvasionBegin3)
+            self.invading = 1
+        elif msgType == ToontownGlobals.VirtualInvasionEnd:
+            messages.append(TTLocalizer.VirtualInvasionEnd1)
+            messages.append(TTLocalizer.VirtualInvasionEnd2)
+            self.invading = 0
+        elif msgType == ToontownGlobals.VirtualInvasionBulletin:
+            messages.append(TTLocalizer.VirtualInvasionBulletin1)
+            messages.append(TTLocalizer.VirtualInvasionBulletin2)
+            messages.append(TTLocalizer.VirtualInvasionBulletin3)
+            self.invading = 1
+        elif msgType == ToontownGlobals.RentalInvasionBegin:
+            messages.append(TTLocalizer.RentalInvasionBegin1)
+            messages.append(TTLocalizer.RentalInvasionBegin2)
+            messages.append(TTLocalizer.RentalInvasionBegin3)
+            self.invading = 1
+        elif msgType == ToontownGlobals.RentalInvasionEnd:
+            messages.append(TTLocalizer.RentalInvasionEnd1)
+            messages.append(TTLocalizer.RentalInvasionEnd2)
+            self.invading = 0
+        elif msgType == ToontownGlobals.RentalInvasionBulletin:
+            messages.append(TTLocalizer.RentalInvasionBulletin1)
+            messages.append(TTLocalizer.RentalInvasionBulletin2)
+            messages.append(TTLocalizer.RentalInvasionBulletin3)
+            self.invading = 1
         else:
             self.notify.warning('setInvasionStatus: invalid msgType: %s' % msgType)
             return

@@ -30,7 +30,7 @@ class PetNameGenerator:
                 if line.lstrip()[0:1] != '#':
                     a1 = line.find('*')
                     a2 = line.find('*', a1 + 1)
-                    self.nameDictionary[int(line[0:a1])] = (int(line[a1 + 1:a2]), line[a2 + 1:len(line) - 1].strip())
+                    self.nameDictionary[int(line[0:a1])] = (int(line[a1 + 1:a2]), line[a2 + 1:len(line)].strip())
 
         masterList = [self.boyFirsts, self.girlFirsts, self.neutralFirsts]
         for tu in self.nameDictionary.values():

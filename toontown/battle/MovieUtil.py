@@ -153,8 +153,11 @@ def avatarFacePoint(av, other = render):
 
 def insertDeathSuit(suit, deathSuit, battle = None, pos = None, hpr = None):
     holdParent = suit.getParent()
-    if suit.getVirtual():
+    if suit.getVirtual() == 1:
         virtualize(deathSuit)
+    if suit.getIsSkelecog() == 0:    
+        if suit.getRental() == 1:
+            doRentalSuit(deathSuit)
     avatarHide(suit)
     if deathSuit != None and not deathSuit.isEmpty():
         if holdParent and 0:
@@ -177,8 +180,11 @@ def removeDeathSuit(suit, deathSuit):
 
 def insertReviveSuit(suit, deathSuit, battle = None, pos = None, hpr = None):
     holdParent = suit.getParent()
-    if suit.getVirtual():
+    if suit.getVirtual() == 1:
         virtualize(deathSuit)
+    if suit.getRental() == 1:
+        if suit.getIsSkelecog == 0:
+            doRentalSuit(deathSuit)
     suit.hide()
     if deathSuit != None and not deathSuit.isEmpty():
         if holdParent and 0:
@@ -209,12 +215,41 @@ def virtualize(deathsuit):
     parts = ()
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
-        if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag'):
-            thing.setColorScale(1.0, 0.0, 0.0, 1.0)
+        if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag', 'nametag3d'):
+            thing.setColorScale(0.3, 0.3, 0.3, 1.0)
             thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
             thing.setDepthWrite(False)
             thing.setBin('fixed', 1)
 
+def doRentalSuit(deathsuit):
+    actorNode = deathsuit.find('**/__Actor_modelRoot')
+    tex = actorNode.find('**/torso').getTexture().getFilename()
+    notify.warning('THE TEXTURE IS %s' % tex)
+    type = ''
+    if tex == 'phase_3.5/maps/c_blazer.jpg':
+        type = 'bossbot'
+    elif tex == 'phase_3.5/maps/l_blazer.jpg':
+        type = 'lawbot'
+    elif tex == 'phase_3.5/maps/m_blazer.jpg':
+        type = 'cashbot'
+    else:
+        type = 'sellbot'
+    torsoTex = loader.loadTexture('phase_3.5/maps/tt_t_ene_%sRental_blazer.jpg' % type)
+    torsoTex.setMinfilter(Texture.FTLinearMipmapLinear)
+    torsoTex.setMagfilter(Texture.FTLinear)        
+    legTex = loader.loadTexture('phase_3.5/maps/tt_t_ene_%sRental_leg.jpg' % type)
+    legTex.setMinfilter(Texture.FTLinearMipmapLinear)
+    legTex.setMagfilter(Texture.FTLinear)
+    armTex = loader.loadTexture('phase_3.5/maps/tt_t_ene_%sRental_sleeve.jpg' % type)
+    armTex.setMinfilter(Texture.FTLinearMipmapLinear)
+    armTex.setMagfilter(Texture.FTLinear)        
+    #handTex = loader.loadTexture('phase_3.5/maps/tt_t_ene_%sRental_hand.jpg' % type)
+    #armTex.setMinfilter(Texture.FTLinearMipmapLinear)
+    #armTex.setMagfilter(Texture.FTLinear)
+    actorNode.find('**/torso').setTexture(torsoTex, 1)
+    actorNode.find('**/arms').setTexture(armTex, 1)
+    actorNode.find('**/legs').setTexture(legTex, 1)
+    #modelRoot.find('**/hands').setTexture(handTex, 1)
 
 def createTrainTrackAppearTrack(dyingSuit, toon, battle, npcs):
     retval = Sequence()

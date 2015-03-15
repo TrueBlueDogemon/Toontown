@@ -106,7 +106,6 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.questManager = QuestManagerAI(self)
         self.banManager = BanManagerAI.BanManagerAI(self)
         self.achievementsManager = AchievementsManagerAI(self)
-        self.suitInvasionManager = SuitInvasionManagerAI(self)
         self.trophyMgr = DistributedTrophyMgrAI(self)
         self.trophyMgr.generateWithRequired(2)
         self.cogSuitMgr = CogSuitManagerAI.CogSuitManagerAI(self)
@@ -114,6 +113,7 @@ class ToontownAIRepository(ToontownInternalRepository):
         self.cogPageManager = CogPageManagerAI.CogPageManagerAI()
         self.bankManager = BankManagerAI.BankManagerAI(self)
         self.holidayManager = HolidayManagerAI(self)
+        self.suitInvasionManager = SuitInvasionManagerAI(self)        
         if self.wantFishing:
             self.fishManager = FishManagerAI(self)
         if self.wantHousing:

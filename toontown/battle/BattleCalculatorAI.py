@@ -691,10 +691,12 @@ class BattleCalculatorAI:
                     else:
                         self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage')
                 totalDamages = totalDamages + damageDone
+                print 'totalDamages ='+ str(totalDamages) +  '+' + str(damageDone)
                 if currTarget.getHP() <= 0:
                     if currTarget.getSkeleRevives() >= 1:
                         currTarget.useSkeleRevive()
                         attack[SUIT_REVIVE_COL] = attack[SUIT_REVIVE_COL] | 1 << position
+                        print 'attack[SUIT_REVIVE_COL]) = ' + str(attack[SUIT_REVIVE_COL] | 1 << position)
                     else:
                         self.suitLeftBattle(targetId)
                         attack[SUIT_DIED_COL] = attack[SUIT_DIED_COL] | 1 << position
@@ -767,7 +769,7 @@ class BattleCalculatorAI:
             return
         tgts = self.__createToonTargetList(toonId)
         for currTgt in tgts:
-            tgtPos = self.battle.suits.index(currTgt)
+            tgtPos = self.battle.activeSuits.index(currTgt)
             attackerId = self.toonAtkOrder[attackIndex]
             attack = self.battle.toonAttacks[attackerId]
             track = self.__getActualTrack(attack)

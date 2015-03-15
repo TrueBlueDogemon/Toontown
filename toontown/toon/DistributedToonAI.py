@@ -195,6 +195,8 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
         self.promotionStatus = [0, 0, 0, 0]
         self.buffs = []
         self.magicWordTeleportRequests = []
+        self.firstTrackPicked = 0
+        self.secondTrackPicked = 0
 
     def generate(self):
         DistributedPlayerAI.DistributedPlayerAI.generate(self)
@@ -4326,6 +4328,26 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
          hoodId,
          zoneId])
         self.air.send(dg)
+        
+    def b_setFirstTrackPicked(self, trackId):
+        self.setFirstTrackPicked(trackId)
+        self.d_setFirstTrackPicked(trackId)
+
+    def d_setFirstTrackPicked(self, trackId):
+        self.sendUpdate('setFirstTrackPicked', [trackId])
+
+    def setFirstTrackPicked(self, trackId):
+        self.firstTrackPicked = trackId
+
+    def b_setSecondTrackPicked(self, trackId):
+        self.setSecondTrackPicked(trackId)
+        self.d_setSecondTrackPicked(trackId)
+
+    def d_setSecondTrackPicked(self, trackId):
+        self.sendUpdate('setSecondTrackPicked', [trackId])
+
+    def setSecondTrackPicked(self, trackId):
+        self.secondTrackPicked = trackId        
 
 @magicWord(category=CATEGORY_PROGRAMMER, types=[str, int, int])
 def cheesyEffect(value, hood=0, expire=0):
@@ -5339,3 +5361,17 @@ def goto(avIdShort):
         return "Unable to teleport to target, they are not currently on this district."
     spellbook.getInvoker().magicWordTeleportRequests.append(avId)
     toon.sendUpdate('magicTeleportRequest', [spellbook.getInvoker().getDoId()])
+    
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int, int, int, int, int, int, int])
+def invasion(suitDept, suitIndex=None, isSkelecog=0, isV2=0, isWaiter=0, isVirtual=0, isRental=0): 
+        flags = [isSkelecog, isV2, isWaiter, isVirtual, isRental]
+        for flag in flags:
+            if flag != 0 and flag != 1:
+                return 'Invalid, 0=False, 1=True'
+        returnCode = simbase.air.suitInvasionManager.startInvasion(suitDept, suitIndex, flags)
+        return returnCode
+
+@magicWord(category=CATEGORY_PROGRAMMER)
+def invasionend():
+    simbase.air.suitInvasionManager.stopInvasion()
+    return 'Ending Invasion...'      
