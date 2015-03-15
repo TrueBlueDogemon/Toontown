@@ -3730,10 +3730,17 @@ def transformReward(baseRewardId, av):
 def chooseBestQuests(tier, currentNpc, av):
     if currentNpc.tutorial and (currentNpc.npcId == 20000):
         if 50 in av.getQuestHistory():
+            print 'has 50'
             if 51 in av.getQuestHistory():
-                if av.getTrackAccess() == [1, 1, 0, 0, 0, 0, 0] or av.getTrackAccess() == [1, 0, 1, 0, 0, 0, 0]:
+                print 'has 51'
+                if av.hasTrackAccess(0) and av.hasTrackAccess(1):
+                    print 'toonup and trap'+str(av.getTrackAccess())
                     return [[52, 0, 20000]]
-                pass
+                elif av.hasTrackAccess(0) and av.hasTrackAccess(2):
+                    print 'toonup and lure'+str(av.getTrackAccess())
+                    return [[52, 0, 20000]]
+                else:
+                    return [[101, 0, 20000]]
             else:
                 return [[51, 0, 20000]]
         else:

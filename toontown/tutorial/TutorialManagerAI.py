@@ -44,7 +44,7 @@ class TutorialFSM(FSM):
 
     def enterBattle(self, av):
         if av:
-            if av.getTrackAccess() == [1, 1, 0, 0, 0, 0, 0] or av.getTrackAccess() == [1, 0, 1, 0, 0, 0, 0]:
+            if (av.hasTrackAccess(0) and av.hasTrackAccess(1)) or (av.hasTrackAccess(0) and av.hasTrackAccess(2)):
                 self.suit = None
                 self.building.door.setDoorLock(FADoorCodes.TALK_TO_HQ)
                 self.hq.door0.setDoorLock(FADoorCodes.UNLOCKED)
