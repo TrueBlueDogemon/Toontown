@@ -46,6 +46,6 @@ force-skip-tutorial #f
 want-instant-parties #t
 
 # Chat:
-blacklist-sequence-url https://s3.amazonaws.com/cdn.toontownrewritten.com/misc/tsequence.dat
+blacklist-sequence-url  https://www.toontownfellowship.com/download/resources/server/tsequence.dat
 want-whitelist #t
 want-blacklist-sequence #t
