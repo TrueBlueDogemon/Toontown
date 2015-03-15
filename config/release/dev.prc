@@ -28,7 +28,7 @@ want-cogdominiums #f
 want-achievements #f
 estate-day-night #t
 want-mega-invasions #t
-notify-level-SuitInvasionManagerAI debug
+safe-harbours Peaceful Peaks, Loopy Harbor
 
 # Chat:
 want-whitelist #t

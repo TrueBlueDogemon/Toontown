@@ -1,11 +1,16 @@
 import time
 from random import random, randint, choice
+from direct.directnotify import DirectNotifyGlobal
+from direct.task import Task
 from toontown.battle import SuitBattleGlobals
+from toontown.toonbase.ToontownGlobals import IDES_OF_MARCH
 import SuitDNA
 from SuitInvasionGlobals import *
 
 
 class SuitInvasionManagerAI:
+    notify = directNotify.newCategory('SuitInvasionManagerAI')
+
     def __init__(self, air):
         self.air = air
 
@@ -35,17 +40,22 @@ class SuitInvasionManagerAI:
         # being created after we're created will know where we're at:
         self.air.netMessenger.accept('queryShardStatus', self, self.sendInvasionStatus)
 
-        self.safeHarbours = config.GetString('invasion-safeHarbours', 'Peaceful Peaks')
+        self.safeHarbours = []
+        tempSafeHarbours = config.GetString('safe-harbours','')
+        if tempSafeHarbours != '':
+            for safeHarbour in tempSafeHarbours.split(","):
+                safeHarbour = safeHarbour.strip()
+                self.safeHarbours.append(safeHarbour)
         
         if config.GetBool('want-mega-invasions', False):
             self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.65)
-            if self.air.distributedDistrict.name == self.safeHarbours:
+            if self.air.distributedDistrict.name in self.safeHarbours:
                 self.notify.debug("Can't summon mega invasion in safe harbour!")
-            elif self.air.isHolidayRunning(ToontownGlobals.IDES_OF_MARCH):#Temp
-                self.megaInvasion = ToontownGlobals.IDES_OF_MARCH
+            elif self.air.holidayManager.isHolidayRunning(IDES_OF_MARCH):#Temp
+                self.megaInvasion = IDES_OF_MARCH
                 #if self.megaInvasion:
                 # self.megaInvasionCog = megaInvasionDict[self.megaInvasion][0]
-                taskMgr.doMethodLater(randint(100, 120), self.__randomInvasionTick, 'random-invasion-tick')
+                taskMgr.doMethodLater(randint(1800, 5400), self.__randomInvasionTick, 'random-invasion-tick')
                 
         self.sendInvasionStatus()
 
@@ -254,7 +264,7 @@ class SuitInvasionManagerAI:
             status = {'invasion': None}
         self.air.netMessenger.send('shardStatus', [self.air.ourChannel, status])
         
- def __randomInvasionTick(self, task=None):
+    def __randomInvasionTick(self, task=None):
         """
         Each hour, have a tick to check if we want to start an invasion in
         the current district. This works by having a random invasion
@@ -273,11 +283,7 @@ class SuitInvasionManagerAI:
         if random() <= self.randomInvasionProbability:
             # We want an invasion!
             self.notify.debug('Invasion probability hit! Starting invasion.')
-            # We want to test if we get a mega invasion or a normal invasion.
-            # Take the mega invasion probability and test it. If we get lucky
-            # a second time, spawn a mega invasion, otherwise spawn a normal
-            # invasion.
-            if config.GetBool('want-mega-invasions', False) and random() <= self.randomInvasionProbability:
+            if config.GetBool('want-mega-invasions', False):
                 suitDept = megaInvasionDict[self.megaInvasion][0][0]
                 suitIndex = megaInvasionDict[self.megaInvasion][0][1]
                 if megaInvasionDict[self.megaInvasion][2]:
