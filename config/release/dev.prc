@@ -11,7 +11,7 @@ accountdb-type developer
 shard-low-pop 50
 shard-mid-pop 100
 battle-input-timeout 42
-active-holidays 105
+#active-holidays 105
 
 # RPC:
 want-rpc-server #f
@@ -22,7 +22,7 @@ dc-file astron/dclass/toon.dc
 dc-file astron/dclass/otp.dc
 
 # Core features:
-want-pets #t
+want-pets #f
 want-parties #f
 want-cogdominiums #f
 want-achievements #f
@@ -46,6 +46,6 @@ force-skip-tutorial #f
 want-instant-parties #t
 
 # Chat:
-blacklist-sequence-url  https://www.toontownfellowship.com/download/resources/server/tsequence.dat
+#blacklist-sequence-url  https://www.toontownfellowship.com/download/resources/server/tsequence.dat
 want-whitelist #t
-want-blacklist-sequence #t
+want-blacklist-sequence #f
