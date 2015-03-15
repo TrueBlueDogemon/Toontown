@@ -1097,13 +1097,9 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         petId = toon.getPetId()
         zoneId = self.zoneId
         if petId == av:
-            print 'petId == av'
             if not toonId in self.pets:
-                print 'toonid not in self.pets'
                 def handleGetPetProxy(success, pet, petId = petId, zoneId = zoneId, toonId = toonId):
-                    print 'handleGetPetProxy'
                     if success:
-                        print 'petproxy success!'
                         petProxy = DistributedPetProxyAI.DistributedPetProxyAI(self.air)
                         petProxy.setOwnerId(pet.getOwnerId())
                         petProxy.setPetName(pet.getPetName())
@@ -1146,14 +1142,10 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
                         petProxy.setSurprise(pet.getSurprise())
                         pet.requestDelete()
                         def deleted(task):
-                            print 'deleted(task)'
                             petProxy.dbObject = 1                  
-                            print 'generatedWithRequiredAndId'
                             petProxy.generateWithRequiredAndId(petId, self.air.districtId, self.zoneId)
                             petProxy.broadcastDominantMood()
-                            print 'broadcastingDominantMood'
                             self.pets[toonId] = petProxy
-                            print 'set self.pets'
                             return task.done
                             
                         self.acceptOnce(self.air.getAvatarExitEvent(petId),
@@ -1852,13 +1844,10 @@ class DistributedBattleBaseAI(DistributedObjectAI.DistributedObjectAI, BattleBas
         doneEvent = 'generate-%d' % petId
 
         def handlePetProxyRead(pet):
-            print 'calling back to read pet proxy'
             callback(1, pet)
 
         self.air.sendActivate(petId, self.air.districtId, 0)
-        print 'sentActivate'
         self.acceptOnce(doneEvent, handlePetProxyRead)
-        print 'acceptOnce'
 
     def _getNextSerialNum(self):
         num = self.serialNum
