@@ -56,7 +56,7 @@ class DistributedBrutalSellbotBossAI(DistributedSellbotBossAI):
 
     def generateSuits(self, battleNumber):
         if battleNumber == 1:
-            return self.invokeSuitPlanner(18, 0, randomRevives=True)
+            return self.invokeSuitPlanner(18, 0)
         else:
             return self.invokeSuitPlanner(19, 0)
 
