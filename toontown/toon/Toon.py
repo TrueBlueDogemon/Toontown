@@ -727,8 +727,6 @@ class Toon(Avatar.Avatar, ToonHead):
                 height *= ToontownGlobals.SmallToonScale
             elif self.cheesyEffect == ToontownGlobals.CETinyToon:
                 height *= ToontownGlobals.TinyToonScale
-            elif self.cheesyEffect == ToontownGlobals.CEGiantToon:
-                height *= ToontownGlobals.GiantToonScale
             self.setHeight(height)
 
     def generateToonLegs(self, copy = 1):
@@ -2600,8 +2598,6 @@ class Toon(Avatar.Avatar, ToonHead):
             return self.__doToonScale(ToontownGlobals.SmallToonScale, lerpTime)
         elif effect == ToontownGlobals.CETinyToon:
             return self.__doToonScale(ToontownGlobals.TinyToonScale, lerpTime)
-        elif effect == ToontownGlobals.CEGiantToon:
-            return self.__doToonScale(ToontownGlobals.GiantToonScale, lerpTime)
         elif effect == ToontownGlobals.CEFlatPortrait:
             return self.__doToonScale(VBase3(1, 0.05, 1), lerpTime)
         elif effect == ToontownGlobals.CEFlatProfile:
@@ -2643,8 +2639,6 @@ class Toon(Avatar.Avatar, ToonHead):
         elif effect == ToontownGlobals.CESmallToon:
             return self.__doToonScale(None, lerpTime)
         elif effect == ToontownGlobals.CETinyToon:
-            return self.__doToonScale(None, lerpTime)
-        elif effect == ToontownGlobals.CEGiantToon:
             return self.__doToonScale(None, lerpTime)
         elif effect == ToontownGlobals.CEFlatPortrait:
             return self.__doToonScale(None, lerpTime)
@@ -2698,6 +2692,10 @@ class Toon(Avatar.Avatar, ToonHead):
         suit.initializeDropShadow()
         suit.setPos(self.getPos())
         suit.setHpr(self.getHpr())
+        if self.cheesyEffect == ToontownGlobals.CETransparent:
+            suit.makeVirtual()
+        if self.cheesyEffect == ToontownGlobals.CEVirtual:
+            suit.makeCEVirtual()        
         for part in suit.getHeadParts():
             part.hide()
 

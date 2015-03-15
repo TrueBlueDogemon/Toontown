@@ -5361,3 +5361,17 @@ def goto(avIdShort):
         return "Unable to teleport to target, they are not currently on this district."
     spellbook.getInvoker().magicWordTeleportRequests.append(avId)
     toon.sendUpdate('magicTeleportRequest', [spellbook.getInvoker().getDoId()])
+    
+@magicWord(category=CATEGORY_PROGRAMMER, types=[int, int, int, int, int, int, int])
+def invasion(suitDept, suitIndex=None, isSkelecog=0, isV2=0, isWaiter=0, isVirtual=0, isRental=0): 
+        flags = [isSkelecog, isV2, isWaiter, isVirtual, isRental]
+        for flag in flags:
+            if flag != 0 and flag != 1:
+                return 'Invalid, 0=False, 1=True'
+        returnCode = simbase.air.suitInvasionManager.startInvasion(suitDept, suitIndex, flags)
+        return returnCode
+
+@magicWord(category=CATEGORY_PROGRAMMER)
+def invasionend():
+    simbase.air.suitInvasionManager.stopInvasion()
+    return 'Ending Invasion...'      
