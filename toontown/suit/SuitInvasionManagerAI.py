@@ -1,5 +1,5 @@
 import time
-
+from random import random, randint, choice
 from toontown.battle import SuitBattleGlobals
 import SuitDNA
 from SuitInvasionGlobals import *
@@ -15,6 +15,10 @@ class SuitInvasionManagerAI:
         self.total = 0
         self.suitDeptIndex = None
         self.suitTypeIndex = None
+        self.megaInvasion = None
+        self.megaInvasionCog = None
+        self.megaInvasionFlags = None
+        self.flags = 0
         self.isSkelecog = 0
         self.isV2 = 0
         self.isWaiter = 0
@@ -31,6 +35,18 @@ class SuitInvasionManagerAI:
         # being created after we're created will know where we're at:
         self.air.netMessenger.accept('queryShardStatus', self, self.sendInvasionStatus)
 
+        self.safeHarbours = config.GetString('invasion-safeHarbours', 'Peaceful Peaks')
+        
+        if config.GetBool('want-mega-invasions', False):
+            self.randomInvasionProbability = config.GetFloat('mega-invasion-probability', 0.65)
+            if self.air.distributedDistrict.name == self.safeHarbours:
+                self.notify.debug("Can't summon mega invasion in safe harbour!")
+            elif self.air.isHolidayRunning(ToontownGlobals.IDES_OF_MARCH):#Temp
+                self.megaInvasion = ToontownGlobals.IDES_OF_MARCH
+                #if self.megaInvasion:
+                # self.megaInvasionCog = megaInvasionDict[self.megaInvasion][0]
+                taskMgr.doMethodLater(randint(100, 120), self.__randomInvasionTick, 'random-invasion-tick')
+                
         self.sendInvasionStatus()
 
     def getInvading(self):
@@ -88,7 +104,7 @@ class SuitInvasionManagerAI:
         if type == INVASION_TYPE_NORMAL:
             self.total = 1000
         elif type == INVASION_TYPE_MEGA:
-            self.total = 0xFFFFFFFF
+            self.total = randint(1800, 5400)
         self.remaining = self.total
 
         self.flySuits()
@@ -237,3 +253,38 @@ class SuitInvasionManagerAI:
         else:
             status = {'invasion': None}
         self.air.netMessenger.send('shardStatus', [self.air.ourChannel, status])
+        
+ def __randomInvasionTick(self, task=None):
+        """
+        Each hour, have a tick to check if we want to start an invasion in
+        the current district. This works by having a random invasion
+        probability, and each tick it will generate a random float between
+        0 and 1, and then if it's less than or equal to the probablity, it
+        will spawn the invasion.
+        An invasion will not be started if there is an invasion already
+        on-going.
+        """
+        # Generate a new tick delay.
+        task.delayTime = randint(1800, 5400)
+        if self.getInvading():
+            # We're already running an invasion. Don't start a new one.
+            self.notify.debug('Invasion tested but already running invasion!')
+            return task.again
+        if random() <= self.randomInvasionProbability:
+            # We want an invasion!
+            self.notify.debug('Invasion probability hit! Starting invasion.')
+            # We want to test if we get a mega invasion or a normal invasion.
+            # Take the mega invasion probability and test it. If we get lucky
+            # a second time, spawn a mega invasion, otherwise spawn a normal
+            # invasion.
+            if config.GetBool('want-mega-invasions', False) and random() <= self.randomInvasionProbability:
+                suitDept = megaInvasionDict[self.megaInvasion][0][0]
+                suitIndex = megaInvasionDict[self.megaInvasion][0][1]
+                if megaInvasionDict[self.megaInvasion][2]:
+                    rngFlag = randint(0, 4)
+                    flags = [0, 0, 0, 0, 0]
+                    flags[rngFlag] = 1
+                else:
+                    flags = megaInvasionDict[self.megaInvasion][1]
+                self.startInvasion(suitDept, suitIndex, flags, INVASION_TYPE_MEGA)
+        return task.again        

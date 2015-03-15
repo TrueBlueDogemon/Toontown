@@ -9,6 +9,11 @@ IsWaiter = 2
 IsVirtual = 3
 isRental = 4
 
+from toontown.toonbase.ToontownGlobals import IDES_OF_MARCH#Temp until I refactor source to HolidayGlobals
+#Mega Invasion Dict
+megaInvasionDict = {
+    #Holiday ID   #Cog Index   #Flags    #Random flags?
+    IDES_OF_MARCH: ((2, 4), [0, 0, 0, 0, 0], True)}
 #Invasion Messages
 SuitInvasionBegin = 0
 SuitInvasionEnd = 1
