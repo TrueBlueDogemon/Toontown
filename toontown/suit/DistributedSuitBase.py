@@ -42,6 +42,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         SuitBase.SuitBase.__init__(self)
         self.activeShadow = 0
         self.virtual = 0
+        self.rental = 0
         self.battleDetectName = None
         self.cRay = None
         self.cRayNode = None

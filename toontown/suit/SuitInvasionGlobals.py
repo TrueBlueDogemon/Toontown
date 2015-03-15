@@ -13,7 +13,7 @@ from toontown.toonbase.ToontownGlobals import IDES_OF_MARCH#Temp until I refacto
 #Mega Invasion Dict
 megaInvasionDict = {
     #Holiday ID   #Cog Index   #Flags    #Random flags?
-    IDES_OF_MARCH: ((2, 4), [0, 0, 0, 0, 0], True)}
+    IDES_OF_MARCH: ((1, 4), [0, 0, 0, 0, 0], True)}
 #Invasion Messages
 SuitInvasionBegin = 0
 SuitInvasionEnd = 1
