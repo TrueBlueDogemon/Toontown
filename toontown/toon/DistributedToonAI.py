@@ -5373,7 +5373,7 @@ def invasion(suitDept, suitIndex=None, isSkelecog=0, isV2=0, isWaiter=0, isVirtu
         if not -1 <= suitIndex <= 7:
             return 'Invalid Suit Index or Dept! (0-7)'
         if suitIndex == -1:
-            suitDept = None
+            suitIndex = None
         returnCode = simbase.air.suitInvasionManager.startInvasion(suitDept, suitIndex, flags)
         return returnCode
 
