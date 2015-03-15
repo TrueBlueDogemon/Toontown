@@ -56,6 +56,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         self.propOutSound = None
         self.reparentTo(hidden)
         self.loop('neutral')
+        self.isASkelecog = 0        
         self.skeleRevives = 0
         self.maxSkeleRevives = 0
         self.sillySurgeText = False
@@ -85,6 +86,9 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
              'level': self.getActualLevel()}
             self.setDisplayName(nameInfo)
         return
+        
+    def getIsSkelecog(self):
+        return self.isASkelecog
 
     def getSkeleRevives(self):
         return self.skeleRevives
@@ -362,6 +366,7 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
 
     def setSkelecog(self, flag):
         SuitBase.SuitBase.setSkelecog(self, flag)
+        self.isASkelecog = flag
         if flag:
             Suit.Suit.makeSkeleton(self)
 
@@ -369,6 +374,24 @@ class DistributedSuitBase(DistributedAvatar.DistributedAvatar, Suit.Suit, SuitBa
         SuitBase.SuitBase.setWaiter(self, flag)
         if flag:
             Suit.Suit.makeWaiter(self)
+
+    def setVirtual(self, flag):
+        SuitBase.SuitBase.setVirtual(self, flag)
+        self.virtual = flag
+        if flag:
+            Suit.Suit.makeVirtual(self)
+
+    def getVirtual(self):
+        return self.virtual
+
+    def setRental(self, flag):
+        SuitBase.SuitBase.setRental(self, flag)
+        self.rental = flag
+        if flag:
+            Suit.Suit.makeRental(self)
+
+    def getRental(self):
+        return self.rental            
 
     def showHpText(self, number, bonus = 0, scale = 1, attackTrack = -1):
         if self.HpTextEnabled and not self.ghostMode:

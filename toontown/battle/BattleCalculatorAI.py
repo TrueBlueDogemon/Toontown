@@ -691,10 +691,12 @@ class BattleCalculatorAI:
                     else:
                         self.notify.debug(str(targetId) + ': suit takes ' + str(damageDone) + ' damage')
                 totalDamages = totalDamages + damageDone
+                print 'totalDamages ='+ str(totalDamages) +  '+' + str(damageDone)
                 if currTarget.getHP() <= 0:
                     if currTarget.getSkeleRevives() >= 1:
                         currTarget.useSkeleRevive()
                         attack[SUIT_REVIVE_COL] = attack[SUIT_REVIVE_COL] | 1 << position
+                        print 'attack[SUIT_REVIVE_COL]) = ' + str(attack[SUIT_REVIVE_COL] | 1 << position)
                     else:
                         self.suitLeftBattle(targetId)
                         attack[SUIT_DIED_COL] = attack[SUIT_DIED_COL] | 1 << position

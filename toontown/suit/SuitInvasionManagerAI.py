@@ -1,9 +1,8 @@
 import time
 from random import random, randint, choice
 from toontown.battle import SuitBattleGlobals
-from toontown.suit import SuitDNA
-from toontown.suit.SuitInvasionGlobals import *
-from toontown.toonbase import ToontownGlobals
+import SuitDNA
+from SuitInvasionGlobals import *
 
 
 class SuitInvasionManagerAI:
@@ -20,6 +19,12 @@ class SuitInvasionManagerAI:
         self.megaInvasionCog = None
         self.megaInvasionFlags = None
         self.flags = 0
+        self.isSkelecog = 0
+        self.isV2 = 0
+        self.isWaiter = 0
+        self.isVirtual = 0
+        self.isRental = 0
+        self.flags = [0, 0, 0, 0, 0]
 
         self.air.netMessenger.accept(
             'startInvasion', self, self.handleStartInvasion)
@@ -50,7 +55,7 @@ class SuitInvasionManagerAI:
     def getInvadingCog(self):
         return (self.suitDeptIndex, self.suitTypeIndex, self.flags)
 
-    def startInvasion(self, suitDeptIndex=None, suitTypeIndex=None, flags=0,
+    def startInvasion(self, suitDeptIndex=None, suitTypeIndex=None, flags=[0, 0, 0, 0, 0],
                       type=INVASION_TYPE_NORMAL):
         if self.invading:
             # An invasion is currently in progress; ignore this request.
@@ -59,17 +64,16 @@ class SuitInvasionManagerAI:
         if (suitDeptIndex is None) and (suitTypeIndex is None) and (not flags):
             # This invasion is no-op.
             return False
-
-        if flags and ((suitDeptIndex is not None) or (suitTypeIndex is not None)):
-            # For invasion flags to be present, it must be a generic invasion.
+            
+        if((flags[2] == 1) and (flags[0] == 1 or flags[4] == 1)):
             return False
+
+        if((flags[0] == 1) and (flags[1] == 1 or flags[2] == 1 or flags[4] == 1)):
+            return False             
+        
 
         if (suitDeptIndex is None) and (suitTypeIndex is not None):
             # It's impossible to determine the invading Cog.
-            return False
-
-        if flags not in (0, IFV2, IFSkelecog, IFWaiter):
-            # The provided flag combination is not possible.
             return False
 
         if (suitDeptIndex is not None) and (suitDeptIndex >= len(SuitDNA.suitDepts)):
@@ -90,6 +94,11 @@ class SuitInvasionManagerAI:
         self.suitDeptIndex = suitDeptIndex
         self.suitTypeIndex = suitTypeIndex
         self.flags = flags
+        self.isSkelecog = flags[0]
+        self.isV2 = flags[1]
+        self.isWaiter = flags[2] 
+        self.isVirtual = flags[3]
+        self.isRental = flags[4]
 
         # How many suits do we want?
         if type == INVASION_TYPE_NORMAL:
@@ -133,7 +142,7 @@ class SuitInvasionManagerAI:
         self.start = 0
         self.suitDeptIndex = None
         self.suitTypeIndex = None
-        self.flags = 0
+        self.flags = None
         self.total = 0
         self.remaining = 0
         self.flySuits()
@@ -151,42 +160,54 @@ class SuitInvasionManagerAI:
             return SuitDNA.suitHeadTypes[0]
 
     def notifyInvasionStarted(self):
-        msgType = ToontownGlobals.SuitInvasionBegin
-        if self.flags & IFSkelecog:
-            msgType = ToontownGlobals.SkelecogInvasionBegin
-        elif self.flags & IFWaiter:
-            msgType = ToontownGlobals.WaiterInvasionBegin
-        elif self.flags & IFV2:
-            msgType = ToontownGlobals.V2InvasionBegin
+        msgType = SuitInvasionBegin
+        if self.isSkelecog:
+            msgType = SkelecogInvasionBegin
+        elif self.isV2:
+            msgType = V2InvasionBegin
+        elif self.isWaiter:
+            msgType = WaiterInvasionBegin
+        elif self.isVirtual:
+            msgType = VirtualInvasionBegin
+        elif self.isRental:
+            msgType = RentalInvasionBegin
         self.air.newsManager.sendUpdate(
             'setInvasionStatus',
             [msgType, self.getSuitName(), self.total, self.flags])
 
     def notifyInvasionEnded(self):
-        msgType = ToontownGlobals.SuitInvasionEnd
-        if self.flags & IFSkelecog:
-            msgType = ToontownGlobals.SkelecogInvasionEnd
-        elif self.flags & IFWaiter:
-            msgType = ToontownGlobals.WaiterInvasionEnd
-        elif self.flags & IFV2:
-            msgType = ToontownGlobals.V2InvasionEnd
+        msgType = SuitInvasionEnd
+        if self.isSkelecog:
+            msgType = SkelecogInvasionEnd
+        elif self.isV2:
+            msgType = V2InvasionEnd
+        elif self.isWaiter:
+            msgType = WaiterInvasionEnd
+        elif self.isVirtual:
+            msgType = VirtualInvasionEnd 
+        elif self.isRental:
+            msgType = RentalInvasionEnd            
         self.air.newsManager.sendUpdate(
             'setInvasionStatus', [msgType, self.getSuitName(), 0, self.flags])
 
     def notifyInvasionUpdate(self):
         self.air.newsManager.sendUpdate(
             'setInvasionStatus',
-            [ToontownGlobals.SuitInvasionUpdate, self.getSuitName(),
+            [SuitInvasionUpdate, self.getSuitName(),
              self.remaining, self.flags])
 
     def notifyInvasionBulletin(self, avId):
-        msgType = ToontownGlobals.SuitInvasionBulletin
-        if self.flags & IFSkelecog:
-            msgType = ToontownGlobals.SkelecogInvasionBulletin
-        elif self.flags & IFWaiter:
-            msgType = ToontownGlobals.WaiterInvasionBulletin
-        elif self.flags & IFV2:
-            msgType = ToontownGlobals.V2InvasionBulletin
+        msgType = SuitInvasionBulletin
+        if self.isSkelecog:
+            msgType = SkelecogInvasionBulletin
+        elif self.isV2:
+            msgType = V2InvasionBulletin
+        elif self.isWaiter:
+            msgType = WaiterInvasionBulletin
+        elif self.isVirtual:
+            msgType = VirtualInvasionBulletin     
+        elif self.isRental:
+            msgType = RentalInvasionBulletin            
         self.air.newsManager.sendUpdateToAvatarId(
             avId, 'setInvasionStatus',
             [msgType, self.getSuitName(), self.remaining, self.flags])
@@ -223,7 +244,7 @@ class SuitInvasionManagerAI:
             status = {
                 'invasion': {
                     'type': type,
-                    'flags': self.flags,
+                    'flags': [self.isSkelecog, self.isV2, self.isWaiter, self.isVirtual, self.isRental],
                     'remaining': self.remaining,
                     'total': self.total,
                     'start': self.start

@@ -552,7 +552,82 @@ class Suit(Avatar.Avatar):
         modelRoot.find('**/arms').setTexture(armTex, 1)
         modelRoot.find('**/legs').setTexture(legTex, 1)
         modelRoot.find('**/hands').setTexture(handTex, 1)
+        
+    def makeVirtual(self, modelRoot = None):
+        if not modelRoot:
+            modelRoot = self
+        self.isVirtual = 1
+        parts = self.findAllMatches('*')           
+        for thingIndex in xrange(0, parts.getNumPaths()):
+            thing = parts[thingIndex]
+            if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag', 'nametag3d'):
+                self.notify.warning('Virtualizing %s' % thing.getName())
+                thing.setColorScale(0.3, 0.3, 0.3, 1.0)
+                thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+                thing.setDepthWrite(False)
+                thing.setBin('fixed', 1)
+        
+    def makeCEVirtual(self, modelRoot = None):
+        if not modelRoot:
+            modelRoot = self
+        self.isVirtual = 1
+        parts = self.findAllMatches('*')           
+        for thingIndex in xrange(0, parts.getNumPaths()):
+            thing = parts[thingIndex]
+            if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag', 'nametag3d'):
+                self.notify.warning('Virtualizing %s' % thing.getName())
+                thing.setColorScale(0.25, 0.25, 1.0, 1.0)
+                thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+                thing.setDepthWrite(False)
+                thing.setBin('fixed', 1)
 
+    def makeStageVirtual(self, modelRoot = None):
+        if not modelRoot:
+            modelRoot = self
+        self.isVirtual = 1
+        parts = self.findAllMatches('*')           
+        for thingIndex in xrange(0, parts.getNumPaths()):
+            thing = parts[thingIndex]
+            if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag', 'nametag3d'):
+                self.notify.warning('Virtualizing %s' % thing.getName())
+                thing.setColorScale(1.0, 0.0, 0.0, 1.0)
+                thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
+                thing.setDepthWrite(False)
+                thing.setBin('fixed', 1)   
+
+    def makeRental(self, modelRoot = None):
+        self.notify.warning('Called makeRental')
+        if not modelRoot:
+            modelRoot = self.getGeomNode()
+        dept = self.style.dept
+        type = ''
+        if dept == 'c':
+            type = 'bossbot'
+        elif dept == 'l':
+            type = 'lawbot'
+        elif dept == 'm':
+            type = 'cashbot'
+        else:
+            type = 'sellbot'
+        torsoTex = loader.loadTexture('phase_3.5/maps/tt_t_ene_%sRental_blazer.jpg' % type)
+        torsoTex.setMinfilter(Texture.FTLinearMipmapLinear)
+        torsoTex.setMagfilter(Texture.FTLinear)        
+        legTex = loader.loadTexture('phase_3.5/maps/tt_t_ene_%sRental_leg.jpg' % type)
+        legTex.setMinfilter(Texture.FTLinearMipmapLinear)
+        legTex.setMagfilter(Texture.FTLinear)
+        armTex = loader.loadTexture('phase_3.5/maps/tt_t_ene_%sRental_sleeve.jpg' % type)
+        armTex.setMinfilter(Texture.FTLinearMipmapLinear)
+        armTex.setMagfilter(Texture.FTLinear)        
+        #handTex = loader.loadTexture('phase_3.5/maps/tt_t_ene_%sRental_hand.jpg' % type)
+        #armTex.setMinfilter(Texture.FTLinearMipmapLinear)
+        #armTex.setMagfilter(Texture.FTLinear)
+        self.isRental = 1
+        modelRoot.find('**/torso').setTexture(torsoTex, 1)
+        modelRoot.find('**/arms').setTexture(armTex, 1)
+        modelRoot.find('**/legs').setTexture(legTex, 1)
+        #modelRoot.find('**/hands').setTexture(handTex, 1)
+        self.notify.warning('Finished makeRental')
+        
     def generateHead(self, headType):
         filePrefix, phase = ModelDict[self.style.body]
         filepath = 'phase_' + str(phase) + filePrefix + 'heads'
