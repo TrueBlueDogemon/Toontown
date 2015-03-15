@@ -155,7 +155,7 @@ def insertDeathSuit(suit, deathSuit, battle = None, pos = None, hpr = None):
     holdParent = suit.getParent()
     if suit.getVirtual() == 1:
         virtualize(deathSuit)
-    if suit.getIsSkelecog() == 0:    
+    if suit.getIsSkelecog() == 0:   
         if suit.getRental() == 1:
             doRentalSuit(deathSuit)
     avatarHide(suit)
@@ -216,7 +216,7 @@ def virtualize(deathsuit):
     for thingIndex in xrange(0, actorCollection.getNumPaths()):
         thing = actorCollection[thingIndex]
         if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag', 'nametag3d'):
-            thing.setColorScale(0.3, 0.3, 0.3, 1.0)
+            thing.setColorScale(1.0, 0.1, 0.1, 0.95)
             thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
             thing.setDepthWrite(False)
             thing.setBin('fixed', 1)
@@ -224,7 +224,6 @@ def virtualize(deathsuit):
 def doRentalSuit(deathsuit):
     actorNode = deathsuit.find('**/__Actor_modelRoot')
     tex = actorNode.find('**/torso').getTexture().getFilename()
-    notify.warning('THE TEXTURE IS %s' % tex)
     type = ''
     if tex == 'phase_3.5/maps/c_blazer.jpg':
         type = 'bossbot'

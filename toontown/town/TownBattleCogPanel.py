@@ -108,11 +108,7 @@ class TownBattleCogPanel(DirectFrame):
         if not self.suit:
             return
         self.setHp(self.suit.getHP())
-        print 'k set hp'
-        print str(self.currHP)
-        print str(self.maxHP)
         health = float(self.currHP) / float(self.maxHP)
-        print 'health is'+str(health)
         if health > 0.95:
             condition = 0
         elif health > 0.9:
@@ -156,7 +152,7 @@ class TownBattleCogPanel(DirectFrame):
             self.healthCondition = condition
 
     def __blinkRed(self, task):
-        if not self.healthBar:
+        if not self.blinkTask or not self.healthBar:
             return Task.done  
         self.healthBar.setColor(self.healthColors[8], 1)
         self.healthBarGlow.setColor(self.healthGlowColors[8], 1)
@@ -165,7 +161,7 @@ class TownBattleCogPanel(DirectFrame):
         return Task.done
 
     def __blinkGray(self, task):
-        if not self.healthBar:
+        if not self.blinkTask or not self.healthBar:
             return Task.done
         self.healthBar.setColor(self.healthColors[9], 1)
         self.healthBarGlow.setColor(self.healthGlowColors[9], 1)
@@ -174,12 +170,12 @@ class TownBattleCogPanel(DirectFrame):
         return Task.done
 
     def removeHealthBar(self):
+        if self.healthCondition == 9 or self.healthCondition == 10:
+            taskMgr.remove(self.blinkTask)
+            self.blinkTask = None    
         if self.healthBar:
             self.healthBar.removeNode()
             self.healthBar = None
-        if self.healthCondition == 9 or self.healthCondition == 10:
-            taskMgr.remove(self.blinkTask)
-            self.blinkTask = None
         self.healthCondition = 0
         return
         
@@ -193,7 +189,6 @@ class TownBattleCogPanel(DirectFrame):
         self.maxHP = hp
 
     def setHp(self, hp):
-        print 'setHp'
         self.currHP = hp
 
     def show(self):
@@ -201,16 +196,12 @@ class TownBattleCogPanel(DirectFrame):
         
     def cleanup(self):
         self.ignoreAll()
-        if self.blinkTask:
-            taskMgr.remove(self.blinkTask)
-            del self.blinkTask
+        self.removeHealthBar()
         if self.head is not None:
             self.head.removeNode()
         del self.head
         self.levelText.destroy()
         del self.levelText
-        if self.healthBar is not None:
-            self.healthBar.removeNode()
         del self.healthBar
         if self.healthBarGlow is not None:
             self.healthBarGlow.removeNode()

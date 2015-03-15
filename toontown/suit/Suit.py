@@ -561,8 +561,7 @@ class Suit(Avatar.Avatar):
         for thingIndex in xrange(0, parts.getNumPaths()):
             thing = parts[thingIndex]
             if thing.getName() not in ('joint_attachMeter', 'joint_nameTag', 'def_nameTag', 'nametag3d'):
-                self.notify.warning('Virtualizing %s' % thing.getName())
-                thing.setColorScale(0.45, 0.45, 0.45, 0.95)
+                thing.setColorScale(1.0, 0.1, 0.1, 0.95)
                 thing.setAttrib(ColorBlendAttrib.make(ColorBlendAttrib.MAdd))
                 thing.setDepthWrite(False)
                 thing.setBin('fixed', 1)
@@ -596,7 +595,6 @@ class Suit(Avatar.Avatar):
                 thing.setBin('fixed', 1)   
 
     def makeRental(self, modelRoot = None):
-        self.notify.warning('Called makeRental')
         if not modelRoot:
             modelRoot = self.getGeomNode()
         dept = self.style.dept
