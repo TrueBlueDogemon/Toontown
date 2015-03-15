@@ -3,6 +3,14 @@ INVASION_TYPE_NORMAL = 0
 INVASION_TYPE_MEGA = 1
 
 # Flags:
-IFSkelecog = 1 << 0
-IFWaiter = 1 << 1
-IFV2 = 1 << 2
+IsSkelecog = 0
+IsV2 = 1
+IsWaiter = 2
+IsVirtual = 3
+isRental = 4
+
+from toontown.toonbase.ToontownGlobals import IDES_OF_MARCH#Temp until I refactor source to HolidayGlobals
+#Mega Invasion Dict
+megaInvasionDict = {
+    #Holiday ID   #Cog Index   #Flags    #Random flags?
+    IDES_OF_MARCH: ((2, 4), [0, 0, 0, 0, 0], True)}

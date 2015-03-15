@@ -21,11 +21,13 @@ dc-file astron/dclass/toon.dc
 dc-file astron/dclass/otp.dc
 
 # Core features:
-want-pets #f
+want-pets #t
 want-parties #f
 want-cogdominiums #f
 want-achievements #f
 estate-day-night #t
+want-mega-invasions #t
+notify-level-SuitInvasionManagerAI debug
 
 # Chat:
 want-whitelist #t
