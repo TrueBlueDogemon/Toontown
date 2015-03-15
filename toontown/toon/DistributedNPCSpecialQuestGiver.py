@@ -5,9 +5,9 @@ from DistributedNPCToonBase import *
 from toontown.chat.ChatGlobals import *
 from toontown.hood import ZoneUtil
 from toontown.nametag.NametagGlobals import *
+from toontown.quest import MultiTrackChoiceGui
 from toontown.quest import QuestChoiceGui
 from toontown.quest import QuestParser
-from toontown.quest import TrackChoiceGui
 from toontown.toonbase import TTLocalizer
 from toontown.toontowngui import TeaserPanel
 
@@ -218,7 +218,7 @@ class DistributedNPCSpecialQuestGiver(DistributedNPCToonBase):
             self.setChatAbsolute(TTLocalizer.QuestMovieTrackChoice, CFSpeech)
             if isLocalToon:
                 self.acceptOnce('chooseTrack', self.sendChooseTrack)
-                self.trackChoiceGui = TrackChoiceGui.TrackChoiceGui(tracks, ChoiceTimeout)
+                self.trackChoiceGui = MultiTrackChoiceGui.MultiTrackChoiceGui(tracks, ChoiceTimeout)
             return
         fullString = Quests.fillInQuestNames(fullString, avName=av.name, fromNpcId=npcId, toNpcId=toNpcId)
         self.acceptOnce(self.uniqueName('doneChatPage'), self.finishMovie, extraArgs=[av, isLocalToon])
