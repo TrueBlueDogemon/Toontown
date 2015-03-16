@@ -4338,6 +4338,12 @@ class DistributedToonAI(DistributedPlayerAI.DistributedPlayerAI, DistributedSmoo
 
     def setFirstTrackPicked(self, trackId):
         self.firstTrackPicked = trackId
+        
+    def getFirstTrackPicked(self):
+        return self.firstTrackPicked
+        
+    def getSecondTrackPicked(self):
+        return self.secondTrackPicked       
 
     def b_setSecondTrackPicked(self, trackId):
         self.setSecondTrackPicked(trackId)

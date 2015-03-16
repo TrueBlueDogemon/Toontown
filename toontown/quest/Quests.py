@@ -1,3 +1,4 @@
+from pandac.PandaModules import *
 from direct.directnotify import DirectNotifyGlobal
 from direct.showbase import PythonUtil
 from toontown.toonbase import ToontownBattleGlobals
@@ -1395,7 +1396,7 @@ class DeliverGagQuest(Quest):
         except:
             resp = simbase.air
         try:
-            self.av = resp.doId2do[self.avId]
+            self.av = resp.doId2do.get(self.avId)
         except KeyError:
             self.av = base.localAvatar
         if self.av.getFirstTrackPicked() == self.av.getSecondTrackPicked():#Prevents breaking toons who weren't made before the change
