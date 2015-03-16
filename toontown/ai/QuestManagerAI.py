@@ -379,7 +379,7 @@ class QuestManagerAI:
         # Iterate through the avatars current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex], self.av.doId)
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
 
             # Check if the Quest isnt already complete
             if questClass.getCompletionStatus(av, questDesc) == Quests.INCOMPLETE:
