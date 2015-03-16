@@ -703,7 +703,7 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
 
     @rpcmethod(accessLevel=ADMINISTRATOR)
     def rpc_startInvasion(self, shardId, suitDeptIndex=None, suitTypeIndex=None,
-                          flags=0, type=INVASION_TYPE_NORMAL):
+                          flags=[0,0,0,0,0], type=INVASION_TYPE_NORMAL):
         """
         Summary:
             Starts an invasion under the provided [shardId] with the specified
