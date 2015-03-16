@@ -1042,19 +1042,18 @@ class NPCMoviePlayer(DirectObject.DirectObject):
         minGagLevel = ToontownBattleGlobals.MIN_LEVEL_INDEX + 1
         maxGagLevel = ToontownBattleGlobals.MAX_LEVEL_INDEX + 1
         curGagLevel = minGagLevel
+        track1 = base.localAvatar.getFirstTrackPicked()
+        track2 = base.localAvatar.getSecondTrackPicked()       
 
         def updateGagLevel(t, curGagLevel = curGagLevel):
             newGagLevel = int(round(t))
             if newGagLevel == curGagLevel:
                 return
             curGagLevel = newGagLevel
-            base.localAvatar.setTrackAccess([0,
-             0,
-             0,
-             0,
-             curGagLevel,
-             curGagLevel,
-             0])
+            tempTracks = base.localAvatar.getTrackAccess()             
+            tempTracks[track1] = curGagLevel
+            tempTracks[track2] = curGagLevel
+            base.localAvatar.setTrackAccess(tempTracks)
 
         return Sequence(Func(grabCurTrackAccess), LerpFunctionInterval(updateGagLevel, fromData=1, toData=7, duration=0.3), WaitInterval(3.5), LerpFunctionInterval(updateGagLevel, fromData=7, toData=1, duration=0.3), Func(restoreTrackAccess), Func(messenger.send, 'doneThrowSquirtPreview'))
 

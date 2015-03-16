@@ -450,7 +450,7 @@ LOCAL_CHAT_CONFIRM npc QuestScriptGagShop_4
 # show advanced throw & squirt gags
 LOCAL_CHAT_PERSIST npc QuestScriptGagShop_5
 WAIT 0.5
-SHOW_THROW_SQUIRT_PREVIEW
+# SHOW_THROW_SQUIRT_PREVIEW
 CLEAR_CHAT npc
 WAIT 0.5
 # show "Exit Back To Playground" button

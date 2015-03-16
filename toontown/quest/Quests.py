@@ -4467,6 +4467,7 @@ def getNextRewards(numChoices, tier, av):
 RewardDict = {
     50: (TrackTrainingReward, None),
     51: (TrackTrainingReward, None),
+    52: (MaxHpReward, 1),
     100: (MaxHpReward, 1),
     101: (MaxHpReward, 2),
     102: (MaxHpReward, 3),
