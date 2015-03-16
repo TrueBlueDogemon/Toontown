@@ -716,6 +716,9 @@ class ToontownRPCHandler(ToontownRPCHandlerBase):
             <int flags> = Extra invasion flags.
             <int type> = The invasion type.
         """
+        if flags == 0:
+            flags = [0, 0, 0, 0, 0]
+
         self.air.netMessenger.send(
             'startInvasion',
             [shardId, suitDeptIndex, suitTypeIndex, flags, type])
