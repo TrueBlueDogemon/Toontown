@@ -1757,7 +1757,7 @@ class TrackChoiceQuest(Quest):
         except:
             resp = simbase.air
         try:
-            self.av = resp.doId2do[self.avId]
+            self.av = resp.doId2do.get(self.avId)
         except KeyError:
             self.av = base.localAvatar
         self.tracks = avatarGetRemainingTrackIds(self.av)   
