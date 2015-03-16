@@ -264,7 +264,7 @@ class QuestManagerAI:
         # Iterate through their current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
             if isinstance(questClass, Quests.TrolleyQuest):
                 questDesc[QuestProgressIndex] = 1
             questList.append(questDesc)
@@ -284,7 +284,7 @@ class QuestManagerAI:
         # Iterate through their current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
             if isinstance(questClass, Quests.FriendQuest):
                 questDesc[QuestProgressIndex] = 1
             questList.append(questDesc)
@@ -304,7 +304,7 @@ class QuestManagerAI:
         # Iterate through their current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
             if isinstance(questClass, Quests.PhoneQuest):
                 questDesc[QuestProgressIndex] += 1
             questList.append(questDesc)
@@ -320,7 +320,7 @@ class QuestManagerAI:
         # Iterate through their current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
             if fishingItem != -1:
                 questList.append(questDesc)
                 continue
@@ -348,7 +348,7 @@ class QuestManagerAI:
         # Iterate through their current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
             if isinstance(questClass, Quests.DeliverItemQuest):
                 if questClass.getCompletionStatus(av, questDesc, npc) == Quests.COMPLETE:
                     # They have a clothing ticket.
@@ -362,7 +362,7 @@ class QuestManagerAI:
         # Iterate through their current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
             if isinstance(questClass, Quests.DeliverItemQuest):
                 if questClass.getCompletionStatus(av, questDesc, npc) == Quests.COMPLETE:
                     av.removeQuest(questDesc[QuestIdIndex])
@@ -431,7 +431,7 @@ class QuestManagerAI:
         # Iterate through the avatars current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
             if questClass.getCompletionStatus(av, questDesc) == Quests.INCOMPLETE:
                 if isinstance(questClass, Quests.BuildingQuest):
                     if questClass.isLocationMatch(zoneId):
@@ -451,7 +451,7 @@ class QuestManagerAI:
         # Iterate through the avatars current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
             if isinstance(questClass, Quests.FactoryQuest):
                 if questClass.doesFactoryCount(av, factoryId, activeVictors):
                     questDesc[QuestProgressIndex] += 1
@@ -467,7 +467,7 @@ class QuestManagerAI:
         # Iterate through the avatars current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
             if isinstance(questClass, Quests.MintQuest):
                 if questClass.doesMintCount(av, mintId, activeVictors):
                     questDesc[QuestProgressIndex] += 1
@@ -489,7 +489,7 @@ class QuestManagerAI:
         # Iterate through the avatar's current quests.
         for i in xrange(0, len(avQuests), 5):
             questDesc = avQuests[i : i + 5]
-            questClass = Quests.getQuest(questDesc[QuestIdIndex])
+            questClass = Quests.getQuest(questDesc[QuestIdIndex], av.doId)
 
             # Check if they are doing a cog quest
             if isinstance(questClass, Quests.CogQuest):
