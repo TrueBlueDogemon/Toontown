@@ -4,6 +4,7 @@ from direct.distributed.DistributedObjectGlobalUD import DistributedObjectGlobal
 from toontown.chat.TTWhiteList import TTWhiteList
 from toontown.chat.TTSequenceList import TTSequenceList
 from otp.distributed import OtpDoGlobals
+import time
 
 class ChatAgentUD(DistributedObjectGlobalUD):
     notify = DirectNotifyGlobal.directNotify.newCategory("ChatAgentUD")
@@ -26,6 +27,17 @@ class ChatAgentUD(DistributedObjectGlobalUD):
             2 : "[ADMIN] ",
             3 : "[SYSADMIN] ",
         }
+        
+        self.muted = {}
+
+    def muteAccount(self, account, howLong):
+        print ['muteAccount', account, howLong]
+        self.muted[account] = int(time.time()/60) + howLong
+
+    def unmuteAccount(self, account):
+        print ['unmuteAccount', account]
+        if account in self.muted:
+            del self.muted[account]        
     # Open chat
     def chatMessage(self, message, chatMode):
         sender = self.air.getAvatarIdFromSender()
@@ -33,6 +45,9 @@ class ChatAgentUD(DistributedObjectGlobalUD):
             self.air.writeServerEvent('suspicious', accId=self.air.getAccountIdFromSender(),
                                          issue='Account sent chat without an avatar', message=message)
             return
+            
+        if sender in self.muted and int(time.time()/60) < self.muted[sender]:
+            return            
 
         if self.wantWhitelist:
             cleanMessage, modifications = self.cleanWhitelist(message)
