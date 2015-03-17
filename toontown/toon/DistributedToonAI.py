@@ -5398,7 +5398,7 @@ def invasionend():
 def fixQuests():
     target = spellbook.getTarget()
     lastQuestCompleted = target.getQuestHistory()[-1]
-    secondLastQuestCompleted = tar.getQuestHistory()[-2]
+    secondLastQuestCompleted = target.getQuestHistory()[-2]
     target.b_setQuests([])
     tempQuestHistory = target.getQuestHistory()
     tempQuestHistory.remove(lastQuestCompleted)
