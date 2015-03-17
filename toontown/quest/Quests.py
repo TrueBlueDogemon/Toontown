@@ -3856,6 +3856,8 @@ def chooseQuestDialog(id, status):
     if id == 2906:
         quest = getQuest(id)
         trackId = base.localAvatar.getSecondTrackPicked()
+        if trackId == base.localAvatar.getFirstTrackPicked():
+            trackId = 4
         if status == QUEST:
             questDialog = TTLocalizer.QuestDialogDict[2906].get(status)[trackId]
         else:
@@ -3865,6 +3867,8 @@ def chooseQuestDialog(id, status):
     elif id == 4208:
         quest = getQuest(id)
         gag = base.localAvatar.getFirstTrackPicked()
+        if trackId == base.localAvatar.getSecondTrackPicked():
+            trackId = 5
         if status == QUEST:
             questDialog = TTLocalizer.QuestDialogDict[4208].get(status) % BattleGlobalAvPropStringsSingular[gag][4]
         else:
