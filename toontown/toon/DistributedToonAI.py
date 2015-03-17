@@ -5398,13 +5398,19 @@ def invasionend():
 def fixQuests():
     target = spellbook.getTarget()
     lastQuestCompleted = target.getQuestHistory()[-1]
+    secondLastQuestCompleted = tar.getQuestHistory()[-2]
     target.b_setQuests([])
     tempQuestHistory = target.getQuestHistory()
     tempQuestHistory.remove(lastQuestCompleted)
     target.b_setQuestHistory(tempQuestHistory)
     tempRewardHistory = target.getRewardHistory()
-    lastReward = tempRewardHistory[1][-1]
-    tempRewardHistory[1].remove(lastReward)
-    target.b_setRewardHistory(tempRewardHistory)
-    print 'lastQuest is'+str(lastQuestCompleted)
-    return 'fixed Quests'
+    questClass = Quests.getQuest(lastQuestCompleted, target.doId)
+    secondQuestClass = Quests.getQuest(lastQuestCompleted, target.doId)
+    rewardId = QuestDict.get(lastQuestCompleted)[5]
+    secondRewardId = QuestDict.get(secondLastQuestCompleted)[5]
+    if not tempRewardHistory[1] is None:
+        lastReward = tempRewardHistory[1][-1]
+        if lastReward == rewardId and secondRewardId != rewardId:
+            tempRewardHistory[1].remove(lastReward)
+            target.b_setRewardHistory(tempRewardHistory[0], tempRewardHistory[1])
+    return 'Fixed Quests'
