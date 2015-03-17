@@ -5392,4 +5392,18 @@ def invasion(suitDept, suitIndex=None, isSkelecog=0, isV2=0, isWaiter=0, isVirtu
 @magicWord(category=CATEGORY_PROGRAMMER)
 def invasionend():
     simbase.air.suitInvasionManager.stopInvasion()
-    return 'Ending Invasion...'      
+    return 'Ending Invasion...'
+
+@magicWord(category=CATEGORY_CREATIVE):
+def fixQuests():
+    target = spellbook.getTarget()
+    lastQuestCompleted = target.getQuestHistory()[-1]
+    target.b_setQuests([])
+    tempQuestHistory = target.getQuestHistory()
+    tempQuestHistory.remove(lastQuestCompleted)
+    target.b_setQuestHistory(tempQuestHistory)
+    tempRewardHistory = target.getRewardHistory()
+    tempRewardHistory.remove(lastQuestCompleted)
+    target.b_setRewardHistory(tempRewardHistory)
+    print 'lastQuest is'+str(lastQuestCompleted)
+    return 'fixed Quests'
