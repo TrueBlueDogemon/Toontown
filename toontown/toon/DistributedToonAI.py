@@ -5409,8 +5409,9 @@ def fixQuests():
     rewardId = Quests.QuestDict.get(lastQuestCompleted)[5]
     secondRewardId = Quests.QuestDict.get(secondLastQuestCompleted)[5]
     if not tempRewardHistory[1] is None:
-        lastReward = tempRewardHistory[1][-1]
-        if lastReward == rewardId and secondRewardId != rewardId:
-            tempRewardHistory[1].remove(lastReward)
-            target.b_setRewardHistory(tempRewardHistory[0], tempRewardHistory[1])
+        if len(tempRewardHistory[1]) > 1:
+            lastReward = tempRewardHistory[1][-1]
+            if lastReward == rewardId and secondRewardId != rewardId:
+                tempRewardHistory[1].remove(lastReward)
+                target.b_setRewardHistory(tempRewardHistory[0], tempRewardHistory[1])
     return 'Fixed Quests'
