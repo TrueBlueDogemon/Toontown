@@ -5394,7 +5394,7 @@ def invasionend():
     simbase.air.suitInvasionManager.stopInvasion()
     return 'Ending Invasion...'
 
-@magicWord(category=CATEGORY_CREATIVE):
+@magicWord(category=CATEGORY_COMMUNITY_MANAGER):
 def fixQuests():
     target = spellbook.getTarget()
     lastQuestCompleted = target.getQuestHistory()[-1]
