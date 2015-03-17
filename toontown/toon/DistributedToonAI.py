@@ -5389,7 +5389,7 @@ def invasion(suitDept, suitIndex=None, isSkelecog=0, isV2=0, isWaiter=0, isVirtu
         returnCode = simbase.air.suitInvasionManager.startInvasion(suitDept, suitIndex, flags)
         return returnCode
 
-@magicWord(category=CATEGORY_PROGRAMMER):
+@magicWord(category=CATEGORY_PROGRAMMER)
 def invasionend():
     simbase.air.suitInvasionManager.stopInvasion()
     return 'Ending Invasion...'
