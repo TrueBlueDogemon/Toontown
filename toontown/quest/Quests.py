@@ -1395,9 +1395,9 @@ class DeliverGagQuest(Quest):
             resp = base.cr
         except:
             resp = simbase.air
-        try:
+        if self.avId is not None and self.avId in resp.doId2do: 
             self.av = resp.doId2do.get(self.avId)
-        except KeyError:
+        else:
             self.av = base.localAvatar
         if self.av.getFirstTrackPicked() == self.av.getSecondTrackPicked():#Prevents breaking toons who weren't made before the change
             if id == 2906:
@@ -1756,9 +1756,9 @@ class TrackChoiceQuest(Quest):
             resp = base.cr
         except:
             resp = simbase.air
-        try:
+        if self.avId is not None and self.avId in resp.doId2do: 
             self.av = resp.doId2do.get(self.avId)
-        except KeyError:
+        else:
             self.av = base.localAvatar
         self.tracks = avatarGetRemainingTrackIds(self.av)   
         for track in self.tracks:
