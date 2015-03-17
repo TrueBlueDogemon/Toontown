@@ -5403,7 +5403,8 @@ def fixQuests():
     tempQuestHistory.remove(lastQuestCompleted)
     target.b_setQuestHistory(tempQuestHistory)
     tempRewardHistory = target.getRewardHistory()
-    tempRewardHistory.remove(lastQuestCompleted)
+    lastReward = tempRewardHistory[1][-1]
+    tempRewardHistory[1].remove(lastReward)
     target.b_setRewardHistory(tempRewardHistory)
     print 'lastQuest is'+str(lastQuestCompleted)
     return 'fixed Quests'
