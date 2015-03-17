@@ -111,7 +111,8 @@ def getCompleteStatusWithNpc(questComplete, toNpcId, npc):
 
 
 def npcMatches(toNpcId, npc):
-    return toNpcId == npc.getNpcId() or toNpcId == Any or toNpcId == ToonHQ and npc.getHq() or toNpcId == ToonTailor and npc.getTailor()
+    return True
+#    return toNpcId == npc.getNpcId() or toNpcId == Any or toNpcId == ToonHQ and npc.getHq() or toNpcId == ToonTailor and npc.getTailor()
 
 
 def calcRecoverChance(numberNotDone, chance, cap = 1):
