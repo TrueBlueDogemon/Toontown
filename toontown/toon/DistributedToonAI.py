@@ -4814,7 +4814,7 @@ def cogIndex(index):
 
 @magicWord(category=CATEGORY_MODERATOR, types=[str, int, int])
 def inventory(a, b=None, c=None):
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
     inventory = invoker.inventory
     if a == 'reset':
         maxLevelIndex = b or 5
