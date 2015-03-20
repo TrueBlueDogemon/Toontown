@@ -4814,7 +4814,7 @@ def cogIndex(index):
 
 @magicWord(category=CATEGORY_MODERATOR, types=[str, int, int])
 def inventory(a, b=None, c=None):
-    invoker = spellbook.getInvoker()
+    invoker = spellbook.getTarget()
     inventory = invoker.inventory
     if a == 'reset':
         maxLevelIndex = b or 5
@@ -5398,7 +5398,7 @@ def invasionend():
 def fixQuests():
     target = spellbook.getTarget()
     lastQuestCompleted = target.getQuestHistory()[-1]
-    secondLastQuestCompleted = tar.getQuestHistory()[-2]
+    secondLastQuestCompleted = target.getQuestHistory()[-2]
     target.b_setQuests([])
     tempQuestHistory = target.getQuestHistory()
     tempQuestHistory.remove(lastQuestCompleted)
@@ -5406,11 +5406,12 @@ def fixQuests():
     tempRewardHistory = target.getRewardHistory()
     questClass = Quests.getQuest(lastQuestCompleted, target.doId)
     secondQuestClass = Quests.getQuest(lastQuestCompleted, target.doId)
-    rewardId = QuestDict.get(lastQuestCompleted)[5]
-    secondRewardId = QuestDict.get(secondLastQuestCompleted)[5]
+    rewardId = Quests.QuestDict.get(lastQuestCompleted)[5]
+    secondRewardId = Quests.QuestDict.get(secondLastQuestCompleted)[5]
     if not tempRewardHistory[1] is None:
-        lastReward = tempRewardHistory[1][-1]
-        if lastReward == rewardId and secondRewardId != rewardId:
-            tempRewardHistory[1].remove(lastReward)
-            target.b_setRewardHistory(tempRewardHistory[0], tempRewardHistory[1])
+        if len(tempRewardHistory[1]) > 1:
+            lastReward = tempRewardHistory[1][-1]
+            if lastReward == rewardId and secondRewardId != rewardId:
+                tempRewardHistory[1].remove(lastReward)
+                target.b_setRewardHistory(tempRewardHistory[0], tempRewardHistory[1])
     return 'Fixed Quests'
