@@ -1,21 +1,21 @@
-Toontown Fellowship
+Toontown 
 =================
-Toontown Fellowship is a free, non-profit game inspired by _Disney's Toontown Online_.
+Toontown is a free, non-profit game inspired by _Disney's Toontown Online_.
 
 Contributing 
 ============
 
 Don't just start contributing. We talk about what we are about to do before we do it! All changes, except for emergency bug fixes, should be done in either a separate branch, or a fork -- **not** to the master or release branches. When you are ready to merge your changes, submit a _pull request_ for review.  
 
-**Note:** Issues submitted in this repository are designed for *code-related* issues only. Issues involving starting the game will be ignored. Please view the [dependencies](https://github.com/ToontownFellowship/src/wiki/Dependencies) page in the wiki for help starting Toontown Fellowship.
+**Note:** Issues submitted in this repository are designed for *code-related* issues only. Issues involving starting the game will be ignored. Please view the [dependencies](https://github.com/ToontownFellowship/src/wiki/Dependencies) page in the wiki for help starting Toontown.
 
 Thank You
 =========
 
-Toontown Fellowship was started using Toontown Infinite's source
+Toontown was started using Toontown Infinite's source
 code. If it wasn't for the amazing developers of Toontown Rewritten,
 the people behind Toontown Infinite, the Astron team, and finally Panda3d,
-Toontown Fellowship wouldn't be here.  
+Toontown wouldn't be here.  
 
 Thank you for their courteousy and their incredible pioneering work.
 
